@@ -203,6 +203,16 @@
             "rid": "win"
           }
         }
+      },
+      "bookshelfData/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/bookshelfData.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/bookshelfData.dll": {}
+        }
       }
     }
   },
@@ -576,40 +586,52 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "bookshelfData/1.0.0": {
+      "type": "project",
+      "path": "../bookshelfData/bookshelfData.csproj",
+      "msbuildProject": "../bookshelfData/bookshelfData.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.1",
       "Microsoft.AspNetCore.Authentication.OpenIdConnect >= 5.0.1",
-      "Swashbuckle.AspNetCore >= 5.6.3"
+      "Swashbuckle.AspNetCore >= 5.6.3",
+      "bookshelfData >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "/Users/GrzegorzNorberciak/.nuget/packages/": {}
+    "C:\\Users\\Marta\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/GrzegorzNorberciak/Documents/codecool/projects/Book-Shelf-Project/Bookshelf/Bookshelf.csproj",
+      "projectUniqueName": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
       "projectName": "Bookshelf",
-      "projectPath": "/Users/GrzegorzNorberciak/Documents/codecool/projects/Book-Shelf-Project/Bookshelf/Bookshelf.csproj",
-      "packagesPath": "/Users/GrzegorzNorberciak/.nuget/packages/",
-      "outputPath": "/Users/GrzegorzNorberciak/Documents/codecool/projects/Book-Shelf-Project/Bookshelf/obj/",
+      "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
+      "packagesPath": "C:\\Users\\Marta\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/GrzegorzNorberciak/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Marta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj": {
+              "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -659,7 +681,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.102/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
