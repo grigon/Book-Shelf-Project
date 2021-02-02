@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj": {}
+    "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj": {
+    "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj",
-        "projectName": "bookshelfData",
-        "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj",
+        "projectUniqueName": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj",
+        "projectName": "bookshelf-app",
+        "projectPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj",
         "packagesPath": "C:\\Users\\Marta\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\obj\\",
+        "outputPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Marta\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,64 +28,6 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "net5.0": {
-          "targetAlias": "net5.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
-        "projectName": "Bookshelf",
-        "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
-        "packagesPath": "C:\\Users\\Marta\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\Marta\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net5.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net5.0": {
-            "targetAlias": "net5.0",
-            "projectReferences": {
-              "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj": {
-                "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj"
-              }
-            }
           }
         },
         "warningProperties": {
@@ -117,6 +59,67 @@
               "version": "[5.6.3, )"
             }
           },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj",
+        "projectName": "bookshelf",
+        "projectPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj",
+        "packagesPath": "C:\\Users\\Marta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Marta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj": {
+                "projectPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
           "imports": [
             "net461",
             "net462",

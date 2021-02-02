@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iy9DYbLGLcFwqtKxeDDbNwReauZbz92+uE3PIAg684cMhsijkxNvFvFPi1AjwD+gRBcoZ1hoOs54gpsKE4wAeQ==",
+  "dgSpecHash": "2ntFyzsVcilA2p9kCJg7eFD6xSdlC1agw/IYAG8yjHHk/5ClJ3MTO0SSbDenne7k2VwBXT/FEuiMuWIepLTizA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
+  "projectFilePath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Marta\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.1\\microsoft.aspnetcore.authentication.jwtbearer.5.0.1.nupkg.sha512",
     "C:\\Users\\Marta\\.nuget\\packages\\microsoft.aspnetcore.authentication.openidconnect\\5.0.1\\microsoft.aspnetcore.authentication.openidconnect.5.0.1.nupkg.sha512",

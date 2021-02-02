@@ -44,12 +44,10 @@
       "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
         "type": "package",
         "build": {
-          "build/Microsoft.Extensions.ApiDescription.Server.props": {},
-          "build/Microsoft.Extensions.ApiDescription.Server.targets": {}
+          "build/_._": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.props": {},
-          "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets": {}
+          "buildMultiTargeting/_._": {}
         }
       },
       "Microsoft.IdentityModel.JsonWebTokens/6.7.1": {
@@ -131,7 +129,7 @@
           "Swashbuckle.AspNetCore.SwaggerUI": "5.6.3"
         },
         "build": {
-          "build/Swashbuckle.AspNetCore.props": {}
+          "build/_._": {}
         }
       },
       "Swashbuckle.AspNetCore.Swagger/5.6.3": {
@@ -204,15 +202,23 @@
           }
         }
       },
-      "bookshelfData/1.0.0": {
+      "bookshelf-app/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "5.0.1",
+          "Microsoft.AspNetCore.Authentication.OpenIdConnect": "5.0.1",
+          "Swashbuckle.AspNetCore": "5.6.3"
+        },
         "compile": {
-          "bin/placeholder/bookshelfData.dll": {}
+          "bin/placeholder/bookshelf-app.dll": {}
         },
         "runtime": {
-          "bin/placeholder/bookshelfData.dll": {}
-        }
+          "bin/placeholder/bookshelf-app.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -587,18 +593,15 @@
         "version.txt"
       ]
     },
-    "bookshelfData/1.0.0": {
+    "bookshelf-app/1.0.0": {
       "type": "project",
-      "path": "../bookshelfData/bookshelfData.csproj",
-      "msbuildProject": "../bookshelfData/bookshelfData.csproj"
+      "path": "../bookshelf-app/bookshelf-app.csproj",
+      "msbuildProject": "../bookshelf-app/bookshelf-app.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.1",
-      "Microsoft.AspNetCore.Authentication.OpenIdConnect >= 5.0.1",
-      "Swashbuckle.AspNetCore >= 5.6.3",
-      "bookshelfData >= 1.0.0"
+      "bookshelf-app >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -607,11 +610,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
-      "projectName": "Bookshelf",
-      "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
+      "projectUniqueName": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj",
+      "projectName": "bookshelf",
+      "projectPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\bookshelf.csproj",
       "packagesPath": "C:\\Users\\Marta\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\obj\\",
+      "outputPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Marta\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -628,8 +631,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj": {
-              "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\bookshelfData\\bookshelfData.csproj"
+            "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj": {
+              "projectPath": "C:\\Users\\Marta\\Desktop\\bookshelf-app\\bookshelf-app\\bookshelf-app.csproj"
             }
           }
         }
@@ -643,26 +646,6 @@
     "frameworks": {
       "net5.0": {
         "targetAlias": "net5.0",
-        "dependencies": {
-          "Microsoft.AspNetCore.Authentication.JwtBearer": {
-            "target": "Package",
-            "version": "[5.0.1, )",
-            "noWarn": [
-              "NU1605"
-            ]
-          },
-          "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
-            "target": "Package",
-            "version": "[5.0.1, )",
-            "noWarn": [
-              "NU1605"
-            ]
-          },
-          "Swashbuckle.AspNetCore": {
-            "target": "Package",
-            "version": "[5.6.3, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",
