@@ -586,26 +586,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Marta\\.nuget\\packages\\": {}
+    "/Users/GrzegorzNorberciak/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
+      "projectUniqueName": "/Users/GrzegorzNorberciak/Documents/codecool/projects/Book-Shelf-Project/Bookshelf/Bookshelf.csproj",
       "projectName": "Bookshelf",
-      "projectPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\Bookshelf.csproj",
-      "packagesPath": "C:\\Users\\Marta\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marta\\Desktop\\Book-Shelf-Project\\Bookshelf\\obj\\",
+      "projectPath": "/Users/GrzegorzNorberciak/Documents/codecool/projects/Book-Shelf-Project/Bookshelf/Bookshelf.csproj",
+      "packagesPath": "/Users/GrzegorzNorberciak/.nuget/packages/",
+      "outputPath": "/Users/GrzegorzNorberciak/Documents/codecool/projects/Book-Shelf-Project/Bookshelf/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Marta\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/GrzegorzNorberciak/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -661,7 +659,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.102/RuntimeIdentifierGraph.json"
       }
     }
   }
