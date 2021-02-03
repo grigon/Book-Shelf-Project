@@ -12,7 +12,7 @@ namespace bookshelf.Entities
         public bool IsActive { get; set; }
         public string City { get; set; }
         public string PhotoPath { get; set; }
-        public Role Role { get; set; }
+        //public Role Role { get; set; }
         public DateTime RegistrationDate { get; set; }
     }
 }
