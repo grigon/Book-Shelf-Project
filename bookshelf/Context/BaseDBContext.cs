@@ -1,6 +1,8 @@
-﻿namespace bookshelf.Context
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace bookshelf.Context
 {
-    public class BaseDBContext
+    public class BaseDBContext : DbContext
     {
         //Connctionstring
         public BaseDBContext()
