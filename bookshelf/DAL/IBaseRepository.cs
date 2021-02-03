@@ -8,9 +8,9 @@ namespace bookshelf.DAL
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
-        void Insert(T t);
+        void Add(T t);
         void Update(T t);
-        void Delete(int id);
+        void Remove(int id);
         void Save();
     }
 }
