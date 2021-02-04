@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using bookshelf.DAL;
 using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Mvc;
@@ -24,5 +26,20 @@ namespace bookshelf_app.Controllers
         {
             return Ok(_data.GetAll());
         }
+        
+        [HttpPut]
+        public async Task<ActionResult<UserBook>> UpdateUserBook()
+        {
+            UserBook user = new UserBook();
+            
+            _data.Update(user);
+            
+            
+            
+            return NoContent();
+            
+        }
+        
+        
     }
 }

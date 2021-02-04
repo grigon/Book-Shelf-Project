@@ -18,7 +18,7 @@ namespace bookshelf.FakeData
         {
             User alonzo = new User()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 UserName = "Aloso Perez",
                 Email = "Alozonzo@aaa.gmail.com",
                 Password = "123456",
@@ -33,45 +33,45 @@ namespace bookshelf.FakeData
             {
                 new UserBook
                 {
-                    Id = new Guid(),
-                    Book = new Book {Id = new Guid(), Title = "Invincible", Author = new Author {Id = new Guid(), FirstName="Amy",
-                            LastName = "Lawernce"}, Genre = new Genre {Id = new Guid(), Name = "Documentary"}, Rating= 9 },
+                    Id = Guid.NewGuid(),
+                    Book = new Book {Id = Guid.NewGuid(), Title = "Invincible", Author = new Author {Id = Guid.NewGuid(), FirstName="Amy",
+                            LastName = "Lawernce"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Documentary"}, Rating= 9 },
                     User = alonzo,
                     Borrowed = false,
                     IsPublic = true
                 },                
                 new UserBook
                 {
-                    Id = new Guid(),
-                    Book =  new Book {Id = new Guid(), Title = "Think and Grow Rich", Author = new Author {Id = new Guid(), FirstName="Napoleon",
-                            LastName = "Hill"}, Genre = new Genre {Id = new Guid(), Name = "Self-development"}, Rating= 9 },
+                    Id = Guid.NewGuid(),
+                    Book =  new Book {Id = Guid.NewGuid(), Title = "Think and Grow Rich", Author = new Author {Id = Guid.NewGuid(), FirstName="Napoleon",
+                            LastName = "Hill"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Self-development"}, Rating= 9 },
                     User = alonzo,
                     Borrowed = false,
                     IsPublic = true
                 },                
                 new UserBook
                 {
-                    Id = new Guid(),
-                    Book = new Book {Id = new Guid(), Title = "Witcher", Author = new Author {Id = new Guid(), FirstName="Andrzej",
-                            LastName = "Sapkowski"}, Genre = new Genre {Id = new Guid(), Name = "Fantasy"}, Rating= 9 },
+                    Id = Guid.NewGuid(),
+                    Book = new Book {Id = Guid.NewGuid(), Title = "Witcher", Author = new Author {Id = Guid.NewGuid(), FirstName="Andrzej",
+                            LastName = "Sapkowski"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Fantasy"}, Rating= 9 },
                     User = alonzo,
                     Borrowed = false,
                     IsPublic = true
                 },                
                 new UserBook
                 {
-                    Id = new Guid(),
-                    Book = new Book {Id = new Guid(), Title = "Solaris", Author = new Author {Id = new Guid(), FirstName="Stanisław",
-                            LastName = "Lem"}, Genre = new Genre {Id = new Guid(), Name = "Sci-fi"}, Rating= 9 },
+                    Id = Guid.NewGuid(),
+                    Book = new Book {Id = Guid.NewGuid(), Title = "Solaris", Author = new Author {Id = Guid.NewGuid(), FirstName="Stanisław",
+                            LastName = "Lem"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Sci-fi"}, Rating= 9 },
                     User = alonzo,
                     Borrowed = false,
                     IsPublic = true
                 },               
                 new UserBook
                 {
-                    Id = new Guid(),
-                    Book = new Book {Id = new Guid(), Title = "The Long Earth", Author = new Author {Id = new Guid(), FirstName="Terry",
-                            LastName = "Pratchett"}, Genre = new Genre {Id = new Guid(), Name = "Fantasy"}, Rating= 8 },
+                    Id = Guid.NewGuid(),
+                    Book = new Book {Id = Guid.NewGuid(), Title = "The Long Earth", Author = new Author {Id = Guid.NewGuid(), FirstName="Terry",
+                            LastName = "Pratchett"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Fantasy"}, Rating= 8 },
                     User = alonzo,
                     Borrowed = false,
                     IsPublic = true
@@ -92,7 +92,14 @@ namespace bookshelf.FakeData
 
         public void Update(UserBook t)
         {
-            throw new NotImplementedException();
+            // var userbook = 
+            // from ub in UserBooks
+            //     where t.Id == ub.Id
+            //     select ub;
+            
+            int index = UserBooks.IndexOf(t);
+            UserBooks[index] = t;
+
         }
 
         public void Remove(int id)
