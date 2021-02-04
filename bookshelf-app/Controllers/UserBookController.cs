@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using bookshelf.DAL;
 using bookshelf.Model.Books;
@@ -14,6 +14,7 @@ namespace bookshelf_app.Controllers
         private readonly ILogger<UserBookController> _logger;
         private readonly IBaseRepository<UserBook> _data;
 
+
         public UserBookController(ILogger<UserBookController> logger, IBaseRepository<UserBook> data)
         {
             _logger = logger;
@@ -22,24 +23,32 @@ namespace bookshelf_app.Controllers
 
         [HttpGet]
         [Produces("application/json")]
+        //public async Task<ActionResult<IBaseRepository<UserBook>>> Get()
+        //{
+        //    return await Ok(_data.GetAll());
+        //}
         public IActionResult Get()
         {
             return Ok(_data.GetAll());
         }
-        
-        [HttpPut]
-        public async Task<ActionResult<UserBook>> UpdateUserBook()
+
+        [HttpPut("{Id}")]
+        public  Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
         {
-            UserBook user = new UserBook();
-            
+            //kontroler musi odebrac wiadomosć od dbcontext
+            //rzutowanie w parametrach funkcji obiekt który chcę przekazać do funkcji 
+            //UserBook user = new UserBook();
+            UserBook user = _data.GetById(id);
+            user.Borrowed = false;
             _data.Update(user);
-            
-            
-            
-            return NoContent();
-            
+            //await _data.Update(user);
+
+
+            return null;
+            //return NoContent();
+
         }
-        
-        
+
+
     }
 }

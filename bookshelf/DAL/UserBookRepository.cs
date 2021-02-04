@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using bookshelf.Model.Books;
 
@@ -33,6 +34,11 @@ namespace bookshelf.DAL
         public void Save()
         {
             throw new System.NotImplementedException();
+        }
+
+        public UserBook GetById(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

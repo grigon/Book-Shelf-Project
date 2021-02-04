@@ -48,5 +48,10 @@ namespace bookshelf.DAL
         {
             throw new NotImplementedException();
         }
+
+        public Book GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

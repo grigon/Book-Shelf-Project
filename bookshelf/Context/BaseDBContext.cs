@@ -7,6 +7,7 @@ namespace bookshelf.Context
         //Connctionstring
         public BaseDBContext()
         {
+            //pod context można na podpiąć każdą strukturę, 
             //singleton
             //przekazac connection string
         }

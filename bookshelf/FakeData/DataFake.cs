@@ -80,9 +80,10 @@ namespace bookshelf.FakeData
             return UserBooks;
         }
 
-        public UserBook GetById(int id)
+        public UserBook GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return UserBooks.Where(a => a.Id == id).FirstOrDefault();
+             //co ta funkcja robi int?? 
         }
 
         public void Add(UserBook t)
