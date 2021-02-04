@@ -1,4 +1,4 @@
-﻿namespace bookshelf.Entities
+﻿namespace bookshelf.Model.Users
 {
     public class UserRole
     {

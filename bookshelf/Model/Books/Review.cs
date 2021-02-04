@@ -1,6 +1,8 @@
-﻿using System;
+﻿using bookshelf.Model.Users;
+using System;
 
-namespace bookshelf.Entities
+
+namespace bookshelf.Model.Books
 {
     public class Review
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using bookshelf.Entities;
+using bookshelf.Model.Users;
 
-namespace bookshelf
+namespace bookshelf.Model.Books
 {
     public class UserBook
     {

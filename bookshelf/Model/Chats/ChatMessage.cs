@@ -1,6 +1,7 @@
-﻿using System;
+﻿using bookshelf.Model.Users;
+using System;
 
-namespace bookshelf.Entities
+namespace bookshelf.Model.Chats
 {
     public class ChatMessage
     {

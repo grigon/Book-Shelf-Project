@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace bookshelf.Entities
+namespace bookshelf.Model.Users
 {
-    public class Genre
+    public class Role
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
