@@ -1,24 +1,20 @@
 ﻿using bookshelf.Model.Books;
 using bookshelf.Model.Users;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using bookshelf.DAL;
 
 namespace bookshelf.FakeData
 {
-    public class DataFake : IData
+    public class DataFake : IBaseRepository<UserBook>
     {
         public List<UserBook> UserBooks;
 
-
-        public List<UserBook> GetAllBooksUser()
-        {
-            return CreateFakeUserBooks();
-        }
-
-        private List<UserBook> CreateFakeUserBooks()
+        public IEnumerable GetAll()
         {
             User alonzo = new User()
             {
@@ -48,7 +44,7 @@ namespace bookshelf.FakeData
                 {
                     Id = new Guid(),
                     Book =  new Book {Id = new Guid(), Title = "Think and Grow Rich", Author = new Author {Id = new Guid(), FirstName="Napoleon",
-                            LastName = "Hill"}, Genre = new Genre {Id = new Guid(), Name = "Self-development"}, Rating= 9 }
+                            LastName = "Hill"}, Genre = new Genre {Id = new Guid(), Name = "Self-development"}, Rating= 9 },
                     User = alonzo,
                     Borrowed = false,
                     IsPublic = true
@@ -82,6 +78,31 @@ namespace bookshelf.FakeData
                 }
             };
             return UserBooks;
+        }
+
+        public UserBook GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(UserBook t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(UserBook t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            throw new NotImplementedException();
         }
     }
 }

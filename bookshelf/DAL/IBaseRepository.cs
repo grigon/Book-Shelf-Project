@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using bookshelf.Context;
-using bookshelf.Entities;
+﻿using System.Collections;
 
 namespace bookshelf.DAL
 {
     public interface IBaseRepository<T>
     {
-        IEnumerable<T> GetAll();
+        IEnumerable GetAll();
         T GetById(int id);
         void Add(T t);
         void Update(T t);
