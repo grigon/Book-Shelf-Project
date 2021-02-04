@@ -10,32 +10,14 @@ namespace bookshelf.FakeData
 {
     public class DataFake : IData
     {
-        public List<Book> Books;
         public List<UserBook> UserBooks;
 
-        public List<Book> GetAllBooks()
+
+        public List<UserBook> GetAllBooksUser()
         {
-            return CreateBooksFake();
+            return CreateFakeUserBooks();
         }
 
-        private List<Book> CreateBooksFake()
-        {
-            Books = new List<Book>()
-            {
-                new Book {Id = new Guid(), Title = "Think and Grow Rich", Author = new Author {Id = new Guid(), FirstName="Napoleon",
-                            LastName = "Hill"}, Genre = new Genre {Id = new Guid(), Name = "Self-development"}, Rating= 9 },
-                new Book {Id = new Guid(), Title = "Witcher", Author = new Author {Id = new Guid(), FirstName="Andrzej",
-                            LastName = "Sapkowski"}, Genre = new Genre {Id = new Guid(), Name = "Fantasy"}, Rating= 9 },
-                new Book {Id = new Guid(), Title = "Solaris", Author = new Author {Id = new Guid(), FirstName="Stanisław",
-                            LastName = "Lem"}, Genre = new Genre {Id = new Guid(), Name = "Sci-fi"}, Rating= 9 },
-                new Book {Id = new Guid(), Title = "The Long Earth", Author = new Author {Id = new Guid(), FirstName="Terry",
-                            LastName = "Pratchett"}, Genre = new Genre {Id = new Guid(), Name = "Fantasy"}, Rating= 8 },
-                new Book {Id = new Guid(), Title = "Invincible", Author = new Author {Id = new Guid(), FirstName="Amy",
-                            LastName = "Lawernce"}, Genre = new Genre {Id = new Guid(), Name = "Documentary"}, Rating= 9 },
-
-            };
-            return Books;
-        }
         private List<UserBook> CreateFakeUserBooks()
         {
             User alonzo = new User()
@@ -99,7 +81,7 @@ namespace bookshelf.FakeData
                     IsPublic = true
                 }
             };
+            return UserBooks;
         }
-
     }
 }

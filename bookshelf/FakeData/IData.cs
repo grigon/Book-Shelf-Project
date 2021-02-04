@@ -9,7 +9,7 @@ namespace bookshelf.FakeData
 {
     public interface IData
     {
-        List<Book> GetAllBooks();
+        List<UserBook> GetAllBooksUser();
         
     }
 }
