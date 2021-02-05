@@ -1,4 +1,5 @@
-﻿using bookshelf.Model.Books;
+﻿using System;
+using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,10 @@ namespace bookshelf.Context
         {
             optionsBuilder.UseSqlServer(_connectionString);
         }
-
+        
         public void Commit()
         {
-
+            throw new NotImplementedException();
         }
         
         public DbSet<Author> Authors { get; set; }
@@ -32,8 +33,9 @@ namespace bookshelf.Context
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatMessage> Messages { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
-        public DbSet<UserBook> BookUsers { get; set; }
+        public DbSet<UserBook> UserBooks { get; set; }
         public DbSet<BookHistory> BookHistory { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using bookshelf.DAL;
-using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

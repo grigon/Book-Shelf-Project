@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using bookshelf;
-using bookshelf.Context;
 using bookshelf.DAL;
-using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,7 +27,7 @@ namespace bookshelf_app.Controllers
         //{
         //    return await Ok(_data.GetAll());
         //}
-        public IActionResult Get()
+        public  IActionResult Get()
         {
             return Ok(_data.GetAll());
         }
@@ -45,14 +42,8 @@ namespace bookshelf_app.Controllers
             UserBook updated = user;
             updated.Borrowed = true;
             _data.Update(updated);
-            //await _data.Update(user);
-            _data.Commit();  
-
-            //return null;
+            _data.Commit();
             return user;
-
         }
-
-
     }
 }

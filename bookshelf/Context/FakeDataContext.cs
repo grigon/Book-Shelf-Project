@@ -1,18 +1,18 @@
-﻿using bookshelf.FakeData;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace bookshelf.Context
 {
-    public class FakeDataContext : IBaseContext
+    public class FakeDataContext : DbContext, IBaseContext
     {
-        private DataFake _dataFake;
-        public FakeDataContext(DataFake dataFake)
+        public FakeDataContext()
         {
-            _dataFake = dataFake;
+
         }
-        
+
         public void Commit()
         {
-                
+            throw new NotImplementedException();
         }
     }
 }
