@@ -2,16 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using bookshelf;
+using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.FakeData;
 using bookshelf.Model.Books;
+using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -30,8 +35,12 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddDbContext<FakeDataContext>(opt =>
+                opt.UseSqlServer(""));
+            services.AddSingleton<IBaseRepository<UserBook>>(services => new UserBookRepository
+                (services.GetService<FakeDataContext>()));
             services.AddSingleton<IBaseRepository<UserBook>, DataFake>();
+            services.AddSingleton<IBaseRepository<Chat>, ChatRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -6,16 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using bookshelf.Context;
 using bookshelf.DAL;
 
 namespace bookshelf.FakeData
 {
     public class DataFake : IBaseRepository<UserBook>
     {
+        private readonly IBaseContext _context;
         public List<UserBook> UserBooks;
 
-        public DataFake()
+        public DataFake(IBaseContext context)
         {
+            _context = context;
             User alonzo = new User()
             {
                 Id = new Guid("667cd0ce-4d59-48e5-aba7-0c5e2432ddde"),
@@ -80,6 +83,7 @@ namespace bookshelf.FakeData
 
         public IEnumerable GetAll()
         {
+            _context.Connect();
             return UserBooks;
         }
 
@@ -106,6 +110,11 @@ namespace bookshelf.FakeData
             int index = UserBooks.IndexOf(before);
             UserBooks[index] = before;
             return before;
+        }
+
+        public void Remove(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         public void Remove(int id)

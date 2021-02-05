@@ -2,21 +2,17 @@
 using System.Collections;
 using bookshelf.Context;
 using bookshelf.Model.Books;
+using bookshelf.Model.Chats;
 
 namespace bookshelf.DAL
 {
-    public class BookRepository : IBaseRepository<Book>
+    public class ChatRepository : IBaseRepository<Chat>
     {
         private readonly IBaseContext _context;
 
-        public BookRepository(IBaseContext context)
+        public ChatRepository(IBaseContext context)
         {
             _context = context;
-        }
-
-        public BookRepository()
-        {
-            throw new NotImplementedException();
         }
 
         public IEnumerable GetAll()
@@ -24,17 +20,17 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public Book GetById(Guid id)
+        public Chat GetById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public void Add(Book t)
+        public void Add(Chat t)
         {
             throw new NotImplementedException();
         }
 
-        public UserBook Update(Book t)
+        public UserBook Update(Chat t)
         {
             throw new NotImplementedException();
         }

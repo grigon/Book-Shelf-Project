@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using bookshelf;
+using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.FakeData;
 using bookshelf.Model.Books;
@@ -15,7 +17,6 @@ namespace bookshelf_app.Controllers
     {
         private readonly ILogger<UserBookController> _logger;
         private readonly IBaseRepository<UserBook> _data;
-
 
         public UserBookController(ILogger<UserBookController> logger, IBaseRepository<UserBook> data)
         {

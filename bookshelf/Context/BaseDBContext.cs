@@ -1,15 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace bookshelf.Context
 {
-    public class BaseDBContext : DbContext
+    public class BaseDBContext : DbContext, IBaseContext
     {
-        //Connctionstring
-        public BaseDBContext()
+
+        public BaseDBContext(DbContextOptions<BaseDBContext> options)
+            : base(options)
         {
-            //pod context można na podpiąć każdą strukturę, 
-            //singleton
-            //przekazac connection string
         }
+
+        public void Connect()
+        {
+        }
+
+
+        
     }
 }
