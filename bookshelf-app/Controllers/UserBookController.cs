@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using bookshelf.DAL;
+using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -33,21 +34,21 @@ namespace bookshelf_app.Controllers
             return Ok(_data.GetAll());
         }
 
-        [HttpPut("/{Id}")]
-        public  Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
+        [HttpPut("{id}")]
+        public  async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
         {
             //kontroler musi odebrac wiadomosć od dbcontext
             //rzutowanie w parametrach funkcji obiekt który chcę przekazać do funkcji 
             //UserBook user = new UserBook();
             UserBook user = _data.GetById(id);
-          
-            user.Borrowed = false;
-            _data.Update(user);
+            UserBook updated = user;
+            updated.Borrowed = true;
+            _data.Update(updated);
             //await _data.Update(user);
+            _data.Commit();  
 
-
-            return null;
-            //return NoContent();
+            //return null;
+            return user;
 
         }
 

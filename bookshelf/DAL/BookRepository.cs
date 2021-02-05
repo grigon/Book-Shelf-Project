@@ -34,7 +34,7 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Update(Book t)
+        public UserBook Update(Book t)
         {
             throw new NotImplementedException();
         }
@@ -45,6 +45,11 @@ namespace bookshelf.DAL
         }
 
         public void Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Commit()
         {
             throw new NotImplementedException();
         }

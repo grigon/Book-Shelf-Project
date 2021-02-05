@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using bookshelf.Model.Books;
 
 namespace bookshelf.DAL
 {
@@ -9,8 +10,9 @@ namespace bookshelf.DAL
         //T GetById(int id);
         T GetById(Guid id);
         void Add(T t);
-        void Update(T t);
+        UserBook Update(T t);
         void Remove(int id);
         void Save();
+        int Commit();
     }
 }

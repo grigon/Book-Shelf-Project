@@ -14,11 +14,11 @@ namespace bookshelf.FakeData
     {
         public List<UserBook> UserBooks;
 
-        public IEnumerable GetAll()
+        public DataFake()
         {
             User alonzo = new User()
             {
-                Id = new Guid("667cd0ce-4d59-48e5-aba7-05e2432dddce"),
+                Id = new Guid("667cd0ce-4d59-48e5-aba7-0c5e2432ddde"),
                 UserName = "Aloso Perez",
                 Email = "Alozonzo@aaa.gmail.com",
                 Password = "123456",
@@ -28,7 +28,6 @@ namespace bookshelf.FakeData
                 PhotoPath = "aaaaaaaaaaa",
                 RegistrationDate = new DateTime(2020, 11, 10)
             };
-
             UserBooks = new List<UserBook>()
             {
                 new UserBook
@@ -42,7 +41,7 @@ namespace bookshelf.FakeData
                 },                
                 new UserBook
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("def9c865-7423-49f6-8ff6-5b96096c7341"),
                     Book =  new Book {Id = Guid.NewGuid(), Title = "Think and Grow Rich", Author = new Author {Id = Guid.NewGuid(), FirstName="Napoleon",
                             LastName = "Hill"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Self-development"}, Rating= 9 },
                     User = alonzo,
@@ -51,7 +50,7 @@ namespace bookshelf.FakeData
                 },                
                 new UserBook
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("def9c864-7423-49f6-8ff6-5b96096c7346"),
                     Book = new Book {Id = Guid.NewGuid(), Title = "Witcher", Author = new Author {Id = Guid.NewGuid(), FirstName="Andrzej",
                             LastName = "Sapkowski"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Fantasy"}, Rating= 9 },
                     User = alonzo,
@@ -60,7 +59,7 @@ namespace bookshelf.FakeData
                 },                
                 new UserBook
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("def9c864-7423-49f6-8ff6-5b96096c7381"),
                     Book = new Book {Id = Guid.NewGuid(), Title = "Solaris", Author = new Author {Id = Guid.NewGuid(), FirstName="Stanisław",
                             LastName = "Lem"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Sci-fi"}, Rating= 9 },
                     User = alonzo,
@@ -69,7 +68,7 @@ namespace bookshelf.FakeData
                 },               
                 new UserBook
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("def9c864-7423-49f6-8ff6-5b96096c7344"),
                     Book = new Book {Id = Guid.NewGuid(), Title = "The Long Earth", Author = new Author {Id = Guid.NewGuid(), FirstName="Terry",
                             LastName = "Pratchett"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Fantasy"}, Rating= 8 },
                     User = alonzo,
@@ -77,6 +76,10 @@ namespace bookshelf.FakeData
                     IsPublic = true
                 }
             };
+        }
+
+        public IEnumerable GetAll()
+        {
             return UserBooks;
         }
 
@@ -91,16 +94,18 @@ namespace bookshelf.FakeData
             throw new NotImplementedException();
         }
 
-        public void Update(UserBook t)
+        public UserBook Update(UserBook t)
         {
             // var userbook = 
             // from ub in UserBooks
             //     where t.Id == ub.Id
             //     select ub;
-            
-            int index = UserBooks.IndexOf(t);
-            UserBooks[index] = t;
 
+            UserBook before = GetById(t.Id);
+            before.Borrowed = true;
+            int index = UserBooks.IndexOf(before);
+            UserBooks[index] = before;
+            return before;
         }
 
         public void Remove(int id)
@@ -111,6 +116,11 @@ namespace bookshelf.FakeData
         public void Save()
         {
             throw new NotImplementedException();
+        }
+
+        public int Commit()
+        {
+            return 0;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace bookshelf.DAL
             throw new System.NotImplementedException();
         }
 
-        public void Update(UserBook t)
+        public UserBook Update(UserBook t)
         {
             throw new System.NotImplementedException();
         }
@@ -34,6 +34,11 @@ namespace bookshelf.DAL
         public void Save()
         {
             throw new System.NotImplementedException();
+        }
+
+        public int Commit()
+        {
+            throw new NotImplementedException();
         }
 
         public UserBook GetById(Guid id)
