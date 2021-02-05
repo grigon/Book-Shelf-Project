@@ -7,16 +7,17 @@ namespace bookshelf.DAL
 {
     public class UserBookRepository : IBaseRepository<UserBook>
     {
-        private readonly IBaseContext _context;
+        private readonly BaseDBContext _context;
 
-        public UserBookRepository(IBaseContext context)
+        public UserBookRepository(BaseDBContext context)
         {
             _context = context;
         }
 
         public IEnumerable GetAll()
         {
-            throw new NotImplementedException();
+            var result = _context.UserBooks;
+            return result;
         }
 
         public UserBook GetById(Guid id)
