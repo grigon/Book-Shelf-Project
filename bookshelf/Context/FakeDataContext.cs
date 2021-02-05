@@ -1,24 +1,18 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using bookshelf.FakeData;
 
 namespace bookshelf.Context
 {
-    public class FakeDataContext : DbContext, IBaseContext
+    public class FakeDataContext : IBaseContext
     {
-        public FakeDataContext()
+        private DataFake _dataFake;
+        public FakeDataContext(DataFake dataFake)
         {
-            Connect();
+            _dataFake = dataFake;
         }
         
-        public void Connect()
+        public void Commit()
         {
-            
-            Console.WriteLine(dupa());
-        }
-        
-        public string dupa()
-        {
-            return "dupa";
+                
         }
     }
 }
