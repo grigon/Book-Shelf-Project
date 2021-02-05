@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace bookshelf_app.Controllers
 {
     [ApiController]
+    [FormatFilter]
     [Route("/UserBooks")]
     public class UserBookController : ControllerBase
     {
@@ -32,13 +33,14 @@ namespace bookshelf_app.Controllers
             return Ok(_data.GetAll());
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("/{Id}")]
         public  Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
         {
             //kontroler musi odebrac wiadomosć od dbcontext
             //rzutowanie w parametrach funkcji obiekt który chcę przekazać do funkcji 
             //UserBook user = new UserBook();
             UserBook user = _data.GetById(id);
+          
             user.Borrowed = false;
             _data.Update(user);
             //await _data.Update(user);

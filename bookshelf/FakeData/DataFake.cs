@@ -18,7 +18,7 @@ namespace bookshelf.FakeData
         {
             User alonzo = new User()
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("667cd0ce-4d59-48e5-aba7-05e2432dddce"),
                 UserName = "Aloso Perez",
                 Email = "Alozonzo@aaa.gmail.com",
                 Password = "123456",
@@ -33,7 +33,7 @@ namespace bookshelf.FakeData
             {
                 new UserBook
                 {
-                    Id = Guid.NewGuid(),
+                    Id = new Guid("def9c864-7423-49f6-8ff6-5b96096c7341"),
                     Book = new Book {Id = Guid.NewGuid(), Title = "Invincible", Author = new Author {Id = Guid.NewGuid(), FirstName="Amy",
                             LastName = "Lawernce"}, Genre = new Genre {Id = Guid.NewGuid(), Name = "Documentary"}, Rating= 9 },
                     User = alonzo,
