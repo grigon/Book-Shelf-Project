@@ -83,7 +83,7 @@ namespace bookshelf.FakeData
 
         public IEnumerable GetAll()
         {
-            _context.Connect();
+           // _context.Connect();
             return UserBooks;
         }
 

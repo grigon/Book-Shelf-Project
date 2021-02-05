@@ -35,12 +35,9 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<FakeDataContext>(opt =>
-                opt.UseSqlServer(""));
-            services.AddSingleton<IBaseRepository<UserBook>>(services => new UserBookRepository
-                (services.GetService<FakeDataContext>()));
-            services.AddSingleton<IBaseRepository<UserBook>, DataFake>();
-            services.AddSingleton<IBaseRepository<Chat>, ChatRepository>();
+            services.AddSingleton(new BaseDBContext(""));
+            services.AddSingleton<FakeDataContext>();
+            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFake(service.GetService<FakeDataContext>()));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

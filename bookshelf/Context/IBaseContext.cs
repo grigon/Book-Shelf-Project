@@ -1,4 +1,6 @@
-﻿namespace bookshelf.Context
+﻿using Microsoft.EntityFrameworkCore.Internal;
+
+namespace bookshelf.Context
 {
     public interface IBaseContext
     {

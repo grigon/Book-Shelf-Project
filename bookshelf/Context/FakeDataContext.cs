@@ -5,8 +5,7 @@ namespace bookshelf.Context
 {
     public class FakeDataContext : DbContext, IBaseContext
     {
-        public FakeDataContext(DbContextOptions<FakeDataContext> options)
-            : base(options)
+        public FakeDataContext()
         {
             Connect();
         }
