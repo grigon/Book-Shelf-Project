@@ -115,11 +115,6 @@ namespace bookshelf.FakeData
             throw new NotImplementedException();
         }
 
-        public void Remove(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Save()
         {
             throw new NotImplementedException();
