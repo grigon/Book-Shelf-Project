@@ -29,7 +29,7 @@ namespace bookshelf_app
         {
             Configuration = configuration;
         }
-        
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -37,10 +37,10 @@ namespace bookshelf_app
         {
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder =>
+                options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001"));
             });
-
+            
             services.AddSingleton(new BaseDBContext(""));
             services.AddSingleton<FakeDataContext>();
             services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFake(service.GetService<FakeDataContext>()));
@@ -70,7 +70,9 @@ namespace bookshelf_app
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors();
+            
+            app.UseCors("MyAllowSpecificOrigins");
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bookshelf.Context
 {
-    public class BaseDBContext : DbContext, IBaseContext
+    public class BaseDBContext : DbContext
     {
         private readonly string _connectionString;
 

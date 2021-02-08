@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using bookshelf.DAL;
 using bookshelf.Model.Books;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +10,7 @@ namespace bookshelf_app.Controllers
 {
     [ApiController]
     [FormatFilter]
+    
     [Route("/UserBooks")]
     public class UserBookController : ControllerBase
     {
@@ -22,6 +24,7 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpGet]
+        
         [Produces("application/json")]
         //public async Task<ActionResult<IBaseRepository<UserBook>>> Get()
         //{

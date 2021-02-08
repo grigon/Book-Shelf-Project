@@ -11,10 +11,10 @@ namespace bookshelf.FakeData
 {
     public class DataFake : IBaseRepository<UserBook>
     {
-        private readonly IBaseContext _context;
+        private readonly FakeDataContext _context;
         public List<UserBook> UserBooks;
 
-        public DataFake(IBaseContext context)
+        public DataFake(FakeDataContext context)
         {
             _context = context;
             User alonzo = new User()
