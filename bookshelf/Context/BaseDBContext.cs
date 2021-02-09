@@ -10,14 +10,9 @@ namespace bookshelf.Context
     {
         private readonly string _connectionString;
 
-        public BaseDBContext(string connectionString)
+        public BaseDBContext(DbContextOptions<BaseDBContext> options)
+            : base(options)
         {
-            _connectionString = connectionString;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
         }
         
         public void Commit()

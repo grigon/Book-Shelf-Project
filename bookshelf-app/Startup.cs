@@ -38,12 +38,16 @@ namespace bookshelf_app
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
-                    builder.WithOrigins("https://localhost:8001"));
+                    builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            
-            services.AddSingleton(new BaseDBContext(""));
+            /*services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration["ConnectionString"]));*/
+            var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
+                .UseSqlServer(Configuration["ConnectionString"])
+                .Options;
+            using var context = new BaseDBContext(contextOptions);
             services.AddSingleton<FakeDataContext>();
-            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFake(service.GetService<FakeDataContext>()));
+            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFake(service.GetService<BaseDBContext>()));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -51,10 +55,6 @@ namespace bookshelf_app
             });
             
             // services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            
-            // services.AddDbContext<BookDBContext>(opt =>
-            //     opt.UseSqlite("Data Source=bookshelf.db"));
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
