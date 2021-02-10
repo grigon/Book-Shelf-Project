@@ -35,16 +35,20 @@ namespace bookshelf_app.Controllers
             return Ok(_data.GetAll());
         }
 
-        [HttpPut("{id}")]
-        public  async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
+        [HttpPut("UpdateBorrowedStatus/{id}")]
+        public async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
         {
-            //kontroler musi odebrac wiadomosć od dbcontext
-            //rzutowanie w parametrach funkcji obiekt który chcę przekazać do funkcji 
-            //UserBook user = new UserBook();
             UserBook user = _data.GetById(id);
-            UserBook updated = user;
-            updated.Borrowed = true;
-            _data.Update(updated);
+            _data.Update(user);
+            _data.Commit();
+            return user;
+        }
+        
+        [HttpPut("UpdateisPublicStatus/{id}")]
+        public async Task<ActionResult<UserBook>> UpdateUserBookIsPublic(Guid id)
+        {
+            UserBook user = _data.GetById(id);
+            _data.UpdateIsPublic(user);
             _data.Commit();
             return user;
         }
