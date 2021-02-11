@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using bookshelf.DAL;
 using bookshelf.Model.Books;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -26,10 +25,6 @@ namespace bookshelf_app.Controllers
         [HttpGet]
         
         [Produces("application/json")]
-        //public async Task<ActionResult<IBaseRepository<UserBook>>> Get()
-        //{
-        //    return await Ok(_data.GetAll());
-        //}
         public  IActionResult Get()
         {
             return Ok(_data.GetAll());

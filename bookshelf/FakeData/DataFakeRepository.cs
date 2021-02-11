@@ -9,14 +9,12 @@ using bookshelf.DAL;
 
 namespace bookshelf.FakeData
 {
-    public class DataFake : IBaseRepository<UserBook>
+    public class DataFakeRepository : IBaseRepository<UserBook>
     {
-        private readonly BaseDBContext _context;
         public List<UserBook> UserBooks;
 
-        public DataFake(BaseDBContext context)
+        public DataFakeRepository()
         {
-            _context = context;
             User alonzo = new User()
             {
                 Id = new Guid("667cd0ce-4d59-48e5-aba7-0c5e2432ddde"),
@@ -81,14 +79,12 @@ namespace bookshelf.FakeData
 
         public IEnumerable GetAll()
         {
-           // _context.Connect();
             return UserBooks;
         }
-
+        
         public UserBook GetById(Guid id)
         {
             return UserBooks.Where(a => a.Id == id).FirstOrDefault();
-             //co ta funkcja robi int?? 
         }
 
         public void Add(UserBook t)
