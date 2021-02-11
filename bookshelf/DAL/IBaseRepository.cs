@@ -12,6 +12,7 @@ namespace bookshelf.DAL
         UserBook Update(T t);
         void Remove(Guid id);
         void Save();
+        UserBook UpdateIsPublic(T t);
         int Commit();
     }
 }

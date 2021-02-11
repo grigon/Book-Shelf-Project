@@ -104,12 +104,17 @@ namespace bookshelf.FakeData
             //     select ub;
 
             UserBook before = GetById(t.Id);
-            before.Borrowed = true;
+            before.Borrowed = !before.Borrowed;
             int index = UserBooks.IndexOf(before);
             UserBooks[index] = before;
             return before;
         }
 
+        public UserBook UpdateIsPublic(UserBook t)
+        {
+            return null;
+        }
+        
         public void Remove(Guid id)
         {
             throw new NotImplementedException();

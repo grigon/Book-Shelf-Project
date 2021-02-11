@@ -45,6 +45,11 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
+        public UserBook UpdateIsPublic(UserBook t)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Commit()
         {
             throw new NotImplementedException();
