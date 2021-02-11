@@ -98,11 +98,6 @@ namespace bookshelf.FakeData
 
         public UserBook Update(UserBook t)
         {
-            // var userbook = 
-            // from ub in UserBooks
-            //     where t.Id == ub.Id
-            //     select ub;
-
             UserBook before = GetById(t.Id);
             before.Borrowed = !before.Borrowed;
             int index = UserBooks.IndexOf(before);
@@ -112,7 +107,11 @@ namespace bookshelf.FakeData
 
         public UserBook UpdateIsPublic(UserBook t)
         {
-            return null;
+            UserBook before = GetById(t.Id);
+            before.IsPublic = !before.IsPublic;
+            int index = UserBooks.IndexOf(before);
+            UserBooks[index] = before;
+            return before;
         }
         
         public void Remove(Guid id)
