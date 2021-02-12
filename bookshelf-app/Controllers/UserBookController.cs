@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using bookshelf.DAL;
 using bookshelf.Model.Books;
@@ -9,7 +10,6 @@ namespace bookshelf_app.Controllers
 {
     [ApiController]
     [FormatFilter]
-    
     [Route("/UserBooks")]
     public class UserBookController : ControllerBase
     {
@@ -23,9 +23,8 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpGet]
-        
         [Produces("application/json")]
-        public  IActionResult Get()
+        public IActionResult Get()
         {
             return Ok(_data.GetAll());
         }
@@ -33,12 +32,14 @@ namespace bookshelf_app.Controllers
         [HttpPut("UpdateBorrowedStatus/{id}")]
         public async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
         {
+            
             UserBook user = _data.GetById(id);
             _data.Update(user);
             _data.Commit();
             return user;
         }
-        
+
+
         [HttpPut("UpdateisPublicStatus/{id}")]
         public async Task<ActionResult<UserBook>> UpdateUserBookIsPublic(Guid id)
         {
@@ -49,3 +50,11 @@ namespace bookshelf_app.Controllers
         }
     }
 }
+
+
+// PUT / PATH
+// if Response.type == "userbook"{
+//     x = (userbook) response
+//         
+//         repo.Update(x).
+// }

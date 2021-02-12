@@ -7,9 +7,9 @@ namespace bookshelf.DAL
 {
     public class BookRepository : IBaseRepository<Book>
     {
-        private readonly IBaseContext _context;
+        private readonly BaseDBContext _context;
 
-        public BookRepository(IBaseContext context)
+        public BookRepository(BaseDBContext context)
         {
             _context = context;
         }

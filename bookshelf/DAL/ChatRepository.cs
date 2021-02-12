@@ -8,9 +8,9 @@ namespace bookshelf.DAL
 {
     public class ChatRepository : IBaseRepository<Chat>
     {
-        private readonly IBaseContext _context;
+        private readonly BaseDBContext _context;
 
-        public ChatRepository(IBaseContext context)
+        public ChatRepository(BaseDBContext context)
         {
             _context = context;
         }
