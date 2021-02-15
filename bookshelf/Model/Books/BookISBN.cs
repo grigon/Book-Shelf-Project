@@ -1,23 +1,18 @@
-﻿using bookshelf.Model.Users;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace bookshelf.Model.Books
 {
-    public class Review
+    public class BookISBN
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(TypeName = "VARCHAR(30)")]
         public Guid Id { get; set; }
-        public string Content { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
-        public User User { get; set; }
         [Column(TypeName = "VARCHAR(30)")]
         public Book Book { get; set; }
-        public int Votes { get; set; }
-        public DateTime ReviewDate { get; set; }
+        [Column(TypeName = "VARCHAR(30)")]
+        public string ISBN { get; set; }
     }
 }

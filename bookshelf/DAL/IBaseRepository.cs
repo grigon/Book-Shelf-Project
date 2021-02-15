@@ -8,11 +8,9 @@ namespace bookshelf.DAL
     {
         IEnumerable GetAll();
         T GetById(Guid id);
-        void Add(T t);
-        UserBook Update(T t);
-        void Remove(Guid id);
-        void Save();
-        UserBook UpdateIsPublic(T t);
+        T Add(T t);
+        T Update(T t);
+        T Remove(Guid id);
         int Commit();
     }
 }
