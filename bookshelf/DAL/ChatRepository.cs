@@ -25,17 +25,17 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Add(Chat t)
+        public Chat Add(Chat t)
         {
             throw new NotImplementedException();
         }
 
-        public UserBook Update(Chat t)
+        public Chat Update(Chat t)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Guid id)
+        public Chat Remove(Guid id)
         {
             throw new NotImplementedException();
         }

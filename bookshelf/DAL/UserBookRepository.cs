@@ -25,7 +25,7 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Add(UserBook t)
+        public UserBook Add(UserBook t)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +35,7 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Remove(Guid id)
+        public UserBook Remove(Guid id)
         {
             throw new NotImplementedException();
         }

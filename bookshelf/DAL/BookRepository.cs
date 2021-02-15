@@ -29,17 +29,17 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Add(Book t)
+        public Book Add(Book t)
         {
             throw new NotImplementedException();
         }
 
-        public UserBook Update(Book t)
+        public Book Update(Book t)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Guid id)
+        public Book Remove(Guid id)
         {
             throw new NotImplementedException();
         }
