@@ -1,13 +1,18 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace bookshelf.Model.Books
 {
     public class BookISBN
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column(TypeName = "VARCHAR(30)")]
         public Guid Id { get; set; }
+        [Column(TypeName = "VARCHAR(30)")]
         public Book Book { get; set; }
-        public string ISBNLight { get; set; }
-        public string ISBNHard { get; set; }
+        [Column(TypeName = "VARCHAR(30)")]
+        public string ISBN { get; set; }
     }
 }
