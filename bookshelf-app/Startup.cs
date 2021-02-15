@@ -29,17 +29,9 @@ namespace bookshelf_app
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            
-            // For futer use when on Sql DataBase
-            /*services.AddDbContext<BaseDBContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"]));*/
-            // var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
-            //     .UseSqlServer(Configuration["ConnectionString"])
-            //     .Options;
-            // using var context = new BaseDBContext(contextOptions);
-
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration["ConnectionString"]));
             services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
-            
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
