@@ -1,7 +1,10 @@
+using System.Reflection;
 using bookshelf.Context;
 using bookshelf.DAL;
+using bookshelf.DTO.User;
 using bookshelf.FakeData;
 using bookshelf.Model.Books;
+using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,14 +27,21 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            services.AddDbContext<BaseDBContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"]));
-            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
+
+            services.AddDbContext<BaseDbContext>(
+                options => options.UseSqlServer(Configuration["ConnectionString"], 
+                    b => b.MigrationsAssembly("bookshelf-app")));
+            
+            services.AddScoped<IBaseRepository<User>, UserRepository>();
+            services.AddScoped<IBaseRepository<UserBook>, UserBookRepository>();
+
+            services.AddAutoMapper(typeof(UserProfile).GetTypeInfo().Assembly);
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

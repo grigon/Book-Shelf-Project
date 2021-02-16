@@ -1,13 +1,28 @@
 # Book-Shelf-Project
 
 
-# Book-Shelf-Project
+api/chats/{idch}/
+
+// filter
+api/users/id/chats
+
+api/
+//access
+if userId in chat
+    return chat
+
+DataBase
+UserSessions Table
+user | session hash | startTime | EndTime
+
+Cookies -> session hash
+
 
 Endpoints:
 
 /api/books/allgenres?limit=20
 /api/book/id
-/api/book/add
+/api/book/
 /api/book/edit
 /api/book/delete
 /api/book/review/add
@@ -16,6 +31,10 @@ Endpoints:
 
 /api/login/signup
 /api/login/signin
+
+/api/chats
+/api/chats?userid=213213
+/api/chats/id
 
 /api/user/add
 /api/user/edit
@@ -35,12 +54,3 @@ Endpoints:
 /api/admin/books
 /api/admin/books?sortby=time
 /api/admin/review/id
-
-
-//TODO
-Szymon pytania:
-1. Jak działają sesje cookiesy w ASP.NET.
-2. Problem logowania
-3. Jakie zrobić kontrolery (MianPage, User, Admin)?
-4. User Admin jednocześnie
-

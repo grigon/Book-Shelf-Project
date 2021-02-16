@@ -6,20 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bookshelf.Context
 {
-    public class BaseDBContext : DbContext
+    public class BaseDbContext : DbContext
     {
-        private readonly string _connectionString;
+        // private readonly string _connectionString;
 
-        public BaseDBContext(DbContextOptions<BaseDBContext> options)
+        public BaseDbContext(DbContextOptions<BaseDbContext> options)
             : base(options)
         {
         }
-        
-        public void Commit()
-        {
-            throw new NotImplementedException();
-        }
-        
+
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<User> Users { get; set; }

@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using bookshelf.Model.Books;
+using bookshelf.Model.Users;
 
 namespace bookshelf.DAL
 {
     public interface IBaseRepository<T>
     {
-        IEnumerable GetAll();
-        T GetById(Guid id);
-        T Add(T t);
+        Task<T[]> GetAll();
+        Task<T> GetById(Guid id);
+        Task<T> Add(T t);
         T Update(T t);
-        T Remove(Guid id);
-        int Commit();
+
+        void Remove(T entity);
+        
+        Task<bool> Commit();
     }
 }

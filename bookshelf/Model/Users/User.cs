@@ -8,7 +8,7 @@ namespace bookshelf.Model.Users
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(36)")]
         public Guid Id { get; set; }
         [Required, StringLength(50)]
         [Column(TypeName = "VARCHAR(50)")]

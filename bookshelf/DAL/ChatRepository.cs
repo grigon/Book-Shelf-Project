@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
@@ -8,14 +9,29 @@ namespace bookshelf.DAL
 {
     public class ChatRepository : IBaseRepository<Chat>
     {
-        private readonly BaseDBContext _context;
+        private readonly BaseDbContext _context;
 
-        public ChatRepository(BaseDBContext context)
+        public ChatRepository(BaseDbContext context)
         {
             _context = context;
         }
 
         public IEnumerable GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Chat> IBaseRepository<Chat>.GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Chat> IBaseRepository<Chat>.Add(Chat t)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Chat[]> IBaseRepository<Chat>.GetAll()
         {
             throw new NotImplementedException();
         }
@@ -31,6 +47,21 @@ namespace bookshelf.DAL
         }
 
         public Chat Update(Chat t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(Chat entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove<T>(T entity) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBaseRepository<Chat>.Commit()
         {
             throw new NotImplementedException();
         }
