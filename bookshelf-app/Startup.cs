@@ -20,17 +20,17 @@ namespace bookshelf_app
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf")));
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            services.AddDbContext<BaseDBContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"]));
+
             services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
             
             services.AddControllers();
@@ -38,10 +38,8 @@ namespace bookshelf_app
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
             });
-            
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
