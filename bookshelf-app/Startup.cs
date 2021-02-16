@@ -24,6 +24,10 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
+            //     .UseSqlServer(Configuration["ConnectionString"])
+            //     .Options;
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
