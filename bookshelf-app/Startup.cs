@@ -25,14 +25,14 @@ namespace bookshelf_app
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.AddDbContext<BaseDBContext>(
-            //    options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf")));
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf")));
             // var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
             //     .UseSqlServer(Configuration["ConnectionString"])
             //     .Options;
-            services.AddDbContext<BaseDBContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"],
-                    b => b.MigrationsAssembly("bookshelf-app")));
+            //services.AddDbContext<BaseDBContext>(
+            //    options => options.UseSqlServer(Configuration["ConnectionString"][0],
+            //        b => b.MigrationsAssembly("bookshelf-app")));
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
