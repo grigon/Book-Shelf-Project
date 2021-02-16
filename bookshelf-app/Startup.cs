@@ -1,3 +1,4 @@
+using System;
 using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.FakeData;
@@ -17,6 +18,7 @@ namespace bookshelf_app
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Console.WriteLine(Configuration["ConnectionString"]);
         }
 
         public IConfiguration Configuration { get; }
@@ -29,19 +31,20 @@ namespace bookshelf_app
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            services.AddDbContext<BaseDBContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"]));
-            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
+
+            //services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
             
             services.AddControllers();
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlite(Configuration["ConnectionString"]));
+    
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
             });
             
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

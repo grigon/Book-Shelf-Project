@@ -87,7 +87,7 @@ namespace bookshelf.FakeData
             return UserBooks.Where(a => a.Id == id).FirstOrDefault();
         }
 
-        public void Add(UserBook t)
+        public UserBook Add(UserBook t)
         {
             throw new NotImplementedException();
         }
@@ -110,7 +110,7 @@ namespace bookshelf.FakeData
             return before;
         }
         
-        public void Remove(Guid id)
+        public UserBook Remove(Guid id)
         {
             throw new NotImplementedException();
         }

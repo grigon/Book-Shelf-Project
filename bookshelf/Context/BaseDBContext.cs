@@ -3,21 +3,15 @@ using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace bookshelf.Context
 {
     public class BaseDBContext : DbContext
     {
-        private readonly string _connectionString;
-
         public BaseDBContext(DbContextOptions<BaseDBContext> options)
             : base(options)
         {
-        }
-        
-        public void Commit()
-        {
-            throw new NotImplementedException();
         }
         
         public DbSet<Author> Authors { get; set; }
