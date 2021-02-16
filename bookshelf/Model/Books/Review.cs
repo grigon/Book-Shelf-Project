@@ -10,12 +10,12 @@ namespace bookshelf.Model.Books
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public Guid Id { get; set; }
         public string Content { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public User User { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public Book Book { get; set; }
         public int Votes { get; set; }
         public DateTime ReviewDate { get; set; }

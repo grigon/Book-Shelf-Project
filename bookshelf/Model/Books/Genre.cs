@@ -8,10 +8,10 @@ namespace bookshelf.Model.Books
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public Guid Id { get; set; }
         [Required, StringLength(40)]
-        [Column(TypeName = "VARCHAR(40)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public string Name { get; set; }
     }
 }

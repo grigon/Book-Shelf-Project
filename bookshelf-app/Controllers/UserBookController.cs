@@ -44,7 +44,7 @@ namespace bookshelf_app.Controllers
         public async Task<ActionResult<UserBook>> UpdateUserBookIsPublic(Guid id)
         {
             UserBook user = _data.GetById(id);
-            _data.UpdateIsPublic(user);
+            //_data.UpdateIsPublic(user);
             _data.Commit();
             return user;
         }

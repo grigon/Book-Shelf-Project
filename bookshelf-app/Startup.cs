@@ -1,6 +1,6 @@
 using bookshelf.Context;
 using bookshelf.DAL;
-using bookshelf.FakeData;
+//using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,18 +24,23 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //services.AddDbContext<BaseDBContext>(
+            //    options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf")));
             // var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
             //     .UseSqlServer(Configuration["ConnectionString"])
             //     .Options;
-
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration["ConnectionString"],
+                    b => b.MigrationsAssembly("bookshelf-app")));
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            services.AddDbContext<BaseDBContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"]));
-            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
+            //services.AddDbContext<BaseDBContext>(
+            //    options => options.UseSqlServer(Configuration["ConnectionString"]));
+            //services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

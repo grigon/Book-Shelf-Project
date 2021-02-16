@@ -9,12 +9,12 @@ namespace bookshelf.Model.Books
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public Guid Id { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(50)")]
         public User User { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
-        public Guid UserBook { get; set; }
+        [Column(TypeName = "VARCHAR(50)")]
+        public UserBook UserBook { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime ReturnDate { get; set; }
     }
