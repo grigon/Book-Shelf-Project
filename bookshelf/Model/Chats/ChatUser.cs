@@ -9,11 +9,11 @@ namespace bookshelf.Model.Chats
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(50)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Guid Id { get; set; }
-        [Column(TypeName = "VARCHAR(50)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Chat Chat { get; set; }
-        [Column(TypeName = "VARCHAR(50)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public User User { get; set; }
     }
 }

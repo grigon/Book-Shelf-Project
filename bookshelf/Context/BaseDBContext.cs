@@ -1,5 +1,4 @@
-﻿using System;
-using bookshelf.Model.Books;
+﻿using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +7,6 @@ namespace bookshelf.Context
 {
     public class BaseDBContext : DbContext
     {
-        private readonly string _connectionString;
-
         public BaseDBContext(DbContextOptions<BaseDBContext> options)
             : base(options)
         {
@@ -29,5 +26,6 @@ namespace bookshelf.Context
         public DbSet<BookHistory> BookHistory { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<BookISBN> BookISBN { get; set; }
     }
 }

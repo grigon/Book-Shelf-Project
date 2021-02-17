@@ -8,11 +8,11 @@ namespace bookshelf.Model.Users
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(50)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Guid Id { get; set; }
-        [Column(TypeName = "VARCHAR(50)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public User User { get; set; }
-        [Column(TypeName = "VARCHAR(50)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Role Role { get; set; }
     }
 }
