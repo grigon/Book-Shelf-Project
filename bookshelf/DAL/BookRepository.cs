@@ -30,10 +30,16 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        Task<Book> IBaseRepository<Book>.Add(Book t)
+        void IBaseRepository<Book>.Add(Book t)
         {
             throw new NotImplementedException();
         }
+
+        public Task<Book> Update(Book t)
+        {
+            throw new NotImplementedException();
+        }
+        
 
         Task<Book[]> IBaseRepository<Book>.GetAll()
         {
@@ -50,10 +56,7 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public Book Update(Book t)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public void Remove(Book entity)
         {

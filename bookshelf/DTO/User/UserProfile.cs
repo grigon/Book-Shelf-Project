@@ -6,7 +6,10 @@ namespace bookshelf.DTO.User
     {
         public UserProfile()
         {
-            this.CreateMap<Model.Users.User, UserModel>();
+            this.CreateMap<Model.Users.User, UserModel>()
+                .ForMember(a => a.Password, s => s.Ignore())
+                .ReverseMap();
+
 
         }
     }

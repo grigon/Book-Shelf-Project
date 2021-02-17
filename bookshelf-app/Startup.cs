@@ -35,7 +35,7 @@ namespace bookshelf_app
             });
 
             services.AddDbContext<BaseDbContext>(
-                options => options.UseSqlServer(Configuration["ConnectionString"], 
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
                     b => b.MigrationsAssembly("bookshelf-app")));
             
             services.AddScoped<IBaseRepository<User>, UserRepository>();

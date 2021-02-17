@@ -87,12 +87,7 @@ namespace bookshelf.FakeData
         {
             throw new NotImplementedException();
         }
-
-        Task<UserBook> IBaseRepository<UserBook>.Add(UserBook t)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         Task<UserBook[]> IBaseRepository<UserBook>.GetAll()
         {
             throw new NotImplementedException();
@@ -108,14 +103,19 @@ namespace bookshelf.FakeData
             throw new NotImplementedException();
         }
 
-        public UserBook Update(UserBook t)
+        public Task<UserBook> Update(UserBook t)
         {
-            UserBook before = GetById(t.Id);
-            before.Borrowed = !before.Borrowed;
-            int index = UserBooks.IndexOf(before);
-            UserBooks[index] = before;
-            return before;
+            throw new NotImplementedException();
         }
+
+        // public UserBook Update(UserBook t)
+        // {
+        //     UserBook before = GetById(t.Id);
+        //     before.Borrowed = !before.Borrowed;
+        //     int index = UserBooks.IndexOf(before);
+        //     UserBooks[index] = before;
+        //     return before;
+        // }
 
         public void Remove(UserBook entity)
         {

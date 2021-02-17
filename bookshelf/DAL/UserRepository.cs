@@ -11,18 +11,18 @@ namespace bookshelf.DAL
 {
     public class UserRepository : IBaseRepository<User>
     {
-        // private readonly ILogger _logger;
+        private readonly ILogger _logger;
         private readonly BaseDbContext _context;
 
-        public UserRepository(BaseDbContext _context)
+        public UserRepository(BaseDbContext context, ILogger<UserRepository> logger)
         {
-            // this._logger = _logger;
-            this._context = _context;
+            _logger = logger;
+            _context = context;
         }
 
         public Task<User[]> GetAll()
         {
-            // _logger.LogInformation($"Getting all Users");
+            _logger.LogInformation($"Getting all Users");
 
             IQueryable<User> query = _context.Users;
 
@@ -31,16 +31,17 @@ namespace bookshelf.DAL
 
         public async Task<User> GetById(Guid id)
         {
-            // _logger.LogInformation($"Getting a Camp for {id}");
+            _logger.LogInformation($"Getting a Camp for {id}");
 
             IQueryable<User> query = _context.Users;
 
             return await query.FirstOrDefaultAsync();
         }
 
-        public Task<User> Add(User t)
+        public void Add(User user) 
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Adding an object of type User to the context.");
+            _context.Add(user);
         }
 
         public void Add<User>(User user) where User : class
@@ -49,7 +50,7 @@ namespace bookshelf.DAL
             _context.Add(user);
         }
 
-        public User Update(User t)
+        public Task<User> Update(User t)
         {
             throw new NotImplementedException();
         }

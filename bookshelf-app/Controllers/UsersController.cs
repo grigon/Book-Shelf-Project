@@ -66,6 +66,7 @@ namespace bookshelf_app.Controllers
                 {
                     return BadRequest("Could not use current Id");
                 }
+                user.RegistrationDate = DateTime.Now;
                 _repository.Add(user);
                 if (await _repository.Commit())
                 {

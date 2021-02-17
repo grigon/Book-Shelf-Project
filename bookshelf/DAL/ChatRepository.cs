@@ -26,10 +26,16 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        Task<Chat> IBaseRepository<Chat>.Add(Chat t)
+        void IBaseRepository<Chat>.Add(Chat t)
         {
             throw new NotImplementedException();
         }
+
+        public Task<Chat> Update(Chat t)
+        {
+            throw new NotImplementedException();
+        }
+        
 
         Task<Chat[]> IBaseRepository<Chat>.GetAll()
         {
@@ -46,10 +52,7 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public Chat Update(Chat t)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public void Remove(Chat entity)
         {
