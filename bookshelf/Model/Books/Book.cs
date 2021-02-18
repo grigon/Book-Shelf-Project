@@ -18,5 +18,6 @@ namespace bookshelf.Model.Books
         [Column(TypeName = "VARCHAR(40)")]
         public Genre Genre { get; set; }
         public int Rating { get; set; }
+        public string CoverPath { get; set; }
     }
 }

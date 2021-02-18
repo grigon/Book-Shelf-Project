@@ -12,5 +12,6 @@ namespace bookshelf.DAL
         T Update(T t);
         T Remove(Guid id);
         int Commit();
+        T UpdateIsPublic(T t);
     }
 }

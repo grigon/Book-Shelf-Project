@@ -54,5 +54,10 @@ namespace bookshelf.DAL
         {
             throw new NotImplementedException();
         }
+
+        Chat IBaseRepository<Chat>.UpdateIsPublic(Chat t)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

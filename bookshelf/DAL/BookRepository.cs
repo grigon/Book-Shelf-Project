@@ -58,5 +58,10 @@ namespace bookshelf.DAL
         {
             throw new NotImplementedException();
         }
+
+        Book IBaseRepository<Book>.UpdateIsPublic(Book t)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

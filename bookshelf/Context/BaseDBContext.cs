@@ -26,6 +26,5 @@ namespace bookshelf.Context
         public DbSet<BookHistory> BookHistory { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<BookISBN> BookISBN { get; set; }
     }
 }

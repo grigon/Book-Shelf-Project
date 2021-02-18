@@ -1,6 +1,6 @@
 using bookshelf.Context;
 using bookshelf.DAL;
-//using bookshelf.FakeData;
+using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,10 +37,10 @@ namespace bookshelf_app
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            //services.AddDbContext<BaseDBContext>(
-            //    options => options.UseSqlServer(Configuration["ConnectionString"]));
-            //services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
-            
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration["ConnectionString"]));
+            services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
