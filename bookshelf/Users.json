@@ -1,0 +1,36 @@
+[
+  {
+    "UserName": "Roman",
+    "Email": "roman@mail.com",
+    "City": "Warsaw",
+    "photoPath": "string"
+  },
+  {
+    "userName": "Jolanta",
+    "email": "malpa@malpa.pl",
+    "password": "somePAss",
+    "city": "Poznań",
+    "photoPath": "string"
+  },
+  {
+    "userName": "Stefan",
+    "email": "stefan@jajko.pl",
+    "password": "Passsome",
+    "city": "Kraków",
+    "photoPath": "string"
+  },
+  {
+    "userName": "Piotrek",
+    "email": "email@adress.pl",
+    "password": "passssss",
+    "city": "Wrocław",
+    "photoPath": "string"
+  },
+  {
+    "userName": "Olaf",
+    "email": "olaf@email.com",
+    "password": "somePass",
+    "city": "Gdańsk",
+    "photoPath": "string"
+  }
+]

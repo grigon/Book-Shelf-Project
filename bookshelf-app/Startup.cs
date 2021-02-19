@@ -1,4 +1,5 @@
 using System.Reflection;
+using bookshelf;
 using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.DTO.User;
@@ -7,6 +8,7 @@ using bookshelf.Model.Books;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,10 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentityCore<User>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<BaseDbContext>();
 
             services.AddCors(options =>
             {
@@ -37,6 +43,12 @@ namespace bookshelf_app
             services.AddDbContext<BaseDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
                     b => b.MigrationsAssembly("bookshelf-app")));
+            
+            // services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //     .AddEntityFrameworkStores<BaseDbContext>();
+            
+            services.AddTransient<UserManager<User>>(); 
+            services.AddTransient<DataSeeder>();
             
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddScoped<IBaseRepository<UserBook>, UserBookRepository>();
@@ -62,6 +74,8 @@ namespace bookshelf_app
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseRouting();
             

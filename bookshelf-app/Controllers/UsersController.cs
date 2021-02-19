@@ -4,6 +4,7 @@ using AutoMapper;
 using bookshelf.DAL;
 using bookshelf.DTO.User;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -54,6 +55,7 @@ namespace bookshelf_app.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<UserModel>> Post(UserModel model)
         {
