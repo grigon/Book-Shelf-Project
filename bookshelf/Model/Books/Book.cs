@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,5 +19,7 @@ namespace bookshelf.Model.Books
         [Column(TypeName = "VARCHAR(40)")]
         public Genre Genre { get; set; }
         public int Rating { get; set; }
+        
+        public ICollection<Review> Reviews { get; set; }
     }
 }

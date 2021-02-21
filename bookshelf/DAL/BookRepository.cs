@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
+using bookshelf.DTO.Book;
 using bookshelf.Model.Books;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace bookshelf.DAL
@@ -19,9 +22,13 @@ namespace bookshelf.DAL
         }
 
 
-        public Task<Book[]> GetAll()
+        public async Task<Book[]> GetAll()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Getting all Books");
+
+            IQueryable<Book> query = _context.Books;
+
+            return await query.ToArrayAsync();
         }
 
         public Task<Book> GetById(Guid id)
