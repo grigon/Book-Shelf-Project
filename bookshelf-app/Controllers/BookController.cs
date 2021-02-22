@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using bookshelf.DAL;
@@ -15,11 +16,11 @@ namespace bookshelf_app.Controllers
     [Route("api/books")]
     public class BookController : ControllerBase
     {
-        private readonly IBaseRepository<Book> _repository;
+        private readonly BookRepository _repository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
 
-        public BookController(IBaseRepository<Book> repository, IMapper mapper, LinkGenerator linkGenerator)
+        public BookController(BookRepository repository, IMapper mapper, LinkGenerator linkGenerator)
         {
             _repository = repository;
              _mapper = mapper;
@@ -33,7 +34,7 @@ namespace bookshelf_app.Controllers
             {
                 var results = await _repository.GetAll();
                 BookDTO[] models = _mapper.Map<BookDTO[]>(results);
-                return Ok(models);
+                return Ok(results);
             }
             catch (Exception)
             {
