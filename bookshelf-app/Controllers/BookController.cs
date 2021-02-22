@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using bookshelf.DAL;
 using bookshelf.DTO.Book;
-using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -27,6 +25,7 @@ namespace bookshelf_app.Controllers
             _linkGenerator = linkGenerator;
         }
         
+        //for not logged/registered users
         [HttpGet]
         [Produces("application/json")]
         public async Task<ActionResult<BookDTO[]>> Get()
@@ -40,6 +39,23 @@ namespace bookshelf_app.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        //for not logged/registered users
+        [HttpGet("{id}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO>> Get(Guid id)
+        {
+            try
+            {
+                var result = await _repository.GetById(id);
+                if (result == null) return NotFound();
+                return _mapper.Map<BookDTO>(result);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Databae failure");
             }
         }
     }
