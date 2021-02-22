@@ -35,7 +35,7 @@ namespace bookshelf_app.Controllers
             {
                 var results = await _repository.GetAll();
                 BookDTO[] models = _mapper.Map<BookDTO[]>(results);
-                return Ok(results);
+                return Ok(models);
             }
             catch (Exception)
             {

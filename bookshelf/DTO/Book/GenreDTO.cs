@@ -1,5 +1,6 @@
 ﻿using System;
 
+/*
 namespace bookshelf.DTO.Book
 {
     public class GenreDTO
@@ -7,4 +8,4 @@ namespace bookshelf.DTO.Book
        // public Guid Id { get; set; }
         public string Name { get; set; }
     }
-}
+}*/
