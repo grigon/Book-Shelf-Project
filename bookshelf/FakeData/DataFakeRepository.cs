@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.DAL;
 
@@ -81,7 +82,17 @@ namespace bookshelf.FakeData
         {
             return UserBooks;
         }
+
+        Task<UserBook> IBaseRepository<UserBook>.GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
         
+        Task<UserBook[]> IBaseRepository<UserBook>.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public UserBook GetById(Guid id)
         {
             return UserBooks.Where(a => a.Id == id).FirstOrDefault();
@@ -92,13 +103,33 @@ namespace bookshelf.FakeData
             throw new NotImplementedException();
         }
 
-        public UserBook Update(UserBook t)
+        public Task<UserBook> Update(UserBook t)
         {
-            UserBook before = GetById(t.Id);
-            before.Borrowed = !before.Borrowed;
-            int index = UserBooks.IndexOf(before);
-            UserBooks[index] = before;
-            return before;
+            throw new NotImplementedException();
+        }
+
+        // public UserBook Update(UserBook t)
+        // {
+        //     UserBook before = GetById(t.Id);
+        //     before.Borrowed = !before.Borrowed;
+        //     int index = UserBooks.IndexOf(before);
+        //     UserBooks[index] = before;
+        //     return before;
+        // }
+
+        public void Remove(UserBook entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove<T>(T entity) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBaseRepository<UserBook>.Commit()
+        {
+            throw new NotImplementedException();
         }
 
         public UserBook UpdateIsPublic(UserBook t)

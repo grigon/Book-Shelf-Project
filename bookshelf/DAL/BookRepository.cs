@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
@@ -10,6 +11,7 @@ namespace bookshelf.DAL
 {
     public class BookRepository : IBaseRepository<Book>
     {
+
         private readonly BaseDBContext _context;
         private readonly ILogger<BookRepository> _logger;
 
@@ -43,7 +45,6 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
 
-        public void Add(Book t)
         {
             throw new NotImplementedException();
         }

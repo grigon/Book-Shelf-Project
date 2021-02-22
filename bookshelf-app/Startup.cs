@@ -1,6 +1,10 @@
 using System.Reflection;
 using bookshelf.Context;
 using bookshelf.DAL;
+using bookshelf.DTO.User;
+using bookshelf.FakeData;
+using bookshelf.Model.Books;
+using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,22 +27,32 @@ namespace bookshelf_app
         
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<BaseDBContext>(
                 options => options.UseSqlite(Configuration.GetConnectionString("BookShelf"), 
                     b => b.MigrationsAssembly("bookshelf-app")));
             
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
 
+            //services.AddDbContext<BaseDbContext>(
+            //    options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
+            //        b => b.MigrationsAssembly("bookshelf-app")));
+            
+            services.AddScoped<IBaseRepository<User>, UserRepository>();
+      
+            services.AddAutoMapper(typeof(UserProfile).GetTypeInfo().Assembly);
             services.AddScoped<BookRepository>();
             services.AddAutoMapper(typeof(BookProfile).GetTypeInfo().Assembly);
             
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+
             
             services.AddSwaggerGen(c =>
             {

@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Threading.Tasks;
 using bookshelf.Model.Books;
+using bookshelf.Model.Users;
 
 namespace bookshelf.DAL
 {
-    public interface IBaseRepository<T>
+    public interface IBaseRepository<T> where T : class
+
     {
         Task<T[]> GetAll();
         Task<T> GetById(Guid id);

@@ -29,26 +29,26 @@ namespace bookshelf_app.Controllers
             return Ok(_data.GetAll());
         }
 
-        [HttpPut("UpdateBorrowedStatus/{id}")]
-        public async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
-        {
-            
-            UserBook user = _data.GetById(id);
-            _data.Update(user);
-            _data.Commit();
-            return user;
-        }
+        // [HttpPut("UpdateBorrowedStatus/{id}")]
+        // public async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)
+        // {
+        //     
+        //     UserBook user = _data.GetById(id);
+        //     _data.Update(user);
+        //     _data.Commit();
+        //     return user;
+        // }
 
 
-        [HttpPut("UpdateisPublicStatus/{id}")]
-        public async Task<ActionResult<UserBook>> UpdateUserBookIsPublic(Guid id)
-        {
-            UserBook user = _data.GetById(id);
-            /*_data.UpdateIsPublic(user);#1#
-            _data.Commit();
-            return user;
-        }
-    }*/
+        // [HttpPut("UpdateisPublicStatus/{id}")]
+        // public async Task<ActionResult<UserBook>> UpdateUserBookIsPublic(Guid id)
+        // {
+        //     UserBook user = _data.GetById(id);
+        //     _data.UpdateIsPublic(user);
+        //     _data.Commit();
+        //     return user;
+        // }
+    }
 }
 
 
