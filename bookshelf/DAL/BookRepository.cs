@@ -1,36 +1,50 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Books;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace bookshelf.DAL
 {
     public class BookRepository : IBaseRepository<Book>
     {
-        private readonly BaseDbContext _context;
 
-        public BookRepository(BaseDbContext context)
+        private readonly BaseDBContext _context;
+        private readonly ILogger<BookRepository> _logger;
+
+        public BookRepository(BaseDBContext context, ILogger<BookRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
-
-        public BookRepository()
+        
+        //for not logged/registered user
+        public async Task<Book[]> GetAll()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Getting all Books");
+
+            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+                Include(g => g.Genre).Include(i => i.BookISBNs).
+                Include(r => r.Reviews).ThenInclude(u => u.User);
+            
+            return await query.ToArrayAsync();
         }
 
-        public IEnumerable GetAll()
+        //for not logged/registered user
+        public async Task<Book> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Getting book by id");
+
+            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+                Include(g => g.Genre).Include(i => i.BookISBNs).
+                Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Id.CompareTo(id) > 0);
+      
+            return await query.FirstOrDefaultAsync();
         }
 
-        Task<Book> IBaseRepository<Book>.GetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IBaseRepository<Book>.Add(Book t)
         {
             throw new NotImplementedException();
         }
@@ -39,58 +53,16 @@ namespace bookshelf.DAL
         {
             throw new NotImplementedException();
         }
-        
 
-        Task<Book[]> IBaseRepository<Book>.GetAll()
+        public void Remove(Book book)
         {
-            throw new NotImplementedException();
+            
+            _context.UserBooks.Remove(userBook);
         }
 
-        public Book GetById(Guid id)
+        public async Task<bool> Commit()
         {
-            throw new NotImplementedException();
-        }
-
-        public Book Add(Book t)
-        {
-            throw new NotImplementedException();
-        }
-
-      
-
-        public void Remove(Book entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove<T>(T entity) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IBaseRepository<Book>.Commit()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Book Remove(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save()
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserBook UpdateIsPublic(Book t)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Commit()
-        {
-            throw new NotImplementedException();
+            return (await _context.SaveChangesAsync()) > 0;
         }
     }
 }

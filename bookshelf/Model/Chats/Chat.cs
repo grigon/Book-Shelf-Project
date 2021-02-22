@@ -8,7 +8,7 @@ namespace bookshelf.Model.Chats
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Guid ChatId { get; set; }
     }
 }

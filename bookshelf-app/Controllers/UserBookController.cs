@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace bookshelf_app.Controllers
 {
-    [ApiController]
+    /*[ApiController]
     [FormatFilter]
     [Route("/UserBooks")]
     public class UserBookController : ControllerBase

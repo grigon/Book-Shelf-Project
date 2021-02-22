@@ -5,6 +5,7 @@ using bookshelf.DTO.User;
 using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using bookshelf.Model.Users;
+using bookshelf.DTO.Book;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -23,10 +24,14 @@ namespace bookshelf_app
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlite(Configuration.GetConnectionString("BookShelf"), 
+                    b => b.MigrationsAssembly("bookshelf-app")));
+            
 
             services.AddCors(options =>
             {
@@ -34,24 +39,27 @@ namespace bookshelf_app
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
 
-            services.AddDbContext<BaseDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
-                    b => b.MigrationsAssembly("bookshelf-app")));
+            //services.AddDbContext<BaseDbContext>(
+            //    options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
+            //        b => b.MigrationsAssembly("bookshelf-app")));
             
             services.AddScoped<IBaseRepository<User>, UserRepository>();
-            services.AddScoped<IBaseRepository<UserBook>, UserBookRepository>();
-
+      
             services.AddAutoMapper(typeof(UserProfile).GetTypeInfo().Assembly);
+            services.AddScoped<BookRepository>();
+            services.AddAutoMapper(typeof(BookProfile).GetTypeInfo().Assembly);
             
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
             });
-            
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

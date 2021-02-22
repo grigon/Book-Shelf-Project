@@ -11,7 +11,7 @@ namespace bookshelf.DAL
     {
         Task<T[]> GetAll();
         Task<T> GetById(Guid id);
-        void Add(T t);
+        void Add(T entity);
         Task<T> Update(T t);
         void Remove(T entity);
         Task<bool> Commit();

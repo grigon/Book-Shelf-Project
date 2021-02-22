@@ -6,7 +6,7 @@ using bookshelf.Model.Books;
 
 namespace bookshelf.DAL
 {
-    public class UserBookRepository : IBaseRepository<UserBook>
+    /*public class UserBookRepository : IBaseRepository<UserBook>
     {
         private readonly BaseDbContext _context;
 
@@ -77,15 +77,10 @@ namespace bookshelf.DAL
         {
             throw new NotImplementedException();
         }
-
-        public UserBook UpdateIsPublic(UserBook t)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public int Commit()
         {
             throw new NotImplementedException();
-        }
-    }
+        }*/
+    /*}*/
 }

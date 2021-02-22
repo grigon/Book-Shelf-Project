@@ -9,13 +9,13 @@ namespace bookshelf.Model.Chats
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Guid Id { get; set; }
         public DateTime MessageDate { get; set; }
         public string Message { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public User MessageAuthor { get; set; }
-        [Column(TypeName = "VARCHAR(30)")]
+        [Column(TypeName = "VARCHAR(40)")]
         public Chat Chat { get; set; }
     }
 }

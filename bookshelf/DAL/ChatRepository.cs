@@ -7,7 +7,7 @@ using bookshelf.Model.Chats;
 
 namespace bookshelf.DAL
 {
-    public class ChatRepository : IBaseRepository<Chat>
+    /*public class ChatRepository : IBaseRepository<Chat>
     {
         private readonly BaseDbContext _context;
 
@@ -88,5 +88,5 @@ namespace bookshelf.DAL
         {
             throw new NotImplementedException();
         }
-    }
+    }*/
 }
