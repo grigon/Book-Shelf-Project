@@ -53,9 +53,10 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Remove(Book entity)
+        public void Remove(Book book)
         {
-            throw new NotImplementedException();
+            
+            _context.UserBooks.Remove(userBook);
         }
 
         public async Task<bool> Commit()

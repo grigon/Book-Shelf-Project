@@ -9,13 +9,13 @@ using bookshelf.DAL;
 
 namespace bookshelf.FakeData
 {
-    public class DataFakeRepository : IBaseRepository<UserBook>
+    /*public class DataFakeRepository : IBaseRepository<UserBook>
     {
         public List<UserBook> UserBooks;
 
         public DataFakeRepository()
         {
-            User alonzo = new User()
+            /*User alonzo = new User()
             {
                 Id = new Guid("667cd0ce-4d59-48e5-aba7-0c5e2432ddde"),
                 UserName = "Aloso Perez",
@@ -87,7 +87,7 @@ namespace bookshelf.FakeData
             return UserBooks.Where(a => a.Id == id).FirstOrDefault();
         }
 
-        public void Add(UserBook t)
+        public UserBook Add(UserBook t)
         {
             throw new NotImplementedException();
         }
@@ -110,7 +110,7 @@ namespace bookshelf.FakeData
             return before;
         }
         
-        public void Remove(Guid id)
+        public UserBook Remove(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -123,6 +123,37 @@ namespace bookshelf.FakeData
         public int Commit()
         {
             return 0;
+        }#1#
         }
-    }
+
+        public IEnumerable GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserBook GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserBook Add(UserBook t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserBook Update(UserBook t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserBook Remove(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Commit()
+        {
+            throw new NotImplementedException();
+        }
+    }*/
 }

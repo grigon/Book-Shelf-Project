@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace bookshelf_app.Controllers
 {
-    [ApiController]
+    /*[ApiController]
     [FormatFilter]
     [Route("/UserBooks")]
     public class UserBookController : ControllerBase
@@ -44,11 +44,11 @@ namespace bookshelf_app.Controllers
         public async Task<ActionResult<UserBook>> UpdateUserBookIsPublic(Guid id)
         {
             UserBook user = _data.GetById(id);
-            _data.UpdateIsPublic(user);
+            /*_data.UpdateIsPublic(user);#1#
             _data.Commit();
             return user;
         }
-    }
+    }*/
 }
 
 
