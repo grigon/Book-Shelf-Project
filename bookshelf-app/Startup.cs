@@ -2,7 +2,6 @@ using System.Reflection;
 using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.DTO.Book;
-using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -33,11 +32,14 @@ namespace bookshelf_app
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-           
-            services.AddScoped<IBaseRepository<Book>, BookRepository>();
+
+            services.AddScoped<BookRepository>();
             services.AddAutoMapper(typeof(BookProfile).GetTypeInfo().Assembly);
             
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});

@@ -14,9 +14,9 @@ namespace bookshelf.DTO.Book
         
         //public string AuthorFirstName { get; set; }
         //public string AuthorLastName { get; set; }
-        public Guid GenreId { get; set; }
-        public string GenreName { get; set; }
-        //public GenreDTO Genre { get; set; }
+        //public Guid GenreId { get; set; }
+        //public string GenreName { get; set; }
+        public GenreDTO Genre { get; set; }
         public string BookISBNISBN { get; set; }
 
         //public string UserUserName { get; set; }
