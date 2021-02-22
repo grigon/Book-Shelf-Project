@@ -31,7 +31,7 @@ namespace bookshelf.DAL
             _logger.LogInformation($"Getting all Books");
 
             IQueryable<Book> query = _context.Books.Include(a => a.Author).
-                Include(g => g.Genre).
+                Include(g => g.Genre).Include(i => i.BookISBNs).
                 Include(r => r.Reviews).ThenInclude(u => u.User);
             
             return await query.ToArrayAsync();

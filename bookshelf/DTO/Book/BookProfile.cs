@@ -11,7 +11,7 @@ namespace bookshelf.DTO.Book
             this.CreateMap<Model.Books.Review, ReviewDTO>()
                 .ReverseMap();
             this.CreateMap<Model.Users.User, UserDTO>().ReverseMap();
-            this.CreateMap<Model.Books.Genre, GenreDTO>().ReverseMap();
+            /*this.CreateMap<Model.Books.Genre, GenreDTO>().ReverseMap();*/
         }
     }
 }

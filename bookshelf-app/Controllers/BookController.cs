@@ -28,6 +28,7 @@ namespace bookshelf_app.Controllers
         }
         
         [HttpGet]
+        [Produces("application/json")]
         public async Task<ActionResult<BookDTO[]>> Get()
         { 
             try
