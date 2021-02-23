@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using bookshelf.DAL;
+using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,12 +63,12 @@ namespace bookshelf_app.Controllers
         //for logged user
         [HttpGet("logged/genre={genre}")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> GetBooks(string genre)
+        public async Task<ActionResult<BookLoggedDTO[]>> GetBooks(string genre)
         { 
             try
             {
                 var results = await _repository.GetAll(genre);
-                BookDTO[] models = _mapper.Map<BookDTO[]>(results);
+                BookLoggedDTO[] models = _mapper.Map<BookLoggedDTO[]>(results);
                 return Ok(models);
             }
             catch (Exception)
@@ -79,13 +80,13 @@ namespace bookshelf_app.Controllers
         //for logged user
         [HttpGet("logged/{id}")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO>> GetBook(Guid id)
+        public async Task<ActionResult<BookLoggedDTO>> GetBook(Guid id)
         {
             try
             {
                 var result = await _repository.GetById(id);
                 if (result == null) return NotFound();
-                return _mapper.Map<BookDTO>(result);
+                return _mapper.Map<BookLoggedDTO>(result);
             }
             catch (Exception)
             {

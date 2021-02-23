@@ -6,7 +6,8 @@ namespace bookshelf.DTO.Book.BookLogged
     {
         public Guid Id { get; set; }
         public string Content { get; set; }
-        public UserLoggedDTO UserDto { get; set; }
+        //why user is null
+        public UserLoggedDTO User { get; set; }
         public int Votes { get; set; }
         public DateTime ReviewDate { get; set; }
     }
