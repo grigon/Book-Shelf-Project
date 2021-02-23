@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bookshelf.Context
 {
-    public class BaseDbContext : DbContext
+    public class BaseDBContext : DbContext
     {
         public BaseDBContext(DbContextOptions<BaseDBContext> options)
 

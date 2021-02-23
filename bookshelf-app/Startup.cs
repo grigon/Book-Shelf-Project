@@ -2,8 +2,6 @@ using System.Reflection;
 using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.DTO.User;
-using bookshelf.FakeData;
-using bookshelf.Model.Books;
 using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
 using Microsoft.AspNetCore.Builder;

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Threading.Tasks;
-using bookshelf.Model.Books;
-using bookshelf.Model.Users;
 
 namespace bookshelf.DAL
 {

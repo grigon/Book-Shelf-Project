@@ -12,9 +12,9 @@ namespace bookshelf.DAL
     public class UserRepository : IBaseRepository<User>
     {
         private readonly ILogger _logger;
-        private readonly BaseDbContext _context;
+        private readonly BaseDBContext _context;
 
-        public UserRepository(BaseDbContext context, ILogger<UserRepository> logger)
+        public UserRepository(BaseDBContext context, ILogger<UserRepository> logger)
         {
             _logger = logger;
             _context = context;

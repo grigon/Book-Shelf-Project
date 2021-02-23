@@ -45,6 +45,7 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
 
+        public void Add(Book entity)
         {
             throw new NotImplementedException();
         }
@@ -57,7 +58,7 @@ namespace bookshelf.DAL
         public void Remove(Book book)
         {
             
-            _context.UserBooks.Remove(userBook);
+           // _context.UserBooks.Remove(userBook);
         }
 
         public async Task<bool> Commit()
