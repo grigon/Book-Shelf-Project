@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
 
 namespace bookshelf.DTO.Book
@@ -13,6 +14,12 @@ namespace bookshelf.DTO.Book
                 .ReverseMap();
             this.CreateMap<Model.Books.BookISBN, BookISBNDTO>().ReverseMap();
             this.CreateMap<Model.Users.User, UserDTO>().ReverseMap();
+            this.CreateMap<Model.Books.Author, AuthorLoggedDTO>().ReverseMap();
+            this.CreateMap<Model.Books.BookHistory, BookHistoryLoggedDTO>().ReverseMap();
+            this.CreateMap<Model.Books.Book, BookLoggedDTO>().ReverseMap();
+            this.CreateMap<Model.Books.Review, ReviewLoggedDTO>().ReverseMap();
+            this.CreateMap<Model.Books.UserBook, UserBookDTO>().ReverseMap();
+            this.CreateMap<Model.Users.User, UserLoggedDTO>();
         }
     }
 }
