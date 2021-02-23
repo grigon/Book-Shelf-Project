@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using bookshelf.DTO.Book.Books;
 
 namespace bookshelf.DTO.Book
 {

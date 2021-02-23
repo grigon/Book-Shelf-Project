@@ -25,5 +25,9 @@
     <ItemGroup>
       <Compile Remove="DTO\Book\GenreDTO.cs" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DTO\Book\BookLogged" />
+    </ItemGroup>
     
 </Project>

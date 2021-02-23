@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using bookshelf.DAL;
-using bookshelf.DTO.Book;
+using bookshelf.DTO.Book.Books;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -26,13 +26,13 @@ namespace bookshelf_app.Controllers
         }
         
         //for not logged/registered users
-        [HttpGet]
+        [HttpGet("genre={genre}")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> Get()
+        public async Task<ActionResult<BookDTO[]>> Get(string genre)
         { 
             try
             {
-                var results = await _repository.GetAll();
+                var results = await _repository.GetAll(genre);
                 BookDTO[] models = _mapper.Map<BookDTO[]>(results);
                 return Ok(models);
             }
@@ -55,7 +55,41 @@ namespace bookshelf_app.Controllers
             }
             catch (Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Databae failure");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
+        
+        //for logged user
+        [HttpGet("logged/genre={genre}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO[]>> GetBooks(string genre)
+        { 
+            try
+            {
+                var results = await _repository.GetAll(genre);
+                BookDTO[] models = _mapper.Map<BookDTO[]>(results);
+                return Ok(models);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        //for logged user
+        [HttpGet("logged/{id}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO>> GetBook(Guid id)
+        {
+            try
+            {
+                var result = await _repository.GetById(id);
+                if (result == null) return NotFound();
+                return _mapper.Map<BookDTO>(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace bookshelf.DTO.Book
+﻿namespace bookshelf.DTO.Book.Books
 {
     public class BookISBNDTO
     {

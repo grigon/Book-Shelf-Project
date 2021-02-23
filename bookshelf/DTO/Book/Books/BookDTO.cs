@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using bookshelf.Model.Books;
 
-namespace bookshelf.DTO.Book
+namespace bookshelf.DTO.Book.Books
 {
     public class BookDTO
     {
