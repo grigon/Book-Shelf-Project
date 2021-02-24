@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace bookshelf.DTO.User
+namespace bookshelf.DTO.Read
 {
-    public class UserModel
+    public class UserReadDTO
     {
         public string UserName { get; set; }
         [Required, StringLength(50)]
@@ -12,7 +12,7 @@ namespace bookshelf.DTO.User
         [Required, StringLength(72)]
         [Column(TypeName = "VARCHAR(72)")]
         public string Password { get; set; }
-        [Required, StringLength(72)]
+        [StringLength(72)]
         [Column(TypeName = "VARCHAR(72)")]
         public string City { get; set; }
         [Column(TypeName = "VARCHAR(200)")]

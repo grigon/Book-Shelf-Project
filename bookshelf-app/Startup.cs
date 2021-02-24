@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using bookshelf;
 using bookshelf.Context;
 using bookshelf.DAL;
-using bookshelf.DTO.User;
-using bookshelf.FakeData;
+using bookshelf.DTO;
 using bookshelf.Model.Books;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Builder;
@@ -13,15 +16,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace bookshelf_app
 {
     public class Startup
     {
+        private RSACryptoServiceProvider _rsa;
+        private RsaSecurityKey _key;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _rsa = new RSACryptoServiceProvider(2048);
+            _key = new RsaSecurityKey(_rsa);
         }
 
         public IConfiguration Configuration { get; }
@@ -29,11 +40,29 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentityCore<User>(options =>
+            
+            // services.AddScoped<IUserClaimsPrincipalFactory<User>, 
+            //     AdditionalUserClaimsPrincipalFactory>();
+
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<BaseDbContext>();
 
+            services.AddSingleton(_key);
+            
+            services.AddAuthentication()
+                .AddCookie()
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = Configuration["Tokens:Issuer"],
+                        ValidAudience = Configuration["Tokens:Audience"],
+                        IssuerSigningKey = _key
+                    };
+                });
+            
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
@@ -44,10 +73,6 @@ namespace bookshelf_app
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
                     b => b.MigrationsAssembly("bookshelf-app")));
             
-            // services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //     .AddEntityFrameworkStores<BaseDbContext>();
-            
-            services.AddTransient<UserManager<User>>(); 
             services.AddTransient<DataSeeder>();
             
             services.AddScoped<IBaseRepository<User>, UserRepository>();
@@ -60,6 +85,7 @@ namespace bookshelf_app
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
             });
+            
             
         }
 
@@ -86,4 +112,34 @@ namespace bookshelf_app
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
+
+    // public class AdditionalUserClaimsPrincipalFactory 
+    //     : UserClaimsPrincipalFactory<User, IdentityRole>
+    // {
+    //     public AdditionalUserClaimsPrincipalFactory( 
+    //         UserManager<User> userManager,
+    //         RoleManager<IdentityRole> roleManager, 
+    //         IOptions<IdentityOptions> optionsAccessor) 
+    //         : base(userManager, roleManager, optionsAccessor)
+    //     {}
+    //
+    //     public async override Task<ClaimsPrincipal> CreateAsync(User user)
+    //     {
+    //         var principal = await base.CreateAsync(user);
+    //         var identity = (ClaimsIdentity)principal.Identity;
+    //
+    //         var claims = new List<Claim>();
+    //         if (user.IsAdmin)
+    //         {
+    //             claims.Add(new Claim(JwtClaimTypes.Role, "admin"));
+    //         }
+    //         else
+    //         {
+    //             claims.Add(new Claim(JwtClaimTypes.Role, "user"));
+    //         }
+    //
+    //         identity.AddClaims(claims);
+    //         return principal;
+    //     }
+    // }
 }

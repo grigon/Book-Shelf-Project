@@ -21,5 +21,10 @@
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="6.0.0-preview.1.21102.2" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DTO\Update" />
+      <Folder Include="DTO\User" />
+    </ItemGroup>
     
 </Project>

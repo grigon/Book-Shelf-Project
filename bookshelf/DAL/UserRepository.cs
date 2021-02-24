@@ -26,7 +26,7 @@ namespace bookshelf.DAL
 
             IQueryable<User> query = _context.Users;
 
-            return   query.ToArrayAsync();
+            return query.ToArrayAsync();
         }
 
         public async Task<User> GetById(Guid id)

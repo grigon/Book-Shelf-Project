@@ -11,16 +11,6 @@ namespace bookshelf.Model.Users
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(TypeName = "VARCHAR(36)")]
         public Guid Id { get; set; }
-        [Required, StringLength(50)]
-        [Column(TypeName = "VARCHAR(50)")]
-        // public string UserName { get; set; }
-        // [Required, StringLength(50)]
-        // [Column(TypeName = "VARCHAR(50)")]
-        // [PersonalData]
-        // public string Email { get; set; }
-        // [Required, StringLength(72)]
-        // [Column(TypeName = "VARCHAR(72)")]
-        // public string Password { get; set; }
         public bool IsPublic { get; set; }
         public bool IsActive { get; set; }
         [Column(TypeName = "VARCHAR(70)")]

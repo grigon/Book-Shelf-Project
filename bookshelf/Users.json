@@ -2,6 +2,7 @@
   {
     "UserName": "Roman",
     "Email": "roman@mail.com",
+    "password": "somePAss",
     "City": "Warsaw",
     "photoPath": "string"
   },
