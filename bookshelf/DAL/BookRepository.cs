@@ -67,6 +67,19 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
         
+        //returns all books belonging to the logged user
+        public async Task<UserBook[]> GetAllUserBooks(Guid id, string genre)
+        {
+            _logger.LogInformation($"Getting all user Books");
+
+            IQueryable<UserBook> query = _context.UserBooks.Include(b => b.Book).ThenInclude(g => g.Genre).Where(b=> b.Book.Genre.Name == genre)
+                .Include(b => b.Book.BookISBNs)
+                .Include(r => r.Book.Reviews).ThenInclude(u => u.User)
+                .Where(u => u.User.Id.CompareTo(id) > 0);
+            
+            return await query.ToArrayAsync();
+        }
+        
         public void Add(Book entity)
         {
             throw new NotImplementedException();
@@ -77,10 +90,9 @@ namespace bookshelf.DAL
             throw new NotImplementedException();
         }
 
-        public void Remove(Book book)
+        public void Remove(UserBook userBook)
         {
-            
-           // _context.UserBooks.Remove(userBook);
+            _context.UserBooks.Remove(userBook);
         }
 
         public async Task<bool> Commit()

@@ -93,5 +93,23 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
+        
+        //for logged user
+        [HttpGet("logged/UserBooks/{id}/{genre}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<UserBookDTO[]>> GetUserBooks(string genre, Guid id)
+        {
+            try
+            {
+                var result = await _repository.GetAllUserBooks(id, genre);
+                if (result == null) return NotFound();
+                return _mapper.Map<UserBookDTO[]>(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
     }
 }

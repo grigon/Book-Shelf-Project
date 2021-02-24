@@ -14,6 +14,6 @@ namespace bookshelf.DTO.Book.BookLogged
 
         public ICollection<ReviewLoggedDTO> Reviews { get; set; }
         public ICollection<BookISBNDTO> BookISBNs { get; set; }
-        public ICollection<BookHistoryLoggedDTO> BookHistory { get; set; }
+        //public ICollection<BookHistoryLoggedDTO> BookHistory { get; set; }
     }
 }
