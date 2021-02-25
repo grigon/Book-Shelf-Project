@@ -10,6 +10,7 @@ namespace bookshelf.DTO.Create
         public string Email { get; set; }
         [Required, StringLength(72)]
         [Column(TypeName = "VARCHAR(72)")]
+        // public bool RememberMe { get; set; }
         public string Password { get; set; }
     }
 }

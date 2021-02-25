@@ -63,10 +63,11 @@ namespace bookshelf.DAL
 
         public async Task<bool> Commit()
         {
-            // _logger.LogInformation($"Attempitng to save the changes in the context");
+            _logger.LogInformation($"Attempitng to save the changes in the context");
 
-            // Only return success if at least one row was changed
-            return (await _context.SaveChangesAsync()) > 0;
+            //TODO return some bool without try block
+            await _context.SaveChangesAsync();
+            return true;
         }
         
     }

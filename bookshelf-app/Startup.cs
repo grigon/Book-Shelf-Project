@@ -47,7 +47,14 @@ namespace bookshelf_app
             services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<BaseDbContext>();
+            }).AddEntityFrameworkStores<BaseDbContext>()
+                .AddRoles<IdentityRole>();
+            
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                    policy => policy.RequireRole("Administrator"));
+            });
 
             services.AddSingleton(_key);
             
@@ -100,13 +107,11 @@ namespace bookshelf_app
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-
             app.UseRouting();
             
             app.UseCors("MyAllowSpecificOrigins");
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

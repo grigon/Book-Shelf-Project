@@ -11,9 +11,6 @@ namespace bookshelf.DTO.Read
         public string Email { get; set; }
         [Required, StringLength(72)]
         [Column(TypeName = "VARCHAR(72)")]
-        public string Password { get; set; }
-        [StringLength(72)]
-        [Column(TypeName = "VARCHAR(72)")]
         public string City { get; set; }
         [Column(TypeName = "VARCHAR(200)")]
         public string PhotoPath { get; set; }

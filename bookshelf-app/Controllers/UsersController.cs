@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Routing;
 namespace bookshelf_app.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/users")]
+    
     public class UsersController : ControllerBase
     {
         private readonly IBaseRepository<User> _repository;
@@ -31,6 +33,7 @@ namespace bookshelf_app.Controllers
             _userManager = userManager;
         }
         
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpGet]
         public async Task<ActionResult<UserReadDTO[]>> GetAll()
         {
@@ -72,8 +75,8 @@ namespace bookshelf_app.Controllers
                     return BadRequest("Could not use current Id");
                 }
                 user.RegistrationDate = DateTime.Now;
-                user.NormalizedEmail = model.Email.Normalize();
-                
+                // user.NormalizedEmail = model.Email.Normalize();
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result != IdentityResult.Success)
                 {
@@ -82,10 +85,9 @@ namespace bookshelf_app.Controllers
                 
                 _repository.Add(user);
 
-                if (await _repository.Commit())
-                {
-                    return Created(location, _mapper.Map<UserReadDTO>(user));
-                }
+                // await _repository.Commit();
+                return Created(location, _mapper.Map<UserReadDTO>(user));
+                
             }
             catch (Exception e)
             {

@@ -22,7 +22,6 @@ namespace bookshelf_app.Controllers
 {
     [ApiController]
     [Route("api/account")]
-    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
@@ -45,17 +44,14 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost("CreateToken")]
-        public async Task<IActionResult> CreateToken([FromBody] UserReadDTO readDto)
+        public async Task<IActionResult> CreateToken(UserLoginDTO loginDto)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(readDto.Email);
-                Console.WriteLine(user.Email);
-                Console.WriteLine(readDto.Password);
+                var user = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (user != null)
                 {
-                    var result = _signInManager.CheckPasswordSignInAsync(user, readDto.Password, false);
-                    Console.WriteLine(result.ToString());    
+                    var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
                     if (result.Result == SignInResult.Success)
                     {
                         var claims = new[]
@@ -91,7 +87,7 @@ namespace bookshelf_app.Controllers
             return BadRequest("User not found");
         }
 
-        [HttpGet]
+        [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -102,11 +98,22 @@ namespace bookshelf_app.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
-            var user = _mapper.Map<User>(model);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (ModelState.IsValid)
             {
-                await _signInManager.SignInAsync(user, false);
+                var result = await _signInManager.PasswordSignInAsync(user, 
+                    model.Password,
+                    false,
+                    // model.RememberMe, 
+                    false);
+                if (result.Succeeded)
+                {
+                    var token = await CreateToken(model);
+                    return Ok();
+                }
             }
+            ModelState.AddModelError("", "Failed to login.");
+            
             return BadRequest();
         } 
     }

@@ -24,7 +24,6 @@
 
     <ItemGroup>
       <Folder Include="DTO\Update" />
-      <Folder Include="DTO\User" />
     </ItemGroup>
     
 </Project>
