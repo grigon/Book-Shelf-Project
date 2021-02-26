@@ -4,6 +4,7 @@ using AutoMapper;
 using bookshelf.DAL;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
+using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -27,15 +28,15 @@ namespace bookshelf_app.Controllers
         }
         
         //for not logged/registered users
-        [HttpGet("genre={genre}")]
+        [HttpGet("genre")]
+       // [HttpGet("genre={genre}")]
         [Produces("application/json")]
         public async Task<ActionResult<BookDTO[]>> Get(string genre)
         { 
             try
             {
                 var results = await _repository.GetAll(genre);
-                BookDTO[] models = _mapper.Map<BookDTO[]>(results);
-                return Ok(models);
+               return _mapper.Map<BookDTO[]>(results);
             }
             catch (Exception)
             {
@@ -67,7 +68,7 @@ namespace bookshelf_app.Controllers
         { 
             try
             {
-                var results = await _repository.GetAll(genre);
+                var results = await _repository.GetAllLoogged(genre);
                 BookLoggedDTO[] models = _mapper.Map<BookLoggedDTO[]>(results);
                 return Ok(models);
             }
@@ -84,7 +85,7 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-                var result = await _repository.GetById(id);
+                var result = await _repository.GetByIdLogged(id);
                 if (result == null) return NotFound();
                 return _mapper.Map<BookLoggedDTO>(result);
             }

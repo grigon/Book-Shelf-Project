@@ -24,11 +24,11 @@ namespace bookshelf.DAL
         public async Task<Book[]> GetAll(string genre)
         {
             _logger.LogInformation($"Getting all Books");
-
+            
             IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
                 .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Take(2);
-            
+
             return await query.ToArrayAsync();
         }
 
@@ -44,7 +44,7 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<Book[]> GetAllLooged(string genre)
+        public async Task<Book[]> GetAllLoogged(string genre)
         {
             _logger.LogInformation($"Getting all Books");
 
@@ -80,12 +80,12 @@ namespace bookshelf.DAL
             return await query.ToArrayAsync();
         }
         
-        public void Add(Book entity)
+        public void Add(UserBook userBook)
         {
-            throw new NotImplementedException();
+            _context.Add(userBook);
         }
 
-        public Task<Book> Update(Book t)
+        public Task<Book> Update(Book book)
         {
             throw new NotImplementedException();
         }
