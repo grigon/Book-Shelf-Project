@@ -4,7 +4,6 @@ using AutoMapper;
 using bookshelf.DAL;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
-using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -31,11 +30,11 @@ namespace bookshelf_app.Controllers
         [HttpGet("genre")]
        // [HttpGet("genre={genre}")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> Get(string genre)
+        public async Task<ActionResult<BookDTO[]>> Get(int i/*string genre*/)
         { 
             try
             {
-                var results = await _repository.GetAll(genre);
+                var results = await _repository.GetAll(i/*genre*/);
                return _mapper.Map<BookDTO[]>(results);
             }
             catch (Exception)
@@ -112,5 +111,41 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
+        
+        /*[HttpPut("logged/UserBooks/add")]
+        [HttpPut("{id:int")]
+        //to check is UserBookDTO valid for this method
+        public async Task<ActionResult<UserBookDTO>> Put(UserBookDTO userBookDto)
+        {
+            try
+            {
+                var talk = await _repository.GetTalkByMonikerAsync(moniker, id, true);
+                if (talk == null) return NotFound("Couldn't find the talk");
+
+                if (model.Speaker != null)
+                {
+                    var speaker = await _repository.GetSpeakerAsync(model.Speaker.SpeakerId);
+                    if (speaker != null)
+                    {
+                        talk.Speaker = speaker;
+                    }
+                }
+
+                _mapper.Map(model, talk);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    return _mapper.Map<TalkModel>(talk);
+                }
+                else
+                {
+                    return BadRequest("Failed to update data base");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to get talk");
+            }
+        }*/
     }
 }

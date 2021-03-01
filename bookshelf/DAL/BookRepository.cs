@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using bookshelf.Context;
 using bookshelf.Model.Books;
 using Microsoft.EntityFrameworkCore;
@@ -21,15 +23,34 @@ namespace bookshelf.DAL
         }
 
         //for not logged/registered user
-        public async Task<Book[]> GetAll(string genre)
+        public async Task<IEnumerable<IEnumerable<Genre, Book>>> GetAll(int j/*string genre*/)
         {
             _logger.LogInformation($"Getting all Books");
-            
+
+            IQueryable<Genre> genres = _context.Genres;
+            Genre[] gg = genres.ToArray();
+
             IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Take(2);
+                .Include(r => r.Reviews).ThenInclude(u => u.User)/*.Where(b => b.Genre.Name == genre)*/.Skip(j).Take(2);
+            
+            foreach (var g in gg)
+            {
+                query = query.Concat(_context.Books.Include(a => a.Author).Include(g => g.Genre)
+                    .Include(i => i.BookISBNs)
+                    .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == g.Name).Skip(j).Take(2));
+            }
 
-            return await query.ToArrayAsync();
+            var query2 = from genre in _context.Genres
+                join book in _context.Books on
+                    genre.Name equals book.Genre.Name into bookGroup
+                select new
+                {
+                    Genre = genre,
+                    Book = bookGroup.Take(2)
+                };
+            
+            return await query2.ToArrayAsync();
         }
 
         //for not logged/registered user
