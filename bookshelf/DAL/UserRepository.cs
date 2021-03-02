@@ -69,6 +69,5 @@ namespace bookshelf.DAL
             await _context.SaveChangesAsync();
             return true;
         }
-        
     }
 }

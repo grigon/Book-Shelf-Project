@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using bookshelf;
+using bookshelf_app.Auth;
 using bookshelf.Context;
 using bookshelf.DAL;
 using bookshelf.DTO;
@@ -11,6 +13,7 @@ using bookshelf.Model.Books;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,16 +43,14 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            // services.AddScoped<IUserClaimsPrincipalFactory<User>, 
-            //     AdditionalUserClaimsPrincipalFactory>();
 
             services.AddIdentity<User, IdentityRole>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<BaseDbContext>()
-                .AddRoles<IdentityRole>();
-            
+                {
+                    options.User.RequireUniqueEmail = true;
+                }).AddEntityFrameworkStores<BaseDbContext>()
+                .AddRoles<IdentityRole>()
+                .AddTokenProvider("BookShelf", typeof(DataProtectorTokenProvider<User>));
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdministratorRole",
@@ -57,6 +58,9 @@ namespace bookshelf_app
             });
 
             services.AddSingleton(_key);
+            services.AddTransient<TokenManagerMiddleware>();
+            services.AddTransient<ITokenManager, TokenManager>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             
             services.AddAuthentication()
                 .AddCookie()
@@ -66,7 +70,9 @@ namespace bookshelf_app
                     {
                         ValidIssuer = Configuration["Tokens:Issuer"],
                         ValidAudience = Configuration["Tokens:Audience"],
-                        IssuerSigningKey = _key
+                        IssuerSigningKey = _key,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
             
@@ -81,6 +87,9 @@ namespace bookshelf_app
                     b => b.MigrationsAssembly("bookshelf-app")));
             
             services.AddTransient<DataSeeder>();
+            services.AddDistributedRedisCache(r =>
+                r.Configuration = Configuration["redis:ConnectionString"]
+            ); 
             
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddScoped<IBaseRepository<UserBook>, UserBookRepository>();
@@ -113,6 +122,7 @@ namespace bookshelf_app
             
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<TokenManagerMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
