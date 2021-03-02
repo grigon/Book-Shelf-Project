@@ -13,9 +13,9 @@ namespace bookshelf.DAL
     public class ChatRepository : IChatRepository
     {
         private readonly BaseDBContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger<ChatRepository> _logger;
 
-        public ChatRepository(BaseDBContext context, ILogger logger)
+        public ChatRepository(BaseDBContext context, ILogger<ChatRepository> logger)
         {
             this._context = context;
             this._logger = logger;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace bookshelf_app.Controllers
 {
@@ -30,14 +31,15 @@ namespace bookshelf_app.Controllers
             try
             {
                 var result = await _chatRepository.GetAll();
+
+                return result;
             }
             catch (Exception)
             {
 
-                throw;
+                _logger.LogError("An error has occured with chat repository");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
-            
-
 
         }
     }
