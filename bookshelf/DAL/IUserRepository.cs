@@ -3,10 +3,11 @@ using System.Collections;
 using System.Threading.Tasks;
 using bookshelf.Model.Books;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace bookshelf.DAL
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IUserRepository<T> where T : class
 
     {
         Task<T[]> GetAll();
@@ -15,5 +16,6 @@ namespace bookshelf.DAL
         Task<T> Update(T t);
         void Remove(T entity);
         Task<bool> Commit();
+        // Task<IdentityUserToken<string>> GetRefreshTokenById(string id);
     }
 }

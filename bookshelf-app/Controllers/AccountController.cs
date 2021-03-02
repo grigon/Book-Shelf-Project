@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,6 +9,7 @@ using AutoMapper;
 using AutoMapper.Configuration;
 using bookshelf_app.Auth;
 using bookshelf_app.Migrations;
+using bookshelf.DAL;
 using bookshelf.DTO.Create;
 using bookshelf.DTO.Read;
 using bookshelf.Model.Users;
@@ -17,6 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -32,12 +35,13 @@ namespace bookshelf_app.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly RsaSecurityKey _key;
+        private readonly IUserRepository<User> _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITokenManager _tokenManager;
 
         public AccountController(ILogger<AccountController> logger, SignInManager<User> signInManager,
-            UserManager<User> userManager, IMapper mapper, RsaSecurityKey key,
+            UserManager<User> userManager, IMapper mapper, RsaSecurityKey key, IUserRepository<User> userRepository,
             IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ITokenManager tokenManager)
         {
             _logger = logger;
@@ -45,6 +49,7 @@ namespace bookshelf_app.Controllers
             _userManager = userManager;
             _mapper = mapper;
             _key = key;
+            _userRepository = userRepository;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             _tokenManager = tokenManager;
@@ -71,7 +76,7 @@ namespace bookshelf_app.Controllers
                         var creds = new SigningCredentials(
                             _key,
                             SecurityAlgorithms.RsaSha256Signature);
-                        
+
                         var token = new JwtSecurityToken(
                             _configuration["Tokens:Issuer"],
                             _configuration["Tokens:Audience"],
@@ -81,25 +86,23 @@ namespace bookshelf_app.Controllers
                         );
 
                         await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                        var newRefreshToken = await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
-                        await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "AccessToken", token.ToString());
-
+                        var newRefreshToken = CreateRefreshToken(user);
                         var results = new
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo,
                             refreshToken = newRefreshToken
-                            
                         };
                         return Created("", results);
                     }
+
                     return BadRequest("Bad User name or password");
-                    
                 }
             }
+
             return BadRequest("User not found");
         }
-        
+
 
         [Authorize]
         [HttpGet("logout")]
@@ -118,7 +121,7 @@ namespace bookshelf_app.Controllers
             }
         }
 
-        [HttpPost("cancelToken")]
+        [HttpPost("CancelToken")]
         public async Task<IActionResult> CancelAccessToken()
         {
             await _tokenManager.DeactivateCurrentAsync();
@@ -126,23 +129,24 @@ namespace bookshelf_app.Controllers
         }
 
         [Authorize]
-        [HttpGet("RefreshToken")]
-        public async Task<IActionResult> RefreshToken()
+        [HttpGet("RefreshAccessToken")]
+        public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
         {
             try
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            
-                var refreshToken = await _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                var isValid = await _userManager.VerifyUserTokenAsync(user, "BookShelf", "RefreshToken", refreshToken );
+
+                var isValid =
+                    await _userManager.VerifyUserTokenAsync(user, "BookShelf", "RefreshToken", "RefreshToken");
 
                 if (isValid)
                 {
-                    await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                    var newRefreshToken = await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
-                    await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken", newRefreshToken);
-                    var token = await CreateToken(_mapper.Map<UserLoginDTO>(user));
-                    return Ok(token);
+                    if (refreshToken ==
+                        _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken").ToString())
+                    {
+                        var token = await CreateToken(_mapper.Map<UserLoginDTO>(user));
+                        return Ok(token);
+                    };
                 }
             }
             catch (Exception e)
@@ -153,6 +157,16 @@ namespace bookshelf_app.Controllers
             return BadRequest();
         }
 
+        [HttpPost("CreateRefreshToken")]
+        public async Task<IActionResult> CreateRefreshToken(User user)
+        {
+            var newRefreshToken =
+                await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
+            await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken",
+                newRefreshToken);
+            return Ok(newRefreshToken);
+        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
@@ -160,7 +174,7 @@ namespace bookshelf_app.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(user, 
+                var result = await _signInManager.PasswordSignInAsync(user,
                     model.Password,
                     false,
                     // model.RememberMe, 
@@ -171,9 +185,10 @@ namespace bookshelf_app.Controllers
                     return Ok(token);
                 }
             }
+
             ModelState.AddModelError("", "Failed to login.");
-            
+
             return BadRequest();
-        } 
+        }
     }
 }

@@ -43,11 +43,8 @@ namespace bookshelf_app
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    options.User.RequireUniqueEmail = true;
-                }).AddEntityFrameworkStores<BaseDbContext>()
+            services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddEntityFrameworkStores<BaseDbContext>()
                 .AddRoles<IdentityRole>()
                 .AddTokenProvider("BookShelf", typeof(DataProtectorTokenProvider<User>));
 
@@ -61,7 +58,7 @@ namespace bookshelf_app
             services.AddTransient<TokenManagerMiddleware>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
             services.AddAuthentication()
                 .AddCookie()
                 .AddJwtBearer(cfg =>
@@ -75,7 +72,7 @@ namespace bookshelf_app
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-            
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
@@ -83,26 +80,24 @@ namespace bookshelf_app
             });
 
             services.AddDbContext<BaseDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"),
                     b => b.MigrationsAssembly("bookshelf-app")));
-            
+
             services.AddTransient<DataSeeder>();
             services.AddDistributedRedisCache(r =>
                 r.Configuration = Configuration["redis:ConnectionString"]
-            ); 
-            
-            services.AddScoped<IBaseRepository<User>, UserRepository>();
-            services.AddScoped<IBaseRepository<UserBook>, UserBookRepository>();
+            );
+
+            services.AddScoped<IUserRepository<User>, UserRepository>();
+            // services.AddScoped<UserRepository<UserBook>, UserBookRepository>();
 
             services.AddAutoMapper(typeof(UserProfile).GetTypeInfo().Assembly);
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
             });
-            
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -117,9 +112,9 @@ namespace bookshelf_app
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            
+
             app.UseCors("MyAllowSpecificOrigins");
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<TokenManagerMiddleware>();
@@ -127,34 +122,4 @@ namespace bookshelf_app
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
-
-    // public class AdditionalUserClaimsPrincipalFactory 
-    //     : UserClaimsPrincipalFactory<User, IdentityRole>
-    // {
-    //     public AdditionalUserClaimsPrincipalFactory( 
-    //         UserManager<User> userManager,
-    //         RoleManager<IdentityRole> roleManager, 
-    //         IOptions<IdentityOptions> optionsAccessor) 
-    //         : base(userManager, roleManager, optionsAccessor)
-    //     {}
-    //
-    //     public async override Task<ClaimsPrincipal> CreateAsync(User user)
-    //     {
-    //         var principal = await base.CreateAsync(user);
-    //         var identity = (ClaimsIdentity)principal.Identity;
-    //
-    //         var claims = new List<Claim>();
-    //         if (user.IsAdmin)
-    //         {
-    //             claims.Add(new Claim(JwtClaimTypes.Role, "admin"));
-    //         }
-    //         else
-    //         {
-    //             claims.Add(new Claim(JwtClaimTypes.Role, "user"));
-    //         }
-    //
-    //         identity.AddClaims(claims);
-    //         return principal;
-    //     }
-    // }
 }

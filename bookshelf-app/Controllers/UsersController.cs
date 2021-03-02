@@ -20,12 +20,12 @@ namespace bookshelf_app.Controllers
     
     public class UsersController : ControllerBase
     {
-        private readonly IBaseRepository<User> _repository;
+        private readonly IUserRepository<User> _repository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
         private readonly UserManager<User> _userManager;
 
-        public UsersController(IBaseRepository<User> _repository, IMapper _mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
+        public UsersController(IUserRepository<User> _repository, IMapper _mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
         {
             this._repository = _repository;
             this._mapper = _mapper;

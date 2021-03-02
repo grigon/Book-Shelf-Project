@@ -10,20 +10,20 @@ namespace bookshelf_app.Controllers
     [Route("/Chat")]
     public class ChatController : ControllerBase
     {
-        private readonly ILogger<ChatController> _logger;
-        private readonly IBaseRepository<Chat> _data;
-
-        public ChatController(ILogger<ChatController> logger, IBaseRepository<Chat> data)
-        {
-            _logger = logger;
-            _data = data;
-        }
-        
-        [HttpGet]
-        [Produces("application/json")]
-        public IActionResult Get()
-        {
-            return Ok(_data.GetAll());
-        }
+        // private readonly ILogger<ChatController> _logger;
+        // private readonly ChatRepository _data;
+        //
+        // public ChatController(ILogger<ChatController> logger, ChatRepository data)
+        // {
+        //     _logger = logger;
+        //     _data = data;
+        // }
+        //
+        // [HttpGet]
+        // [Produces("application/json")]
+        // public IActionResult Get()
+        // {
+        //     // return Ok(_data.GetAll());
+        // }
     }
 }

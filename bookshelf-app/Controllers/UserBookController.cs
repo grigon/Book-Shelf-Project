@@ -13,21 +13,21 @@ namespace bookshelf_app.Controllers
     [Route("/UserBooks")]
     public class UserBookController : ControllerBase
     {
-        private readonly ILogger<UserBookController> _logger;
-        private readonly IBaseRepository<UserBook> _data;
-
-        public UserBookController(ILogger<UserBookController> logger, IBaseRepository<UserBook> data)
-        {
-            _logger = logger;
-            _data = data;
-        }
-
-        [HttpGet]
-        [Produces("application/json")]
-        public IActionResult Get()
-        {
-            return Ok(_data.GetAll());
-        }
+        // private readonly ILogger<UserBookController> _logger;
+        // private readonly IBaseRepository<UserBook> _data;
+        //
+        // public UserBookController(ILogger<UserBookController> logger, IBaseRepository<UserBook> data)
+        // {
+        //     _logger = logger;
+        //     _data = data;
+        // }
+        //
+        // [HttpGet]
+        // [Produces("application/json")]
+        // public IActionResult Get()
+        // {
+        //     return Ok(_data.GetAll());
+        // }
 
         // [HttpPut("UpdateBorrowedStatus/{id}")]
         // public async Task<ActionResult<UserBook>> UpdateUserBook(Guid id)

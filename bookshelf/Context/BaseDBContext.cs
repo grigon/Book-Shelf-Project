@@ -2,6 +2,7 @@
 using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,5 @@ namespace bookshelf.Context
         public DbSet<BookHistory> BookHistory { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        
     }
 }

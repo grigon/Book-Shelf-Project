@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RTools_NTS.Util;
 
 namespace bookshelf.DAL
 {
-    public class UserRepository : IBaseRepository<User>
+    public class UserRepository : IUserRepository<User>
     {
         private readonly ILogger _logger;
         private readonly BaseDbContext _context;
@@ -69,5 +71,11 @@ namespace bookshelf.DAL
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IdentityUserToken<string>> GetRefreshTokenById(string id)
+        {
+            return _context.UserTokens.First(t => t.UserId == id);
+        }
+        
     }
 }
