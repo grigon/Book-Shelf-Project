@@ -23,7 +23,7 @@ namespace bookshelf.DAL
         }
 
         //for not logged/registered user
-        public async Task<IEnumerable<IEnumerable<Genre, Book>>> GetAll(int j/*string genre*/)
+        public async Task<Book[]> GetAll(int j/*string genre*/)
         {
             _logger.LogInformation($"Getting all Books");
 
@@ -32,7 +32,7 @@ namespace bookshelf.DAL
 
             IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User)/*.Where(b => b.Genre.Name == genre)*/.Skip(j).Take(2);
+                .Include(r => r.Reviews).ThenInclude(u => u.User)/*.Where(b => b.Genre.Name == genre)*//*.Skip(j).*/.Take(2);
             
             foreach (var g in gg)
             {
@@ -47,10 +47,30 @@ namespace bookshelf.DAL
                 select new
                 {
                     Genre = genre,
-                    Book = bookGroup.Take(2)
+                    Book = bookGroup
                 };
+
+            var query3 = _context.Genres.GroupJoin(_context.Books,
+                g => g.Name,
+                b => b.Genre.Name,
+                (g, b) =>
+                    new
+                    {
+                        Genge = g,
+                        Book = b
+                    }).GroupBy(g => g.Genge.Name);
+
+            var query4 = query3.SelectMany(b => b.SelectMany(g => g.Book).Take(2));
             
-            return await query2.ToArrayAsync();
+            foreach (var gb in query3)
+            {
+              foreach (var b in gb)
+                    {
+                        
+                    }
+            }
+            
+            return await query.ToArrayAsync();
         }
 
         //for not logged/registered user
