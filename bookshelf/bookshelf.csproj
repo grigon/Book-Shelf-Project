@@ -7,6 +7,12 @@
         <!--<TargetFramework>net5.0</TargetFramework>-->
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Remove="DAL\DTOS\**" />
+      <EmbeddedResource Remove="DAL\DTOS\**" />
+      <None Remove="DAL\DTOS\**" />
+    </ItemGroup>
+
 <!--    <ItemGroup>-->
 <!--      <ProjectReference Include="..\bookshelf-app\bookshelf-app.csproj" />-->
 <!--    </ItemGroup>-->
@@ -28,7 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DAL\DTOS\" />
+      <Folder Include="DTOS\" />
     </ItemGroup>
     
 </Project>

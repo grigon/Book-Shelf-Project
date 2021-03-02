@@ -1,56 +1,54 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
+using Microsoft.Extensions.Logging;
 
 namespace bookshelf.DAL
 {
-    public class ChatRepository : IBaseRepository<Chat>
+    public class ChatRepository : IChatRepository<Chat>
     {
         private readonly BaseDBContext _context;
+        private readonly ILogger _logger;
 
-        public ChatRepository(BaseDBContext context)
+        public ChatRepository(BaseDBContext context, ILogger logger)
         {
-            _context = context;
+            this._context = context;
+            this._logger = logger;
+
         }
 
-        public IEnumerable GetAll()
+
+        public void Create(Chat entity)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Adding an object {entity.GetType()} to the context");
         }
 
-        public Chat GetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Chat Add(Chat t)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Chat Update(Chat t)
+        public void Delete(Chat entity)
         {
             throw new NotImplementedException();
         }
 
-        public Chat Remove(Guid id)
+        public Task<Chat[]> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public void Save()
+        public Task<Chat> GetById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public UserBook UpdateIsPublic(Chat t)
+        public async Task<bool> SaveChanges()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Attempting to save this changes");
+
+            return (await _context.SaveChangesAsync() > 0) ;
         }
 
-        public int Commit()
+        public Task<Chat> Update(Chat t)
         {
             throw new NotImplementedException();
         }

@@ -42,7 +42,7 @@ namespace bookshelf.Migrations
                 {
                     table.PrimaryKey("PK_Genres", x => x.Id);
                 });
-
+            
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
