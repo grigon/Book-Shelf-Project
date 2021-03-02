@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bookshelf.Model.Chats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +7,20 @@ using System.Threading.Tasks;
 
 namespace bookshelf.DAL
 {
-    public interface IChatRepository<T> where T : class
+    public interface IChatRepository 
     {
+        void Create<T>(T entity) where T : class;
 
-        Task<T[]> GetAll();
-        Task<T> GetById(Guid id);
-        void Create(T entity);
-        Task<T> Update(T entity);
-        void Delete(T entity);
+        void Delete<T>(T entity) where T : class;
+        void Update<T>(T entity) where T : class;
+
+        Task<ChatMessage[]> GetAll();
+        Task<ChatMessage[]> GetAllMessagesForUsers(Guid id);
+        Task<ChatMessage[]> GetByIdChatId(Guid id);
+        Task<Chat[]> AllChatUser(Guid id);
         Task<bool> SaveChanges();
+
+        
 
     }
 }

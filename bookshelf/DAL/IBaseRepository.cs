@@ -7,6 +7,8 @@ namespace bookshelf.DAL
     public interface IBaseRepository<T>
     {
         IEnumerable GetAll();
+
+        
         T GetById(Guid id);
         T Add(T t);
         T Update(T t);
