@@ -32,6 +32,7 @@ namespace bookshelf_app
             //services.AddDbContext<BaseDBContext>(
             //    options => options.UseSqlServer(Configuration["ConnectionString"][0],
             //        b => b.MigrationsAssembly("bookshelf-app")));
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
