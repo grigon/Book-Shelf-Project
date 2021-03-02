@@ -33,8 +33,6 @@
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DTOS\" />
-    </ItemGroup>
+
     
 </Project>

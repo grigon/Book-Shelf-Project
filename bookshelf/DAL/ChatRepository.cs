@@ -30,12 +30,14 @@ namespace bookshelf.DAL
 
         public void Update<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Updating an object {entity.GetType()} from the context");
+            _context.Update(entity);
         }
 
         public void Delete<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"Removing and object {entity.GetType()} from the context");
+            _context.Remove(entity);
         }
 
         public async Task<ChatMessage[]> GetAll()
@@ -60,6 +62,17 @@ namespace bookshelf.DAL
             _logger.LogInformation("Attempting to save this changes");
 
             return (await _context.SaveChangesAsync() > 0) ;
+        }
+
+        public async Task<ChatMessage[]> AllChatUser(Guid id)
+        {
+            _logger.LogInformation($"Get all Chat by id");
+
+            IQueryable<ChatMessage> query = _context.Messages
+                .Include(m => m.Chat).Where(m => m.MessageAuthor.Id == id);
+            //join with userChat
+
+            return await query.ToArrayAsync();
         }
 
     }

@@ -9,6 +9,6 @@ namespace bookshelf.Profiles
 {
     public class CHatProfiles
     {
-        this.CreateMap<Chat>
+        //this.CreateMap<Chat>
     }
 }

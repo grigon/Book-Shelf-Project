@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace bookshelf_app
 {
@@ -32,16 +33,21 @@ namespace bookshelf_app
             //services.AddDbContext<BaseDBContext>(
             //    options => options.UseSqlServer(Configuration["ConnectionString"][0],
             //        b => b.MigrationsAssembly("bookshelf-app")));
+            services.AddScoped<IChatRepository, ChatRepository>();
 
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             //services.AddDbContext<BaseDBContext>(
             //    options => options.UseSqlServer(Configuration["ConnectionString"]));
             //services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
