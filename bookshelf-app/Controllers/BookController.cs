@@ -4,6 +4,7 @@ using AutoMapper;
 using bookshelf.DAL;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
+using bookshelf.Model.Books;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -28,14 +29,15 @@ namespace bookshelf_app.Controllers
         
         //for not logged/registered users
         [HttpGet("genre")]
-       // [HttpGet("genre={genre}")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> Get(int i/*string genre*/)
+       //Change to book DTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public async Task<ActionResult<Book[]>> Get(int i/*string genre*/)
         { 
             try
             {
                 var results = await _repository.GetAll(i/*genre*/);
-               return _mapper.Map<BookDTO[]>(results);
+                //return _mapper.Map<BookDTO[]>(results);
+                return results;
             }
             catch (Exception)
             {
@@ -109,6 +111,37 @@ namespace bookshelf_app.Controllers
             {
                 Console.WriteLine(e.StackTrace);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
+        
+        [HttpGet("{genre}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO[]>> Get(int page, string genre)
+        { 
+            try
+            {
+                var results = await _repository.GetPartByGenre(page, genre);
+                return _mapper.Map<BookDTO[]>(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        //paging books by genre for logged user
+        [HttpGet("logged/{genre}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookLoggedDTO[]>> GetLoggedPartByGenre(int page, string genre)
+        { 
+            try
+            {
+                var results = await _repository.GetPartByGenre(page, genre);
+                return _mapper.Map<BookLoggedDTO[]>(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
         
