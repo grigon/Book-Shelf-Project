@@ -37,6 +37,10 @@ namespace bookshelf_app
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BaseDbContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"),
+                    b => b.MigrationsAssembly("bookshelf-app")));
+
             services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<BaseDbContext>()
                 .AddRoles<IdentityRole>()
