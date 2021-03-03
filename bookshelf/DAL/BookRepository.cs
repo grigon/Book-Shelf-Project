@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper.QueryableExtensions;
 using bookshelf.Context;
 using bookshelf.Model.Books;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +11,10 @@ namespace bookshelf.DAL
     public class BookRepository
     {
 
-        private readonly BaseDBContext _context;
+        private readonly BaseDbContext _context;
         private readonly ILogger<BookRepository> _logger;
 
-        public BookRepository(BaseDBContext context, ILogger<BookRepository> logger)
+        public BookRepository(BaseDbContext context, ILogger<BookRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -50,7 +48,6 @@ namespace bookshelf.DAL
                     Genre = genre,
                     Book = bookGroup
                 };
-
             var query3 = _context.Genres.GroupJoin(_context.Books,
                 g => g.Name,
                 b => b.Genre.Name,
@@ -60,7 +57,6 @@ namespace bookshelf.DAL
                         Genge = g,
                         Book = b
                     }).GroupBy(g => g.Genge.Name);
-
             var query4 = query3.SelectMany(b => b.SelectMany(g => g.Book).Take(2));
             
             foreach (var gb in query3)

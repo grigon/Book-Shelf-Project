@@ -4,17 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RTools_NTS.Util;
 
 namespace bookshelf.DAL
 {
-    public class UserRepository : IBaseRepository<User>
+    public class UserRepository : IUserRepository<User>
     {
         private readonly ILogger _logger;
-        private readonly BaseDBContext _context;
+        private readonly BaseDbContext _context;
 
-        public UserRepository(BaseDBContext context, ILogger<UserRepository> logger)
+        public UserRepository(BaseDbContext context, ILogger<UserRepository> logger)
         {
             _logger = logger;
             _context = context;
@@ -26,7 +28,7 @@ namespace bookshelf.DAL
 
             IQueryable<User> query = _context.Users;
 
-            return   query.ToArrayAsync();
+            return query.ToArrayAsync();
         }
 
         public async Task<User> GetById(Guid id)
@@ -63,10 +65,16 @@ namespace bookshelf.DAL
 
         public async Task<bool> Commit()
         {
-            // _logger.LogInformation($"Attempitng to save the changes in the context");
+            _logger.LogInformation($"Attempitng to save the changes in the context");
 
-            // Only return success if at least one row was changed
-            return (await _context.SaveChangesAsync()) > 0;
+            //TODO return some bool without try block
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IdentityUserToken<string>> GetRefreshTokenById(string id)
+        {
+            return _context.UserTokens.First(t => t.UserId == id);
         }
         
     }

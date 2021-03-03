@@ -1,14 +1,18 @@
-﻿using bookshelf.Model.Books;
+﻿using System;
+using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace bookshelf.Context
 {
-    public class BaseDBContext : DbContext
+    public class BaseDbContext : IdentityDbContext<User>
     {
-        public BaseDBContext(DbContextOptions<BaseDBContext> options)
+        // private readonly string _connectionString;
 
+        public BaseDbContext(DbContextOptions<BaseDbContext> options)
             : base(options)
         {
         }

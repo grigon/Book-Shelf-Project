@@ -2,36 +2,45 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using bookshelf.DAL;
-using bookshelf.DTO.User;
+using bookshelf.DTO.Create;
+using bookshelf.DTO.Read;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 namespace bookshelf_app.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/users")]
+    
     public class UsersController : ControllerBase
     {
-        private readonly IBaseRepository<User> _repository;
+        private readonly IUserRepository<User> _repository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
+        private readonly UserManager<User> _userManager;
 
-        public UsersController(IBaseRepository<User> _repository, IMapper _mapper, LinkGenerator linkGenerator)
+        public UsersController(IUserRepository<User> _repository, IMapper _mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
         {
             this._repository = _repository;
             this._mapper = _mapper;
             _linkGenerator = linkGenerator;
+            _userManager = userManager;
         }
         
+        // [Authorize(Policy = "RequireAdministratorRole")]
         [HttpGet]
-        public async Task<ActionResult<UserModel[]>> GetAll()
+        public async Task<ActionResult<UserReadDTO[]>> GetAll()
         {
             try
             {
                 User[] results = await _repository.GetAll();
-                return _mapper.Map<UserModel[]>(results);
+                return _mapper.Map<UserReadDTO[]>(results);
             }
             catch (Exception)
             {
@@ -40,26 +49,25 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserModel>> GetUser(Guid  id)
+        public async Task<ActionResult<UserReadDTO>> GetUser(Guid  id)
         {
             try
             {
                 var result = await _repository.GetById(id);
                 if (result == null) return NotFound();
-                return _mapper.Map<UserModel>(result);
+                return _mapper.Map<UserReadDTO>(result);
             }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
-
+        
         [HttpPost]
-        public async Task<ActionResult<UserModel>> Post(UserModel model)
+        public async Task<ActionResult<UserReadDTO>> Post(UserCreateDTO model)
         {
             try
             {
-                
                 var user = _mapper.Map<User>(model);
                 var location = _linkGenerator.GetPathByAction("GetUser", "Users", new { id = user.Id });
                 if (string.IsNullOrWhiteSpace(location))
@@ -67,11 +75,19 @@ namespace bookshelf_app.Controllers
                     return BadRequest("Could not use current Id");
                 }
                 user.RegistrationDate = DateTime.Now;
-                _repository.Add(user);
-                if (await _repository.Commit())
+                // user.NormalizedEmail = model.Email.Normalize();
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result != IdentityResult.Success)
                 {
-                    return Created(location, _mapper.Map<UserModel>(user));
+                    throw new InvalidOperationException("Could not create new user");
                 }
+                
+                _repository.Add(user);
+
+                // await _repository.Commit();
+                return Created(location, _mapper.Map<UserReadDTO>(user));
+                
             }
             catch (Exception e)
             {
@@ -80,7 +96,7 @@ namespace bookshelf_app.Controllers
 
             return BadRequest();
         }
-
+        
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(Guid Id)
         {
