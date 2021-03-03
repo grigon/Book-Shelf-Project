@@ -39,6 +39,12 @@ namespace bookshelf.DAL
             _logger.LogInformation($"Removing and object {entity.GetType()} from the context");
             _context.Remove(entity);
         }
+        public async Task<bool> SaveChanges()
+        {
+            _logger.LogInformation("Attempting to save this changes");
+
+            return (await _context.SaveChangesAsync() > 0);
+        }
 
         public async Task<ChatMessage[]> GetAll()
         {
@@ -57,13 +63,8 @@ namespace bookshelf.DAL
 
             return await query.ToArrayAsync();
         }
-        public async Task<bool> SaveChanges()
-        {
-            _logger.LogInformation("Attempting to save this changes");
-
-            return (await _context.SaveChangesAsync() > 0) ;
-        }
-
+        
+        //allchats/user
         public async Task<ChatMessage[]> AllChatUser(Guid id)
         {
             _logger.LogInformation($"Get all Chat by id");
@@ -73,7 +74,28 @@ namespace bookshelf.DAL
             //join with userChat
 
             return await query.ToArrayAsync();
+
         }
+        //allchats/admin
+        public async Task<Chat[]> AllChatsForAdmin()
+        {
+            _logger.LogInformation($"Get all Chats for user");
+
+            var query = _context.Chats;
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<ChatMessage[]> MessagesForOneChat(Guid chatid)
+        {
+            _logger.LogInformation("Get all messages for one chat");
+
+            var query = _context.Messages.Where(c => c.Chat.ChatId == chatid);
+
+
+            return await query.ToArrayAsync();
+        }
+
 
     }
 }

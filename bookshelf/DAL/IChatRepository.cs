@@ -18,6 +18,8 @@ namespace bookshelf.DAL
         Task<ChatMessage[]> GetAllMessagesForUsers(Guid id);
         Task<ChatMessage[]> AllChatUser(Guid id);
 
+        Task<Chat[]> AllChatsForAdmin();
+        Task<ChatMessage[]> MessagesForOneChat(Guid chatid);
         Task<bool> SaveChanges();
 
         
