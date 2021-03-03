@@ -95,7 +95,5 @@ namespace bookshelf.DAL
 
             return await query.ToArrayAsync();
         }
-
-
     }
 }
