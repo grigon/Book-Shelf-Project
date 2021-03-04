@@ -78,7 +78,10 @@ namespace bookshelf_app.Controllers
                         );
 
                         await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                        var newRefreshToken = CreateRefreshToken(user);
+                        var newRefreshToken =
+                            await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
+                        await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken",
+                            newRefreshToken);
                         var results = new
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -113,6 +116,7 @@ namespace bookshelf_app.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("CancelToken")]
         public async Task<IActionResult> CancelAccessToken()
         {
@@ -158,8 +162,7 @@ namespace bookshelf_app.Controllers
                 newRefreshToken);
             return Ok(newRefreshToken);
         }
-
-
+        
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
