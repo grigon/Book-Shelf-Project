@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.Internal;
 using bookshelf.Context;
 using bookshelf.Model.Books;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace bookshelf.DAL
         }
 
         //for not logged/registered user
+        /*
         public async Task<Book[]> GetAll(int j)
         {
             _logger.LogInformation($"Getting all Books");
@@ -53,7 +55,8 @@ namespace bookshelf.DAL
 
             return await Task.WhenAll<Book>(resultBooks);
         }
-
+        */
+        
         //for not logged/registered user
         public async Task<Book> GetById(Guid id)
         {
@@ -109,7 +112,7 @@ namespace bookshelf.DAL
             //why not correct?
             IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Skip(page > 1 ? 2 * page - 2 : 0).Take(2);
+                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
         }

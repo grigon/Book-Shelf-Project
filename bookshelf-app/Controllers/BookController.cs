@@ -28,14 +28,14 @@ namespace bookshelf_app.Controllers
         }
         
         //for not logged/registered users
-        [HttpGet("genre")]
-        [Produces("application/json")]
+        /*[HttpGet("genre")]
+        [Produces("application/json")]*/
        //Change to book DTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        public async Task<ActionResult<Book[][]>> Get(int i/*string genre*/)
+        /*public async Task<ActionResult<Book[][]>> Get(int i/*string genre#1#)
         { 
             try
             {
-                var results = await _repository.GetAll(i/*genre*/);
+                var results = await _repository.GetAll(i/*genre#1#);
                 //return _mapper.Map<BookDTO[]>(results);
                 return results;
             }
@@ -43,7 +43,7 @@ namespace bookshelf_app.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
-        }
+        }*/
         
         //for not logged/registered users
         [HttpGet("{id}")]
