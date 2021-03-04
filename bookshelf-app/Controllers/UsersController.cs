@@ -16,6 +16,7 @@ namespace bookshelf_app.Controllers
 {
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [FormatFilter]
     [Route("api/users")]
     
     public class UsersController : ControllerBase
@@ -63,7 +64,8 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        [HttpPost]
+        [HttpPost("/add")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserReadDTO>> Post(UserCreateDTO model)
         {
             try

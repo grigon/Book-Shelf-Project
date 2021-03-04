@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
@@ -21,84 +22,36 @@ namespace bookshelf.DAL
         }
 
         //for not logged/registered user
-        public async Task<Book[]> GetAll(int j/*string genre*/)
+        public async Task<Book[]> GetAll(int j)
         {
             _logger.LogInformation($"Getting all Books");
-
-            IQueryable<Genre> genres = _context.Genres;
-            Genre[] gg = genres.ToArray();
-
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
-                .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User)/*.Where(b => b.Genre.Name == genre)*/.Take(2);
             
-            foreach (var g in gg)
+            IQueryable<Genre> genres = _context.Genres;
+            Genre[] genre = genres.ToArray();
+
+            var list = new List<Book[]>();
+            int i = 0;
+            List<Task<Book>> resultBooks = new List<Task<Book>>();
+            
+            foreach (var g in genre)
             {
-                query = query.Concat(_context.Books.Include(a => a.Author).Include(g => g.Genre)
+                Book[] resultBookArray = null;
+                
+                resultBookArray = _context.Books.Include(a => a.Author).
+                    Include(g => g.Genre)
                     .Include(i => i.BookISBNs)
-                    .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == g.Name).Skip(j).Take(2));
+                    .Include(r => r.Reviews).ThenInclude(u => u.User).
+                    Where(b => b.Genre.Name == genre[i].Name).Skip(j).Take(2).ToArray();
+
+                foreach (var book in resultBookArray)
+                {
+                    resultBooks.Add(new Task(() => book));
+                }
+                
+                i += 1;
             }
 
-            /*
-            var query2 = from genre in _context.Genres
-                join book in _context.Books on
-                    genre.Name equals book.Genre.Name into bookGroup
-                select new
-                {
-                    Genre = genre,
-                    Book = bookGroup
-                };
-            var query3 = _context.Genres.GroupJoin(_context.Books,
-                g => g.Name,
-                b => b.Genre.Name,
-                (g, b) =>
-                    new
-                    {
-                        Genge = g,
-                        Book = b
-                    }).GroupBy(g => g.Genge.Name);
-            var query4 = query3.SelectMany(b => b.SelectMany(g => g.Book).Take(2));
-            
-            foreach (var gb in query3)
-            {
-              foreach (var b in gb)
-                    {
-                        
-                    }
-            }*/
-
-            /*
-            var queryA = from book in _context.Books
-                group book by book.Genre.Name
-                into bookGroup
-                select new
-                {
-                    Book = bookGroup
-                } into result orderby result.Book.Key select result;*/
-            
-            
-            /*
-            var query3 = _context.Genres.Join(_context.Books,
-                g => g.Name,
-                b => b.Genre.Name,
-                (g, b) =>
-                    new
-                    {
-                        Genge = g,
-                        Book = b
-                    }).GroupBy(g => g.Genge.Name).Select(b => b);
-            
-            var a = 
-                _context.Genres.GroupJoin(_context.Books,
-                    genre => genre.Name,
-                    book => book.Genre.Name,
-                    (g, booksCollection) =>
-                        new
-                        {
-                            Books = booksCollection.Select(book => book).Take(2)
-                        });*/
-            
-            return await query.ToArrayAsync();
+            return await Task.WhenAll<Book>(resultBooks);
         }
 
         //for not logged/registered user

@@ -31,7 +31,7 @@ namespace bookshelf_app.Controllers
         [HttpGet("genre")]
         [Produces("application/json")]
        //Change to book DTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        public async Task<ActionResult<Book[]>> Get(int i/*string genre*/)
+        public async Task<ActionResult<Book[][]>> Get(int i/*string genre*/)
         { 
             try
             {
