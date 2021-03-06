@@ -12,7 +12,7 @@ namespace bookshelf.DTOS
         public DateTime MessageDate { get; set; }
         public string Message { get; set; }
         
-        public User MessageAuthor { get; set; }
+        public string Autor { get; set; }
         
     }
 }

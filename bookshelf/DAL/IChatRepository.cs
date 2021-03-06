@@ -1,4 +1,5 @@
 ﻿using bookshelf.Model.Chats;
+using bookshelf.Model.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,12 @@ namespace bookshelf.DAL
         Task<ChatMessage[]> AllChatUser(Guid id);
 
         Task<Chat[]> AllChatsForAdmin();
+        //Task<Chat> GetChatIdToConversation();
+        Task<ChatUser[]> GetAllChatsUser();
         Task<ChatMessage[]> MessagesForOneChat(Guid chatid);
         Task<bool> SaveChanges();
+
+        Task<User> GetUserById(Guid id);
 
         
 
