@@ -54,9 +54,9 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation("Get all chat message");
 
-            IQueryable<ChatMessage> query  = _context.Messages.
-                Include(autor => autor.MessageAuthor)
-                .OrderBy(t => t.MessageDate);
+            IQueryable<ChatMessage> query = _context.Messages.
+            Include(autor => autor.MessageAuthor)
+            .OrderBy(t => t.MessageDate);
 
             return await query.ToArrayAsync();
         }

@@ -7,6 +7,8 @@ using System;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using bookshelf.DTOS;
+using Microsoft.AspNetCore.Routing;
+
 
 namespace bookshelf_app.Controllers
 {
@@ -34,12 +36,12 @@ namespace bookshelf_app.Controllers
             {
                 var result = await _chatRepository.GetAll();
 
-                var chat = new Chat();
+
                 //chat.ChatId = new Guid();
                 //var replace = _mapper.Map<Chat>(chat);
 
                 //_chatRepository.Create(replace);
-
+                
                 return _mapper.Map<ChatMessageDTO[]>(result);
             }
             catch (Exception)

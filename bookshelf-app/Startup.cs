@@ -2,6 +2,7 @@ using bookshelf.Context;
 using bookshelf.DAL;
 //using bookshelf.FakeData;
 using bookshelf.Model.Books;
+using bookshelf.Profiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,8 @@ namespace bookshelf_app
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly("bookshelf"));
+            services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
@@ -48,7 +50,7 @@ namespace bookshelf_app
             //    options => options.UseSqlServer(Configuration["ConnectionString"]));
             //services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
 
-            services.AddControllers();
+            services.AddMvcCore();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
