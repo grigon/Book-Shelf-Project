@@ -27,7 +27,7 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Adding an object {entity.GetType()} to the context");
             _context.Add(entity);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public void Update<T>(T entity) where T : class
@@ -179,6 +179,13 @@ namespace bookshelf.DAL
             _logger.LogInformation("Get user by Id");
 
             var query = _context.Users.Where(u => u.Id == id);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Chat> GetChatById(Guid chatId)
+        {
+            var query = _context.Chats.Where(c => c.ChatId == chatId);
 
             return await query.FirstOrDefaultAsync();
         }

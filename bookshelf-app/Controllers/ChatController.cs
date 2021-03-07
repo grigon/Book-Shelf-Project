@@ -20,12 +20,14 @@ namespace bookshelf_app.Controllers
         private readonly ILogger<ChatController> _logger;
         private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
+        private readonly LinkGenerator _linkGenerator;
 
-        public ChatController(ILogger<ChatController> logger, IChatRepository chatRepository, IMapper mapper)
+        public ChatController(ILogger<ChatController> logger, IChatRepository chatRepository, IMapper mapper, LinkGenerator linkGenerator)
         {
             _logger = logger;
             this._chatRepository = chatRepository;
             this._mapper = mapper;
+            this._linkGenerator = linkGenerator;
         }
 
         [HttpGet]
@@ -83,7 +85,47 @@ namespace bookshelf_app.Controllers
             
         }
         [HttpPost("{chatid}")]
+        public async Task<ActionResult<ChatMessageCreateDTO>> AddMessageInChat(Guid chatid, ChatMessageCreateDTO message)
+        {
+            try
+            {
+                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+                //
+                var user = await _chatRepository.GetUserById(id);
 
+                if (user == null) return BadRequest("user doesn't exist");
+
+                var chat = await _chatRepository.GetChatById(chatid);
+
+                if (chat == null) return BadRequest("user doesn't exist");
+                var messageToDb = _mapper.Map<ChatMessage>(message);
+
+                messageToDb.Chat = chat;
+                messageToDb.MessageAuthor = user;
+
+                _chatRepository.Create(messageToDb);
+                
+                if (await _chatRepository.SaveChanges())
+                {
+                    var url = _linkGenerator.GetPathByAction(HttpContext, "ActualUserChat",
+                        values: new { chatid = messageToDb.Chat.ChatId });
+
+                    return Created(url, _mapper.Map<ChatMessageReadDTO>(messageToDb));
+                }
+                else
+                {
+                    return BadRequest("failed save");
+                }
+
+                
+
+            }
+            catch (Exception)
+            {
+                _logger.LogError("An error has occured with chat repository, Couldn't save message in database");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
+            }
+        }
 
         [HttpGet("userchat")]
         public async Task<ActionResult<ChatUser[]>> AllUsersChats()
@@ -106,15 +148,11 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost] 
-        public async  Task<ActionResult<ChatUser>> AddChat(Chat chat2)
+        public async  Task<ActionResult<ChatUser>> AddChat(Chat chat)
         {
             try
             {
-                var chat = new Chat();
-
-                //create chatId , retrive id from DB  assign chat to   table userId , user id-logged user
-                // second line - chat-id  we have // user id will come from client format json.
-                ;
+                var chatNew = new Chat();
 
 
                 var mojje = new ChatUser();
@@ -139,7 +177,8 @@ namespace bookshelf_app.Controllers
             }
         }
             
-        []
+        
+
         //[HttpPost]
         //public async Task<ActionResult>
     }

@@ -43,6 +43,7 @@ namespace bookshelf_app
             });
             //services.AddAutoMapper(Assembly.GetExecutingAssembly("bookshelf"));
             services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );

@@ -24,7 +24,7 @@ namespace bookshelf.DAL
         //Task<Chat> GetChatIdToConversation();
         Task<ChatUser[]> GetAllChatsUser();
 
-
+        Task<Chat> GetChatById(Guid chatId);
         Task<bool> SaveChanges();
 
         Task<User> GetUserById(Guid id);
