@@ -1,5 +1,4 @@
-﻿using bookshelf.Model.Users;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace bookshelf.DTOS
 {
-    public class ChatMessageDTO
+    public class ChatMessageCreateDTO
     {
-        public DateTime MessageDate { get; set; }
+        public DateTime MessageDate { get; set; } = DateTime.Now;
         public string Message { get; set; }
-
-        public string Autor { get; set; }
-
+        public Guid AutorId { get; set; }
     }
 }

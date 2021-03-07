@@ -13,7 +13,7 @@ namespace bookshelf.Profiles
     {
         public ChatProfile()
         {
-            this.CreateMap<ChatMessage, ChatMessageDTO>()
+            this.CreateMap<ChatMessage, ChatMessageReadDTO>()
             .ForMember(c => c.Autor, o => o.MapFrom(a => a.MessageAuthor.UserName)).ReverseMap();
         }
     }

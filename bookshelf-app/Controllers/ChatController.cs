@@ -14,7 +14,7 @@ namespace bookshelf_app.Controllers
 {
     [ApiController]
     //[FormatFilter]
-    [Route("/[controller]")]
+    [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
         private readonly ILogger<ChatController> _logger;
@@ -30,19 +30,13 @@ namespace bookshelf_app.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult<ChatMessageDTO[]>> GetAllMesegges()
+        public async Task<ActionResult<ChatMessageReadDTO[]>> GetAllMesegges()
         {
             try
             {
                 var result = await _chatRepository.GetAll();
-
-
-                //chat.ChatId = new Guid();
-                //var replace = _mapper.Map<Chat>(chat);
-
-                //_chatRepository.Create(replace);
                 
-                return _mapper.Map<ChatMessageDTO[]>(result);
+                return _mapper.Map<ChatMessageReadDTO[]>(result);
             }
             catch (Exception)
             {
@@ -67,20 +61,46 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
             
+
         }
+        [HttpGet("{chatid}")]
+        public async Task<ActionResult<ChatMessageReadDTO[]>> ActualUserChat(Guid chatid)
+        {
+            try
+            {
+                var chat = await _chatRepository.GetAllMessagesForChat(chatid);
+
+                if (chat == null) return NotFound();
+
+                return _mapper.Map<ChatMessageReadDTO[]>(chat);
+            }
+            catch (Exception)
+            {
+
+                _logger.LogError($"An error has occuredd with chat repository, get meassages for chat {chatid},  It came across a problem");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
+            }
+            
+        }
+        [HttpPost("{chatid}")]
+
+
         [HttpGet("userchat")]
         public async Task<ActionResult<ChatUser[]>> AllUsersChats()
         {
             try
             {
-                var userchat = await _chatRepository.GetAllChatsUser();
+                // this id is from identity....
+                // method not complete in progress
+                var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
+                var userchat = await _chatRepository.AllChatIdByUserId(id);
 
                 return userchat;
 
             }
             catch (Exception)
             {
-                _logger.LogError("An error has occured with chat r");
+                _logger.LogError("An error has occured with chat repository");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
         }
@@ -118,6 +138,8 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
         }
+            
+        []
         //[HttpPost]
         //public async Task<ActionResult>
     }

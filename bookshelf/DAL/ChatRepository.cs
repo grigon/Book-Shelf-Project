@@ -50,6 +50,13 @@ namespace bookshelf.DAL
             return (await _context.SaveChangesAsync() > 0);
         }
 
+
+
+        /// <summary>
+        /// for admin get all message. Is it allow??
+        /// </summary>
+        /// <returns></returns>
+
         public async Task<ChatMessage[]> GetAll()
         {
             _logger.LogInformation("Get all chat message");
@@ -60,29 +67,10 @@ namespace bookshelf.DAL
 
             return await query.ToArrayAsync();
         }
-
-        public async Task<ChatMessage[]> GetAllMessagesForUsers(Guid id)
-        {
-            _logger.LogInformation("Get all chat message for one user");
-
-            var query = _context.Messages.Where(u => u.MessageAuthor.Id == id).OrderBy(m => m.MessageDate);
-
-            return await query.ToArrayAsync();
-        }
-
-        //allchats/user
-        public async Task<ChatMessage[]> AllChatUser(Guid id)
-        {
-            _logger.LogInformation($"Get all Chat by id");
-
-            IQueryable<ChatMessage> query = _context.Messages
-                .Include(m => m.Chat).Where(m => m.MessageAuthor.Id == id);
-            //join with userChat
-
-            return await query.ToArrayAsync();
-
-        }
-        //allchats/admin
+        /// <summary>
+        /// for admin
+        /// </summary>
+        /// <returns></returns>
         public async Task<Chat[]> AllChatsForAdmin()
         {
             _logger.LogInformation($"Get all Chats for user");
@@ -92,15 +80,80 @@ namespace bookshelf.DAL
             return await query.ToArrayAsync();
         }
 
-        public async Task<ChatMessage[]> MessagesForOneChat(Guid chatid)
-        {
-            _logger.LogInformation("Get all messages for one chat");
+        /// <summary>
+        /// for user return all message in chat
+        /// add lazy lodaing the last 20 messages????
+        /// skip do scieżki  // dodatkow paginacja 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
-            var query = _context.Messages.Where(c => c.Chat.ChatId == chatid);
+        public async Task<ChatMessage[]> GetAllMessagesForChat(Guid id)
+        {
+            _logger.LogInformation("Get all chat message for one user");
+
+            IQueryable<ChatMessage> query = _context.Messages.
+                Include(autor => autor.MessageAuthor);
+
+
+            query = query.Where(u => u.Chat.ChatId == id).OrderBy(m => m.MessageDate);
+
+            return await query.ToArrayAsync();
+        }
+
+        /// <summary>
+        /// //allchats/user ?????????
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ChatMessage[]> AllChatUser(Guid id)
+        {
+            _logger.LogInformation($"Get all Chat by id");
+
+
+
+            IQueryable<ChatMessage> query = _context.Messages
+                .Include(m => m.Chat).Where(m => m.MessageAuthor.Id == id).Distinct();
+            //join with userChat
+
+            return await query.ToArrayAsync();
+
+        }
+        /// <summary>
+        /// all chat for specific user/ logged user
+        /// this to improve join , group join
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+       public async Task<ChatUser[]> AllChatIdByUserId(Guid UserId)
+        {
+            IQueryable<ChatUser> query = _context.ChatUsers
+                .Include(c => c.Chat)
+                .Include(u => u.User);
+
+
+            query = query.Where(u => u.User.Id == UserId);
+
+
+
+            //IQueryable<ChatUser> uuuser = _context.ChatUsers.Join
+            //    (_context.Users,  chat => chat. ,user => user.User.Id)
+
+            //var finalquery = _context.ChatUsers.GroupJoin(query,
+            //            user => new { user.User.UserName },
+            //            user2 => new { user2.User.UserName },
+            //            (user, user2) =>
+            //            new
+            //            {
+            //                user.User.UserName,
+            //            });
 
 
             return await query.ToArrayAsync();
         }
+
+        
+
 
         //public async Task<Chat> GetChatIdToConversation()
         //{

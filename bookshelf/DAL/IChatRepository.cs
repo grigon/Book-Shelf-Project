@@ -16,13 +16,15 @@ namespace bookshelf.DAL
         void Update<T>(T entity) where T : class;
 
         Task<ChatMessage[]> GetAll();
-        Task<ChatMessage[]> GetAllMessagesForUsers(Guid id);
+        Task<ChatMessage[]> GetAllMessagesForChat(Guid id);
         Task<ChatMessage[]> AllChatUser(Guid id);
 
         Task<Chat[]> AllChatsForAdmin();
+        Task<ChatUser[]> AllChatIdByUserId(Guid UserId);
         //Task<Chat> GetChatIdToConversation();
         Task<ChatUser[]> GetAllChatsUser();
-        Task<ChatMessage[]> MessagesForOneChat(Guid chatid);
+
+
         Task<bool> SaveChanges();
 
         Task<User> GetUserById(Guid id);
