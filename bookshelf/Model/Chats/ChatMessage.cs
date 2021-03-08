@@ -12,6 +12,7 @@ namespace bookshelf.Model.Chats
         [Column(TypeName = "VARCHAR(40)")]
         public Guid Id { get; set; }
         public DateTime MessageDate { get; set; }
+
         public string Message { get; set; }
         [Column(TypeName = "VARCHAR(40)")]
         public User MessageAuthor { get; set; }

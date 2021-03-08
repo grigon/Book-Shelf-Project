@@ -1,4 +1,6 @@
-﻿using System;
+﻿using bookshelf.Model.Chats;
+using bookshelf.Model.Users;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +11,8 @@ namespace bookshelf.DTOS
     public class ChatUserCreateDTO
     {
         
+        public Guid ChatId { get; set; }
+        
+        public Guid UserId { get; set; }
     }
 }

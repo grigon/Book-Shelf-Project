@@ -146,18 +146,38 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost] 
-        public async  Task<ActionResult<ChatUser>> AddChat(ChatUser SecondUser)
+        public async  Task<ActionResult<ChatUser>> AddChat(ChatUser secondUser)
         {
             try
             {
 
                 //first user to this entity will be from identity , create new object chat and assign to chatuser 
                 //first user chat initiator
-                var NewChatId = new Chat();
-                var FirstUserChat = new ChatUser();
+                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+                var firstParticipant = await _chatRepository.GetUserById(id);
 
-                _chatRepository.Create(FirstUserChat);
-                await _chatRepository.SaveChanges();
+                    if (firstParticipant == null) return BadRequest("user doesn't exist");
+
+                
+                var newChatId = new Chat();
+                var firstUserChat = new ChatUser();
+                firstUserChat.Chat = newChatId;
+                firstUserChat.User = firstParticipant = await _chatRepository.GetUserById(id);
+                
+
+                _chatRepository.Create(firstUserChat);
+                if (! await _chatRepository.SaveChanges())
+                {
+                    _logger.LogError("An error  occured with save user chat to database in chat repository");
+                    return BadRequest($"failed save {firstUserChat.GetType()} for first user to database");
+                }
+                
+
+                var secondParticipant = await _chatRepository.GetUserById(secondUser.User)
+
+                var SecondUserChat = new ChatUser();
+
+
 
                 //second chatuser will come from frot in json.
                 //for two 
