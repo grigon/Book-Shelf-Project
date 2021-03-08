@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper.Internal;
 using bookshelf.Context;
+using bookshelf.DTO.Book.BookLogged;
 using bookshelf.Model.Books;
+using bookshelf.Model.Chats;
+using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -21,41 +25,25 @@ namespace bookshelf.DAL
             _context = context;
             _logger = logger;
         }
-
+        
         //for not logged/registered user
-        /*
         public async Task<Book[]> GetAll(int j)
         {
             _logger.LogInformation($"Getting all Books");
             
-            IQueryable<Genre> genres = _context.Genres;
-            Genre[] genre = genres.ToArray();
+            var genres = _context.Books.Select(b => b.Genre).Distinct();
 
-            var list = new List<Book[]>();
-            int i = 0;
-            List<Task<Book>> resultBooks = new List<Task<Book>>();
+            // var genres = _context.Genres;
             
-            foreach (var g in genre)
-            {
-                Book[] resultBookArray = null;
-                
-                resultBookArray = _context.Books.Include(a => a.Author).
-                    Include(g => g.Genre)
-                    .Include(i => i.BookISBNs)
-                    .Include(r => r.Reviews).ThenInclude(u => u.User).
-                    Where(b => b.Genre.Name == genre[i].Name).Skip(j).Take(2).ToArray();
+            var books =
+                from genre in genres
+                from book in _context.Books.Include(b => b.Genre)/*.Include(b => b.Reviews)
+                    .ThenInclude(u => u.User).Include(n => n.BookISBNs)*/.Include(b => b.Author).Where(b => b.Genre == genre)
+                    .Take(2)
+                select book;
 
-                foreach (var book in resultBookArray)
-                {
-                    resultBooks.Add(new Task(() => book));
-                }
-                
-                i += 1;
-            }
-
-            return await Task.WhenAll<Book>(resultBooks);
+            return await books.ToArrayAsync();
         }
-        */
         
         //for not logged/registered user
         public async Task<Book> GetById(Guid id)

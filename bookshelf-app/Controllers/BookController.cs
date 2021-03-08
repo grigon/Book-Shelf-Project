@@ -5,6 +5,8 @@ using bookshelf.DAL;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
 using bookshelf.Model.Books;
+using bookshelf.Model.Chats;
+using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -28,14 +30,14 @@ namespace bookshelf_app.Controllers
         }
         
         //for not logged/registered users
-        /*[HttpGet("genre")]
-        [Produces("application/json")]*/
+        [HttpGet("all/{page}")]
+        [Produces("application/json")]
        //Change to book DTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        /*public async Task<ActionResult<Book[][]>> Get(int i/*string genre#1#)
+        public async Task<ActionResult<Book[]>> Get(int page)
         { 
             try
             {
-                var results = await _repository.GetAll(i/*genre#1#);
+                var results = await _repository.GetAll(page);
                 //return _mapper.Map<BookDTO[]>(results);
                 return results;
             }
@@ -43,7 +45,7 @@ namespace bookshelf_app.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
-        }*/
+        }
         
         //for not logged/registered users
         [HttpGet("{id}")]
