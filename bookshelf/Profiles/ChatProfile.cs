@@ -29,6 +29,12 @@ namespace bookshelf.Profiles
                 .ForMember(c => c.AutorId, o => o.MapFrom(a => a.MessageAuthor.Id))
                 .ForMember(c => c.ChatId, o => o.MapFrom(a => a.Chat.ChatId))
                 .ReverseMap();
+
+            this.CreateMap<ChatUser, ChatUserCreateDTO>()
+                .ForMember(c => c.ChatId, o => o.MapFrom(c => c.Chat.ChatId))
+                .ForMember(u => u.UserId, o => o.MapFrom(user => user.User.Id))
+                .ReverseMap();
+
         }
     }
 }
