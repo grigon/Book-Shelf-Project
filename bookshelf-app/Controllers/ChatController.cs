@@ -65,7 +65,7 @@ namespace bookshelf_app.Controllers
             
 
         }
-        [HttpGet("{chatid}")]
+        [HttpGet("{chatid}")]//add paginate 
         public async Task<ActionResult<ChatMessageReadDTO[]>> ActualUserChat(Guid chatid)
         {
             try
@@ -88,16 +88,16 @@ namespace bookshelf_app.Controllers
         public async Task<ActionResult<ChatMessageCreateDTO>> AddMessageInChat(Guid chatid, ChatMessageCreateDTO message)
         {
             try
-            {
-                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+            {//dużo w kontrolerze
+                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");//from identity
                 //
                 var user = await _chatRepository.GetUserById(id);
 
-                if (user == null) return BadRequest("user doesn't exist");
+                    if (user == null) return BadRequest("user doesn't exist");
 
                 var chat = await _chatRepository.GetChatById(chatid);
 
-                if (chat == null) return BadRequest("user doesn't exist");
+                    if (chat == null) return BadRequest("user doesn't exist");
                 var messageToDb = _mapper.Map<ChatMessage>(message);
 
                 messageToDb.Chat = chat;
@@ -110,14 +110,12 @@ namespace bookshelf_app.Controllers
                     var url = _linkGenerator.GetPathByAction(HttpContext, "ActualUserChat",
                         values: new { chatid = messageToDb.Chat.ChatId });
 
-                    return Created(url, _mapper.Map<ChatMessageReadDTO>(messageToDb));
+                    return Created(url, _mapper.Map<ChatMessageReadDTO>(messageToDb));//po co zwracać
                 }
                 else
                 {
-                    return BadRequest("failed save");
+                    return BadRequest("failed save chat message to data base in chat repository");
                 }
-
-                
 
             }
             catch (Exception)
@@ -133,7 +131,7 @@ namespace bookshelf_app.Controllers
             try
             {
                 // this id is from identity....
-                // method not complete in progress
+                // method not complete in progress...
                 var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
                 var userchat = await _chatRepository.AllChatIdByUserId(id);
 
@@ -148,15 +146,23 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost] 
-        public async  Task<ActionResult<ChatUser>> AddChat(Chat chat)
+        public async  Task<ActionResult<ChatUser>> AddChat(ChatUser SecondUser)
         {
             try
             {
-                var chatNew = new Chat();
 
+                //first user to this entity will be from identity , create new object chat and assign to chatuser 
+                //first user chat initiator
+                var NewChatId = new Chat();
+                var FirstUserChat = new ChatUser();
 
-                var mojje = new ChatUser();
-                mojje.Chat = chat;
+                _chatRepository.Create(FirstUserChat);
+                await _chatRepository.SaveChanges();
+
+                //second chatuser will come from frot in json.
+                //for two 
+
+                //mojje.Chat = chat;
 
                 var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
 

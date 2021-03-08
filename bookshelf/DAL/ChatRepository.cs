@@ -34,14 +34,14 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Updating an object {entity.GetType()} from the context");
             _context.Update(entity);
-            _context.SaveChanges();
+            
         }
 
         public void Delete<T>(T entity) where T : class
         {
             _logger.LogInformation($"Removing and object {entity.GetType()} from the context");
             _context.Remove(entity);
-            _context.SaveChanges();
+            
         }
         public async Task<bool> SaveChanges()
         {
@@ -83,7 +83,7 @@ namespace bookshelf.DAL
         /// <summary>
         /// for user return all message in chat
         /// add lazy lodaing the last 20 messages????
-        /// skip do scieżki  // dodatkow paginacja 
+        /// skip to path  // additional pagination
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
