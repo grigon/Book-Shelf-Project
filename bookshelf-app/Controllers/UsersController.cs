@@ -33,7 +33,7 @@ namespace bookshelf_app.Controllers
             _userManager = userManager;
         }
         
-        // [Authorize(Policy = "RequireAdministratorRole")]
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpGet]
         // [AllowAnonymous]
         public async Task<ActionResult<UserReadDTO[]>> GetAll()

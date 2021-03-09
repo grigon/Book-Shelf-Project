@@ -45,7 +45,7 @@ namespace bookshelf_app
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdministratorRole",
-                    policy => policy.RequireRole("Administrator"));
+                    policy => policy.RequireRole("Admin"));
             });
 
             services.AddSingleton(_key);
@@ -126,6 +126,7 @@ namespace bookshelf_app
             app.UseMiddleware<TokenManagerMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
         }
     }
 }

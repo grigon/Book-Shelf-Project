@@ -48,22 +48,33 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost("CreateToken")]
-        public async Task<IActionResult> CreateToken(UserLoginDTO loginDto)
+        public async Task<IActionResult> CreateToken(UserLoginDTO loginDto, bool refresh)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (user != null)
                 {
-                    var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-                    if (result.Result == SignInResult.Success)
+                    var IsSuccess = false;
+                    if (!refresh)
+                    {
+                        var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+                        IsSuccess = (result.Result == SignInResult.Success);
+                    }
+                    else
+                    {
+                        IsSuccess = true;
+                    }
+
+                    if (IsSuccess)
                     {
                         var claims = new[]
-                        {
-                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
-                        };
+                            {
+                                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+                            }
+                            ;
 
                         var creds = new SigningCredentials(
                             _key,
@@ -98,7 +109,6 @@ namespace bookshelf_app.Controllers
             return BadRequest("User not found");
         }
 
-
         [Authorize]
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
@@ -107,6 +117,7 @@ namespace bookshelf_app.Controllers
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 await _userManager.UpdateSecurityStampAsync(user);
+
                 await _signInManager.SignOutAsync();
                 return Ok();
             }
@@ -122,6 +133,15 @@ namespace bookshelf_app.Controllers
         {
             await _tokenManager.DeactivateCurrentAsync();
             return NoContent();
+        }
+        
+        [Authorize]
+        [HttpPost("admin")]
+        public async Task<IActionResult> admin()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            _userManager.AddToRoleAsync(user, "Admin");
+            return Ok();
         }
 
         [Authorize]
@@ -140,9 +160,11 @@ namespace bookshelf_app.Controllers
                     if (refreshToken ==
                         _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken").ToString())
                     {
-                        var token = await CreateToken(_mapper.Map<UserLoginDTO>(user));
+                        var token = await CreateToken(_mapper.Map<UserLoginDTO>(user), true);
                         return Ok(token);
-                    };
+                    }
+
+                    ;
                 }
             }
             catch (Exception e)
@@ -162,7 +184,7 @@ namespace bookshelf_app.Controllers
                 newRefreshToken);
             return Ok(newRefreshToken);
         }
-        
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
@@ -176,7 +198,7 @@ namespace bookshelf_app.Controllers
                     false);
                 if (result.Succeeded)
                 {
-                    var token = await CreateToken(model);
+                    var token = await CreateToken(model, false);
                     return Ok(token);
                 }
             }
