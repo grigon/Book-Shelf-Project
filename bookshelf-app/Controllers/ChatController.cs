@@ -37,7 +37,7 @@ namespace bookshelf_app.Controllers
         //    //try
         //    //{
         //    //    var result = await _chatRepository.GetAll();
-                
+
         //    //    return _mapper.Map<ChatMessageReadDTO[]>(result);
         //    //}
         //    //catch (Exception)
@@ -62,7 +62,7 @@ namespace bookshelf_app.Controllers
                 _logger.LogError("An error has occured with chat repository load all chats for admin");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
-            
+
 
         }
         [HttpGet("{chatid}")]//add paginate 
@@ -82,7 +82,7 @@ namespace bookshelf_app.Controllers
                 _logger.LogError($"An error has occuredd with chat repository, get meassages for chat {chatid},  It came across a problem");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
-            
+
         }
         [HttpPost("{chatid}")]
         public async Task<ActionResult<ChatMessageCreateDTO>> AddMessageInChat(Guid chatid, ChatMessageCreateDTO message)
@@ -93,11 +93,11 @@ namespace bookshelf_app.Controllers
                 //
                 var user = await _chatRepository.GetUserById(id);
 
-                    if (user == null) return BadRequest("user doesn't exist");
+                if (user == null) return BadRequest("user doesn't exist");
 
                 var chat = await _chatRepository.GetChatById(chatid);
 
-                    if (chat == null) return BadRequest("user doesn't exist");
+                if (chat == null) return BadRequest("user doesn't exist");
 
 
                 var messageToDb = _mapper.Map<ChatMessage>(message);
@@ -106,7 +106,7 @@ namespace bookshelf_app.Controllers
                 messageToDb.MessageAuthor = user;
 
                 _chatRepository.Create(messageToDb);
-                
+
                 if (await _chatRepository.SaveChanges())
                 {
                     var url = _linkGenerator.GetPathByAction(HttpContext, "ActualUserChat",
@@ -127,18 +127,41 @@ namespace bookshelf_app.Controllers
             }
         }
         [HttpPatch("{chatid}/{messageId}")]
-        public async Task<ActionResult<ChatMessageUpdateDTO>>  UpdateMessageForActualChat(Guid messageId,  JsonPatchDocument<ChatMessageUpdateDTO> messageUpdate)
+        public async Task<ActionResult<ChatMessageUpdateDTO>> UpdateMessageForActualChat(Guid messageId, JsonPatchDocument<ChatMessageUpdateDTO> messageUpdate)
         {
-            //getmessagebyId
-            // check is the user is author this information
-            var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");// identity
+            try
+            {
+                //getmessagebyId
+                // check is the user is author this information
+                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");// identity
 
-            var message = await _chatRepository.GetMessageById(id, messageId);
+                if (messageUpdate == null) return NotFound();
 
-            if (message == null) return NotFound()
+                var messageFromDB = await _chatRepository.GetMessageById(id, messageId);
 
-            Console.WriteLine("...");
-            return Ok();
+                if (messageFromDB == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var messagePath = _mapper.Map<ChatMessageUpdateDTO>(messageFromDB);
+                    messageUpdate.ApplyTo(messagePath, ModelState);
+                    _mapper.Map(messagePath, messageFromDB);
+                    await _chatRepository.SaveChanges();
+
+                    //redirect to chat my id
+                    return NoContent();
+                }
+
+
+            }
+            catch (Exception)
+            {
+                _logger.LogError("Retrieve chat message from database came across a problem");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
+            }
+            //logger???
 
         }
 
@@ -162,8 +185,8 @@ namespace bookshelf_app.Controllers
             }
         }
 
-        [HttpPost("newchat")] 
-        public async  Task<ActionResult<ChatUserCreateDTO>> AddChat(ChatUserCreateDTO secondUser)
+        [HttpPost("newchat")]
+        public async Task<ActionResult<ChatUserCreateDTO>> AddChat(ChatUserCreateDTO secondUser)
         {
             try
             {
@@ -173,17 +196,17 @@ namespace bookshelf_app.Controllers
                 var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
                 var firstParticipant = await _chatRepository.GetUserById(id);
 
-                    if (firstParticipant == null) return BadRequest("user doesn't exist");
+                if (firstParticipant == null) return BadRequest("user doesn't exist");
 
-                
+
                 var newChatId = new Chat();
                 var firstUserChat = new ChatUser();
                 firstUserChat.Chat = newChatId;
                 firstUserChat.User = firstParticipant;
-                
+
 
                 _chatRepository.Create(firstUserChat);
-                if (! await _chatRepository.SaveChanges())
+                if (!await _chatRepository.SaveChanges())
                 {
                     _logger.LogError("An error  occured with save user chat to database in chat repository");
                     return BadRequest($"failed save {firstUserChat.GetType()} for first user to database");
@@ -192,7 +215,7 @@ namespace bookshelf_app.Controllers
                 var secondParticipant = await _chatRepository.GetUserById(secondUser.userId);
 
                 var secondUserChat = _mapper.Map<ChatUser>(secondUser);
-                
+
                 secondUserChat.Chat = firstUserChat.Chat;
                 secondUserChat.User = secondParticipant;
 
@@ -202,7 +225,7 @@ namespace bookshelf_app.Controllers
                 {
 
                     var url = _linkGenerator.GetPathByAction(HttpContext, "ActualUserChat",
-                        values: new { chatid =  newChatId.ChatId});
+                        values: new { chatid = newChatId.ChatId });
 
                     return Created(url, _mapper.Map<ChatUserReadDTO>(secondUserChat));//po co zwracać 
                 }
