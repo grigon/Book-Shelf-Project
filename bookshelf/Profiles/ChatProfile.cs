@@ -19,8 +19,10 @@ namespace bookshelf.Profiles
 
 
 
-
-
+            this.CreateMap<ChatUser, ChatUserReadDTO>()
+                .ForMember(c => c.userName, o => o.MapFrom(a => a.User.UserName))
+                .ForMember(id => id.userId, o => o.MapFrom(a => a.User.Id))
+                .ReverseMap();
 
 
 
@@ -31,8 +33,8 @@ namespace bookshelf.Profiles
                 .ReverseMap();
 
             this.CreateMap<ChatUser, ChatUserCreateDTO>()
-                .ForMember(c => c.ChatId, o => o.MapFrom(c => c.Chat.ChatId))
-                .ForMember(u => u.UserId, o => o.MapFrom(user => user.User.Id))
+                .ForMember(c => c.chatId, o => o.MapFrom(c => c.Chat.ChatId))
+                .ForMember(u => u.userId, o => o.MapFrom(user => user.User.Id))
                 .ReverseMap();
 
         }

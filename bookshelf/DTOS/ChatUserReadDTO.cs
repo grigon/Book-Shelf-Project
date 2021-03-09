@@ -1,6 +1,4 @@
-﻿using bookshelf.Model.Chats;
-using bookshelf.Model.Users;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace bookshelf.DTOS
 {
-    public class ChatUserCreateDTO
+    public class ChatUserReadDTO
     {
-        
-        public Guid chatId { get; set; }
-        
+        public string userName { get; set; }
+
         public Guid userId { get; set; }
     }
 }

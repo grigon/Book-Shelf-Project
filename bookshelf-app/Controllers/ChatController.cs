@@ -98,6 +98,8 @@ namespace bookshelf_app.Controllers
                 var chat = await _chatRepository.GetChatById(chatid);
 
                     if (chat == null) return BadRequest("user doesn't exist");
+
+
                 var messageToDb = _mapper.Map<ChatMessage>(message);
 
                 messageToDb.Chat = chat;
@@ -124,6 +126,8 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
             }
         }
+        [HttpPatch("{chatid}/{messageId}")]
+        public async Task<ActionResult<>>
 
         [HttpGet("userchat")]
         public async Task<ActionResult<ChatUser[]>> AllUsersChats()
@@ -134,7 +138,7 @@ namespace bookshelf_app.Controllers
                 // method not complete in progress...
                 var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
                 var userchat = await _chatRepository.AllChatIdByUserId(id);
-
+                // link user , with other users in this same chat 
                 return userchat;
 
             }
@@ -145,8 +149,8 @@ namespace bookshelf_app.Controllers
             }
         }
 
-        [HttpPost] 
-        public async  Task<ActionResult<ChatUser>> AddChat(ChatUser secondUser)
+        [HttpPost("newchat")] 
+        public async  Task<ActionResult<ChatUserCreateDTO>> AddChat(ChatUserCreateDTO secondUser)
         {
             try
             {
@@ -162,7 +166,7 @@ namespace bookshelf_app.Controllers
                 var newChatId = new Chat();
                 var firstUserChat = new ChatUser();
                 firstUserChat.Chat = newChatId;
-                firstUserChat.User = firstParticipant = await _chatRepository.GetUserById(id);
+                firstUserChat.User = firstParticipant;
                 
 
                 _chatRepository.Create(firstUserChat);
@@ -171,33 +175,31 @@ namespace bookshelf_app.Controllers
                     _logger.LogError("An error  occured with save user chat to database in chat repository");
                     return BadRequest($"failed save {firstUserChat.GetType()} for first user to database");
                 }
+
+                var secondParticipant = await _chatRepository.GetUserById(secondUser.userId);
+
+                var secondUserChat = _mapper.Map<ChatUser>(secondUser);
                 
+                secondUserChat.Chat = firstUserChat.Chat;
+                secondUserChat.User = secondParticipant;
 
-                var secondParticipant = await _chatRepository.GetUserById(secondUser.User)
+                _chatRepository.Create(secondUserChat);
 
-                var SecondUserChat = new ChatUser();
+                if (await _chatRepository.SaveChanges())
+                {
 
+                    var url = _linkGenerator.GetPathByAction(HttpContext, "ActualUserChat",
+                        values: new { chatid =  newChatId.ChatId});
 
-
-                //second chatuser will come from frot in json.
-                //for two 
-
-                //mojje.Chat = chat;
-
-                var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
-
-                var user = await _chatRepository.GetUserById(id);
-
-                mojje.User = user;
-
-
-
-                _chatRepository.Create(mojje);
-                return mojje;
+                    return Created(url, _mapper.Map<ChatUserReadDTO>(secondUserChat));//po co zwracać 
+                }
+                else
+                {
+                    return BadRequest("Failed save second user to chat");
+                }
             }
             catch (Exception)
             {
-
                 _logger.LogError("An error has occured with chat repository");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
