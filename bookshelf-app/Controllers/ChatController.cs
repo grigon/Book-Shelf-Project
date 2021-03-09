@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using bookshelf.DTOS;
 using Microsoft.AspNetCore.Routing;
-
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace bookshelf_app.Controllers
 {
@@ -32,22 +32,22 @@ namespace bookshelf_app.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult<ChatMessageReadDTO[]>> GetAllMesegges()
-        {
-            try
-            {
-                var result = await _chatRepository.GetAll();
+        //public async Task<ActionResult<ChatMessageReadDTO[]>> GetAllMesegges()
+        //{
+        //    //try
+        //    //{
+        //    //    var result = await _chatRepository.GetAll();
                 
-                return _mapper.Map<ChatMessageReadDTO[]>(result);
-            }
-            catch (Exception)
-            {
+        //    //    return _mapper.Map<ChatMessageReadDTO[]>(result);
+        //    //}
+        //    //catch (Exception)
+        //    //{
 
-                _logger.LogError("An error has occured with chat repository");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
-            }
+        //    //    _logger.LogError("An error has occured with chat repository");
+        //    //    return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
+        //    //}
 
-        }
+        //}
         [HttpGet("allchats/admin")]
         public async Task<ActionResult<Chat[]>> AllChatAdmin()
         {
@@ -127,7 +127,20 @@ namespace bookshelf_app.Controllers
             }
         }
         [HttpPatch("{chatid}/{messageId}")]
-        public async Task<ActionResult<>>
+        public async Task<ActionResult<ChatMessageUpdateDTO>>  UpdateMessageForActualChat(Guid messageId,  JsonPatchDocument<ChatMessageUpdateDTO> messageUpdate)
+        {
+            //getmessagebyId
+            // check is the user is author this information
+            var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");// identity
+
+            var message = await _chatRepository.GetMessageById(id, messageId);
+
+            if (message == null) return NotFound()
+
+            Console.WriteLine("...");
+            return Ok();
+
+        }
 
         [HttpGet("userchat")]
         public async Task<ActionResult<ChatUser[]>> AllUsersChats()
@@ -204,9 +217,6 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
         }
-            
-        
-
         //[HttpPost]
         //public async Task<ActionResult>
     }

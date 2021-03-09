@@ -11,11 +11,10 @@ namespace bookshelf.DAL
     public interface IChatRepository 
     {
         void Create<T>(T entity) where T : class;
-
         void Delete<T>(T entity) where T : class;
         void Update<T>(T entity) where T : class;
 
-        Task<ChatMessage[]> GetAll();
+        //Task<ChatMessage[]> GetAll();
         Task<ChatMessage[]> GetAllMessagesForChat(Guid id);
         Task<ChatMessage[]> AllChatUser(Guid id);
 
@@ -25,6 +24,8 @@ namespace bookshelf.DAL
         Task<ChatUser[]> GetAllChatsUser();
 
         Task<Chat> GetChatById(Guid chatId);
+
+        Task<ChatMessage> GetMessageById(Guid userId, Guid messageId);
         Task<bool> SaveChanges();
 
         Task<User> GetUserById(Guid id);

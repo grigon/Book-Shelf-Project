@@ -57,16 +57,16 @@ namespace bookshelf.DAL
         /// </summary>
         /// <returns></returns>
 
-        public async Task<ChatMessage[]> GetAll()
-        {
-            _logger.LogInformation("Get all chat message");
+        //public async Task<ChatMessage[]> GetAll()
+        //{
+        //    _logger.LogInformation("Get all chat message");
 
-            IQueryable<ChatMessage> query = _context.Messages.
-            Include(autor => autor.MessageAuthor)
-            .OrderBy(t => t.MessageDate);
+        //    IQueryable<ChatMessage> query = _context.Messages.
+        //    Include(autor => autor.MessageAuthor)
+        //    .OrderBy(t => t.MessageDate);
 
-            return await query.ToArrayAsync();
-        }
+        //    return await query.ToArrayAsync();
+        //}
         /// <summary>
         /// for admin
         /// </summary>
@@ -186,6 +186,15 @@ namespace bookshelf.DAL
         public async Task<Chat> GetChatById(Guid chatId)
         {
             var query = _context.Chats.Where(c => c.ChatId == chatId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<ChatMessage> GetMessageById(Guid userId, Guid messageId)
+        {
+
+            var query = _context.Messages.Where(m => m.Id == messageId && m.MessageAuthor.Id == userId);
+
 
             return await query.FirstOrDefaultAsync();
         }

@@ -8,6 +8,6 @@ namespace bookshelf.DTOS
 {
     public class ChatMessageUpdateDTO
     {
-        public string Message { get; set; }
+        public string message { get; set; }
     }
 }
