@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -68,13 +70,16 @@ namespace bookshelf_app.Controllers
 
                     if (IsSuccess)
                     {
-                        var claims = new[]
+                        var claims = new List<Claim>
                             {
                                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+                                
                             }
                             ;
+
+                        claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                         var creds = new SigningCredentials(
                             _key,
@@ -87,12 +92,15 @@ namespace bookshelf_app.Controllers
                             expires: DateTime.UtcNow.AddSeconds(Convert.ToDouble(_configuration["Tokens:TimeValid"])),
                             signingCredentials: creds
                         );
-
-                        await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                        var newRefreshToken =
-                            await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
-                        await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken",
-                            newRefreshToken);
+                        var newRefreshToken = "";
+                        if (!refresh)
+                        {
+                            newRefreshToken =
+                                await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
+                            await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken",
+                                newRefreshToken);
+                        }
+                        
                         var results = new
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -117,7 +125,8 @@ namespace bookshelf_app.Controllers
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 await _userManager.UpdateSecurityStampAsync(user);
-
+                await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
+                await CancelAccessToken();
                 await _signInManager.SignOutAsync();
                 return Ok();
             }
@@ -136,11 +145,11 @@ namespace bookshelf_app.Controllers
         }
         
         [Authorize]
-        [HttpPost("admin")]
+        [HttpPut("admin")]
         public async Task<IActionResult> admin()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            _userManager.AddToRoleAsync(user, "Admin");
+            await _userManager.AddToRoleAsync(user, "Admin");
             return Ok();
         }
 

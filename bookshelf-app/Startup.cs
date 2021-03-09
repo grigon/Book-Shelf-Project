@@ -8,6 +8,7 @@ using bookshelf.DAL;
 using bookshelf.DTO;
 using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,8 +45,13 @@ namespace bookshelf_app
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireAdministratorRole",
-                    policy => policy.RequireRole("Admin"));
+                options.AddPolicy("ShouldBeAnAdmin", options =>
+                {
+                    options.RequireAuthenticatedUser();
+                    options.AuthenticationSchemes.Add(
+                        JwtBearerDefaults.AuthenticationScheme);
+                    options.Requirements.Add(new ShouldBeAnAdminRequirement());
+                });
             });
 
             services.AddSingleton(_key);
