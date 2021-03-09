@@ -99,15 +99,17 @@ namespace bookshelf_app.Controllers
         }
         
         //for logged user
-        [HttpGet("logged/UserBooks/{id}/{genre}")]
+        [HttpGet("logged/UserBooks/{id}/{genre}/{page}")]
         [Produces("application/json")]
-        public async Task<ActionResult<UserBookDTO[]>> GetUserBooks(string genre, Guid id)
+        //change to dto
+        public async Task<ActionResult<UserBook[]>> GetUserBooks(string genre, Guid id, int page)
         {
             try
             {
-                var result = await _repository.GetAllUserBooks(id, genre);
+                var result = await _repository.GetAllUserBooks(id, page, genre);
                 if (result == null) return NotFound();
-                return _mapper.Map<UserBookDTO[]>(result);
+               // return _mapper.Map<UserBookDTO[]>(result);
+               return result;
             }
             catch (Exception e)
             {

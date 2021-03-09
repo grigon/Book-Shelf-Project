@@ -81,14 +81,19 @@ namespace bookshelf.DAL
         }
         
         //returns all books belonging to the logged user
-        public async Task<UserBook[]> GetAllUserBooks(Guid id, string genre)
+        public async Task<UserBook[]> GetAllUserBooks(Guid id, int page, string genre)
         {
             _logger.LogInformation($"Getting all user Books");
 
-            IQueryable<UserBook> query = _context.UserBooks.Include(b => b.Book).ThenInclude(g => g.Genre).Where(b=> b.Book.Genre.Name == genre)
+            IQueryable<UserBook> query = _context.UserBooks.Include(b => b.Book)
+                .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                .Include(b => b.Book.Reviews)
+                .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
+                /*.Include(b => b.Book).ThenInclude(g => g.Genre)/*.Where(b=> b.Book.Genre.Name == genre)#1#
                 .Include(b => b.Book.BookISBNs)
-                .Include(r => r.Book.Reviews).ThenInclude(u => u.User)
-                .Where(u => u.User.Id.CompareTo(id) > 0);
+                .Include(r => r.Book.Reviews).ThenInclude(u => u.User)*/
+                /*.Include(b => b.Book.BookHistories)*/
+                /*.Where(u => u.User.Id.CompareTo(id) > 0)*//*.Skip(page == 1 ? 0 : page * 2 - 2)*/.Take(2);
             
             return await query.ToArrayAsync();
         }
