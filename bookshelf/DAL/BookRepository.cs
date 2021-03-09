@@ -37,8 +37,8 @@ namespace bookshelf.DAL
             
             var books =
                 from genre in genres
-                from book in _context.Books.Include(b => b.Genre)/*.Include(b => b.Reviews)
-                    .ThenInclude(u => u.User).Include(n => n.BookISBNs)*/.Include(b => b.Author).Where(b => b.Genre == genre)
+                from book in _context.Books.Include(b => b.Genre).Include(b => b.Reviews)
+                    .ThenInclude(u => u.User).Include(n => n.BookISBNs).Include(b => b.Author).Where(b => b.Genre == genre)
                     .Take(2)
                 select book;
 
@@ -81,11 +81,11 @@ namespace bookshelf.DAL
         }
         
         //returns all books belonging to the logged user
-        public async Task<UserBook[]> GetAllUserBooks(Guid id, int page, string genre)
+        public async Task<UserBook[]> GetAllUserBooks(string id, int page, string genre)
         {
             _logger.LogInformation($"Getting all user Books");
 
-            //why is not including user?
+            //why is not including user to review?
             //why in the review once user is present, once is null?
             //why I can no compare by user id?
 
@@ -96,7 +96,7 @@ namespace bookshelf.DAL
                 .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
                 .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
                 .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
-                .Where(u => u.Book.Genre.Name == genre && u.User.Id.CompareTo(id) > 0).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+                .Where(u => u.Book.Genre.Name == genre && u.User.Id == id).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
         }

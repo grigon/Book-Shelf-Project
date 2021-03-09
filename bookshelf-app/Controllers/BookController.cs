@@ -8,6 +8,7 @@ using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -21,12 +22,14 @@ namespace bookshelf_app.Controllers
         private readonly BookRepository _repository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
+        private readonly UserManager<User> _userManager;
 
-        public BookController(BookRepository repository, IMapper mapper, LinkGenerator linkGenerator)
+        public BookController(BookRepository repository, IMapper mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
         {
             _repository = repository;
              _mapper = mapper;
             _linkGenerator = linkGenerator;
+             _userManager = userManager;
         }
         
         //for not logged/registered users
@@ -99,14 +102,16 @@ namespace bookshelf_app.Controllers
         }
         
         //for logged user
-        [HttpGet("logged/UserBooks/{id}/{genre}/{page}")]
+        [HttpGet("logged/UserBooks/{page}/{genre}")]
         [Produces("application/json")]
         //change to dto
-        public async Task<ActionResult<UserBook[]>> GetUserBooks(string genre, Guid id, int page)
+        public async Task<ActionResult<UserBook[]>> GetUserBooks(int page, string genre)
         {
             try
             {
-                var result = await _repository.GetAllUserBooks(id, page, genre);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+        
+                var result = await _repository.GetAllUserBooks(user.Id, page, genre);
                 if (result == null) return NotFound();
                // return _mapper.Map<UserBookDTO[]>(result);
                return result;
