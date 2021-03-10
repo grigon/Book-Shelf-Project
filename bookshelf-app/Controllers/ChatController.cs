@@ -9,6 +9,8 @@ using AutoMapper;
 using bookshelf.DTOS;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Identity;
+using bookshelf.Model.Users;
 
 namespace bookshelf_app.Controllers
 {
@@ -21,13 +23,15 @@ namespace bookshelf_app.Controllers
         private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
+        private readonly UserManager<User> _userManager;
 
-        public ChatController(ILogger<ChatController> logger, IChatRepository chatRepository, IMapper mapper, LinkGenerator linkGenerator)
+        public ChatController(ILogger<ChatController> logger, IChatRepository chatRepository, IMapper mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
         {
             _logger = logger;
             this._chatRepository = chatRepository;
             this._mapper = mapper;
             this._linkGenerator = linkGenerator;
+            this._userManager = userManager;
         }
 
         [HttpGet]
@@ -49,7 +53,7 @@ namespace bookshelf_app.Controllers
 
         //}
 
-        [HttpGet("allchats/admin")]
+        [HttpGet("allchats/admin")]// add all id in chat 
         public async Task<ActionResult<Chat[]>> AllChatAdmin()
         {
             try
@@ -86,12 +90,13 @@ namespace bookshelf_app.Controllers
         public async Task<ActionResult<ChatMessageCreateDTO>> AddMessageInChat(Guid chatid, ChatMessageCreateDTO message)
         {
             try
-            {//dużo w kontrolerze
+            {
                 if (message.Message.Length < 1) return BadRequest("Empty object");
 
-                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");//from identity
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                //var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");//from identity
                 //
-                var user = await _chatRepository.GetUserById(id);
+                var userAll = await _chatRepository.GetUserById(user.Id); // grześka metoda
 
                 if (user == null) return BadRequest("user doesn't exist");
 
@@ -132,11 +137,14 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");// identity
+                //var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");// identity
+                
 
                 if (messageUpdate == null) return NotFound();
 
-                var messageFromDB = await _chatRepository.GetMessageById(id, messageId);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+                var messageFromDB = await _chatRepository.GetMessageById(user.Id, messageId);
 
                 if (messageFromDB == null)
                 {
@@ -173,9 +181,9 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+                var userId = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
 
-                var messagetoDelete = await _chatRepository.GetMessageById(id, messageId);
+                var messagetoDelete = await _chatRepository.GetMessageById(userId, messageId);
 
                 if (messagetoDelete == null) return NotFound();
 
@@ -223,6 +231,7 @@ namespace bookshelf_app.Controllers
                 //first user to this entity will be from identity , create new object chat and assign to chatuser 
                 //first user chat initiator
                 var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+
                 var firstParticipant = await _chatRepository.GetUserById(id);
 
                 if (firstParticipant == null) return BadRequest("user doesn't exist");

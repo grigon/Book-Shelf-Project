@@ -175,11 +175,11 @@ namespace bookshelf.DAL
             return await query.ToArrayAsync();
 
         }
-        public async Task<User> GetUserById(Guid id)
+        public async Task<User> GetUserById(string id)
         {
             _logger.LogInformation("Get user by Id");
 
-            var query = _context.Users.Where(u => u.Id == id.ToString());
+            var query = _context.Users.Where(u => u.Id == id);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -191,12 +191,12 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<ChatMessage> GetMessageById(Guid userId, Guid messageId)
+        public async Task<ChatMessage> GetMessageById(string userId, Guid messageId)
         {
 
             var query = _context.Messages
                 .Include(c => c.Chat)
-                .Where(m => m.Id == messageId && m.MessageAuthor.Id == userId.ToString());
+                .Where(m => m.Id == messageId && m.MessageAuthor.Id == userId);
 
             return await query.FirstOrDefaultAsync();
         }

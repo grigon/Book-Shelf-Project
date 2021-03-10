@@ -25,10 +25,10 @@ namespace bookshelf.DAL
 
         Task<Chat> GetChatById(Guid chatId);
 
-        Task<ChatMessage> GetMessageById(Guid userId, Guid messageId);
+        Task<ChatMessage> GetMessageById(string userId, Guid messageId);
         Task<bool> SaveChanges();
 
-        Task<User> GetUserById(Guid id);
+        Task<User> GetUserById(string id);
 
         
 
