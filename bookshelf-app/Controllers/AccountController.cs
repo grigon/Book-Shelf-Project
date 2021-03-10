@@ -57,18 +57,18 @@ namespace bookshelf_app.Controllers
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (user != null)
                 {
-                    var IsSuccess = false;
+                    var isSuccess = false;
                     if (!refresh)
                     {
                         var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-                        IsSuccess = (result.Result == SignInResult.Success);
+                        isSuccess = (result.Result == SignInResult.Success);
                     }
                     else
                     {
-                        IsSuccess = true;
+                        isSuccess = true;
                     }
 
-                    if (IsSuccess)
+                    if (isSuccess)
                     {
                         var claims = new List<Claim> { };
                         var roles = await _userManager.GetRolesAsync(user);
@@ -92,7 +92,7 @@ namespace bookshelf_app.Controllers
                                 }
                                 ;
                         }
-                        
+
                         var creds = new SigningCredentials(
                             _key,
                             SecurityAlgorithms.RsaSha256Signature);
@@ -112,7 +112,7 @@ namespace bookshelf_app.Controllers
                             await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken",
                                 newRefreshToken);
                         }
-                        
+
                         var results = new
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -153,14 +153,6 @@ namespace bookshelf_app.Controllers
             return BadRequest();
         }
 
-        // [Authorize]
-        // [HttpPost("CancelToken")]
-        // public async Task<IActionResult> CancelAccessToken()
-        // {
-        //     await _tokenManager.DeactivateCurrentAsync();
-        //     return NoContent();
-        // }
-        
         [Authorize]
         [HttpPut("admin")]
         public async Task<IActionResult> Admin()
@@ -177,30 +169,33 @@ namespace bookshelf_app.Controllers
 
         [Authorize]
         [HttpGet("RefreshAccessToken")]
-        public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshAccessToken()
         {
-            try
+            if (_httpContextAccessor
+                .HttpContext != null)
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                var isValid =
-                    await _userManager.VerifyUserTokenAsync(user, "BookShelf", "RefreshToken", "RefreshToken");
-
-                if (isValid)
+                var refreshToken = _httpContextAccessor
+                    .HttpContext.Request.Headers["RefreshToken"];
+                try
                 {
-                    if (refreshToken ==
-                        _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken").ToString())
+                    if (User.Identity != null)
                     {
-                        var token = await CreateToken(_mapper.Map<UserLoginDTO>(user), true);
-                        return Ok(token);
+                        var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                        var tokenToCompare =
+                            await _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
+                        
+                        if (refreshToken == tokenToCompare)
+                        {
+                            await _tokenManager.DeactivateCurrentAsync();
+                            var token = await CreateToken(_mapper.Map<UserLoginDTO>(user), true);
+                            return Ok(token);
+                        };
                     }
-
-                    ;
                 }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to refresh token");
+                catch (Exception e)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to refresh token");
+                }
             }
 
             return BadRequest();
@@ -225,7 +220,6 @@ namespace bookshelf_app.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user,
                     model.Password,
                     false,
-                    // model.RememberMe, 
                     false);
                 if (result.Succeeded)
                 {
