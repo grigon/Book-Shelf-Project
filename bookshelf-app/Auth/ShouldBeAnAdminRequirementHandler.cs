@@ -7,7 +7,6 @@ namespace bookshelf_app.Auth
 {
     public class ShouldBeAnAdminRequirementHandler : AuthorizationHandler<ShouldBeAnAdminRequirement>
     {
-
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             ShouldBeAnAdminRequirement requirement)

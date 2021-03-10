@@ -70,17 +70,29 @@ namespace bookshelf_app.Controllers
 
                     if (IsSuccess)
                     {
-                        var claims = new List<Claim>
+                        var claims = new List<Claim> { };
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Count == 0)
+                        {
+                            claims = new List<Claim>
                             {
                                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
-                                
-                            }
-                            ;
-
-                        claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-
+                                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                            };
+                        }
+                        else
+                        {
+                            claims = new List<Claim>
+                                {
+                                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                                    new Claim(ClaimTypes.Role, roles.Last())
+                                }
+                                ;
+                        }
+                        
                         var creds = new SigningCredentials(
                             _key,
                             SecurityAlgorithms.RsaSha256Signature);

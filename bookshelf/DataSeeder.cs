@@ -30,7 +30,7 @@ namespace bookshelf
         public async Task SeedAsync()
         {
             var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            // var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
+            var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
 
             IdentityResult roleResult;
             //Adding Admin Role
@@ -41,7 +41,7 @@ namespace bookshelf
                 roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
             }
 
-            User user = await _userManager.FindByNameAsync("Admin");
+            User user = await UserManager.FindByNameAsync("Admin");
             if (user == null)
             {
                 user = new User()

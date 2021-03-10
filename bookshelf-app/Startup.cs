@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using bookshelf;
 using bookshelf_app.Auth;
@@ -9,6 +10,7 @@ using bookshelf.DTO;
 using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -35,7 +37,7 @@ namespace bookshelf_app
         }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
@@ -43,9 +45,11 @@ namespace bookshelf_app
                 .AddRoles<IdentityRole>()
                 .AddTokenProvider("BookShelf", typeof(DataProtectorTokenProvider<User>));
 
-            services.AddAuthorization(options =>
+
+            services.AddAuthorization(config =>
             {
-                options.AddPolicy("ShouldBeAnAdmin", options =>
+                // Add a new Policy with requirement to check for Admin
+                config.AddPolicy("ShouldBeAnAdmin", options =>
                 {
                     options.RequireAuthenticatedUser();
                     options.AuthenticationSchemes.Add(
@@ -56,6 +60,7 @@ namespace bookshelf_app
 
             services.AddSingleton(_key);
             services.AddTransient<TokenManagerMiddleware>();
+            // services.AddTransient<AuthorizationHandler<ShouldBeAnAdminRequirement>, ShouldBeAnAdminRequirementHandler>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -76,7 +81,7 @@ namespace bookshelf_app
             // services.AddDbContext<BaseDbContext>(
             //     options => options.UseSqlite(Configuration.GetConnectionString("BookShelf"), 
             //         b => b.MigrationsAssembly("bookshelf-app")));
-            
+
 
             services.AddCors(options =>
             {
@@ -99,19 +104,20 @@ namespace bookshelf_app
             services.AddAutoMapper(typeof(UserProfile).GetTypeInfo().Assembly);
             services.AddScoped<BookRepository>();
             services.AddAutoMapper(typeof(BookProfile).GetTypeInfo().Assembly);
-            
+
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "bookshelf_app", Version = "v1"});
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -124,7 +130,7 @@ namespace bookshelf_app
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseCors("MyAllowSpecificOrigins");
 
             app.UseAuthentication();
@@ -132,7 +138,6 @@ namespace bookshelf_app
             app.UseMiddleware<TokenManagerMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
         }
     }
 }
