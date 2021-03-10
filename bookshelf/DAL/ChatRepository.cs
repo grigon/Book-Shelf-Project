@@ -90,6 +90,7 @@ namespace bookshelf.DAL
 
         public async Task<ChatMessage[]> GetAllMessagesForChat(Guid id)
         {
+
             _logger.LogInformation("Get all chat message for one user");
 
             IQueryable<ChatMessage> query = _context.Messages.
@@ -193,8 +194,9 @@ namespace bookshelf.DAL
         public async Task<ChatMessage> GetMessageById(Guid userId, Guid messageId)
         {
 
-            var query = _context.Messages.Where(m => m.Id == messageId && m.MessageAuthor.Id == userId);
-
+            var query = _context.Messages
+                .Include(c => c.Chat)
+                .Where(m => m.Id == messageId && m.MessageAuthor.Id == userId);
 
             return await query.FirstOrDefaultAsync();
         }

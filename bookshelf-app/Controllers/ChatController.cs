@@ -131,8 +131,6 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-                //getmessagebyId
-                // check is the user is author this information
                 var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");// identity
 
                 if (messageUpdate == null) return NotFound();
@@ -168,6 +166,34 @@ namespace bookshelf_app.Controllers
             }
             //logger???
 
+        }
+        [HttpDelete("{chatid}/{messageId}")]
+
+        public async Task <IActionResult> DeleteMessageFromChat(Guid messageId)
+        {
+            try
+            {
+                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+
+                var messagetoDelete = await _chatRepository.GetMessageById(id, messageId);
+
+                if (messagetoDelete == null) return NotFound();
+
+                _chatRepository.Delete(messagetoDelete);
+
+                if (await _chatRepository.SaveChanges())
+                {
+                    return Ok();
+                }
+
+            }
+            catch (Exception)
+            {
+                _logger.LogError("An error has occured whit chat repository, couldn't delete message in this chat");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("userchat")]
