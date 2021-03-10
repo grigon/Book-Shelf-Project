@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.JsonPatch;
 namespace bookshelf_app.Controllers
 {
     [ApiController]
-    //[FormatFilter]
+    [FormatFilter]
     [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
@@ -48,6 +48,7 @@ namespace bookshelf_app.Controllers
         //    //}
 
         //}
+
         [HttpGet("allchats/admin")]
         public async Task<ActionResult<Chat[]>> AllChatAdmin()
         {
@@ -62,8 +63,6 @@ namespace bookshelf_app.Controllers
                 _logger.LogError("An error has occured with chat repository load all chats for admin");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
-
-
         }
         [HttpGet("{chatid}")]//add paginate 
         public async Task<ActionResult<ChatMessageReadDTO[]>> ActualUserChat(Guid chatid)
@@ -78,17 +77,18 @@ namespace bookshelf_app.Controllers
             }
             catch (Exception)
             {
-
                 _logger.LogError($"An error has occuredd with chat repository, get meassages for chat {chatid},  It came across a problem");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
-
         }
+
         [HttpPost("{chatid}")]
         public async Task<ActionResult<ChatMessageCreateDTO>> AddMessageInChat(Guid chatid, ChatMessageCreateDTO message)
         {
             try
             {//dużo w kontrolerze
+                if (message.Message.Length < 1) return BadRequest("Empty object");
+
                 var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");//from identity
                 //
                 var user = await _chatRepository.GetUserById(id);
@@ -126,6 +126,7 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
             }
         }
+
         [HttpPatch("{chatid}/{messageId}")]
         public async Task<ActionResult<ChatMessageUpdateDTO>> UpdateMessageForActualChat(Guid messageId, JsonPatchDocument<ChatMessageUpdateDTO> messageUpdate)
         {
@@ -165,10 +166,9 @@ namespace bookshelf_app.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
             }
             //logger???
-
         }
-        [HttpDelete("{chatid}/{messageId}")]
 
+        [HttpDelete("{chatid}/{messageId}")]
         public async Task <IActionResult> DeleteMessageFromChat(Guid messageId)
         {
             try
@@ -185,7 +185,6 @@ namespace bookshelf_app.Controllers
                 {
                     return Ok();
                 }
-
             }
             catch (Exception)
             {
@@ -221,7 +220,6 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-
                 //first user to this entity will be from identity , create new object chat and assign to chatuser 
                 //first user chat initiator
                 var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
@@ -229,12 +227,10 @@ namespace bookshelf_app.Controllers
 
                 if (firstParticipant == null) return BadRequest("user doesn't exist");
 
-
                 var newChatId = new Chat();
                 var firstUserChat = new ChatUser();
                 firstUserChat.Chat = newChatId;
                 firstUserChat.User = firstParticipant;
-
 
                 _chatRepository.Create(firstUserChat);
                 if (!await _chatRepository.SaveChanges())
