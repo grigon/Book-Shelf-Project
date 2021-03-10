@@ -72,6 +72,7 @@ namespace bookshelf_app.Controllers
             }
         }
         [HttpGet("{chatid}")]//add paginate 
+        [Produces("application/json")]
         public async Task<ActionResult<ChatMessageReadDTO[]>> ActualUserChat(Guid chatid)
         {
             try
@@ -90,6 +91,7 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost("{chatid}")]
+        [Produces("application/json")]
         public async Task<ActionResult<ChatMessageCreateDTO>> AddMessageInChat(Guid chatid, ChatMessageCreateDTO message)
         {
             try
@@ -136,6 +138,7 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPatch("{chatid}/{messageId}")]
+        [Produces("application/json")]
         public async Task<ActionResult<ChatMessageUpdateDTO>> UpdateMessageForActualChat(Guid messageId, JsonPatchDocument<ChatMessageUpdateDTO> messageUpdate)
         {
             try
@@ -180,6 +183,8 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpDelete("{chatid}/{messageId}")]
+        [Produces("application/json")]
+
         public async Task <IActionResult> DeleteMessageFromChat(Guid messageId)
         {
             try
@@ -209,6 +214,8 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpGet("userchat")]
+        [Produces("application/json")]
+
         public async Task<ActionResult<ChatUser[]>> AllUsersChats()
         {
             try
@@ -234,6 +241,8 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost("newchat")]
+        [Produces("application/json")]
+
         public async Task<ActionResult<ChatUserCreateDTO>> AddChat(ChatUserCreateDTO secondUser)
         {
             try
