@@ -27,22 +27,20 @@ namespace bookshelf_app.Controllers
         public BookController(BookRepository repository, IMapper mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
         {
             _repository = repository;
-             _mapper = mapper;
+            _mapper = mapper;
             _linkGenerator = linkGenerator;
-             _userManager = userManager;
+            _userManager = userManager;
         }
         
         //for not logged/registered users
         [HttpGet("all/{page}")]
         [Produces("application/json")]
-       //Change to book DTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        public async Task<ActionResult<Book[]>> Get(int page)
+        public async Task<ActionResult<BookDTO[]>> Get(int page)
         { 
             try
             {
                 var results = await _repository.GetAll(page);
-                //return _mapper.Map<BookDTO[]>(results);
-                return results;
+                return _mapper.Map<BookDTO[]>(results);
             }
             catch (Exception)
             {
@@ -110,7 +108,7 @@ namespace bookshelf_app.Controllers
             try
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
-        
+                
                 var result = await _repository.GetAllUserBooks(user.Id, page, genre);
                 if (result == null) return NotFound();
                // return _mapper.Map<UserBookDTO[]>(result);
@@ -125,7 +123,7 @@ namespace bookshelf_app.Controllers
         
         [HttpGet("{genre}/page={page}")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> Get(int page, string genre)
+        public async Task<ActionResult<BookDTO[]>> Get(string genre, int page)
         { 
             try
             {

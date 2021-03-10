@@ -1,4 +1,5 @@
 ﻿using System;
+using bookshelf.Model.Users;
 
 namespace bookshelf.DTO.Book.BookLogged
 {

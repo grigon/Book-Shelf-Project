@@ -7,7 +7,9 @@ namespace bookshelf.DTO.Book
         //For not logged/registered users
         public Guid Id { get; set; }
         public string Content { get; set; }
-        public UserDTO UserDto { get; set; }
+        /*public string UserUserName { get; set; }
+        public string UserPhotoPath { get; set; }
+        public DateTime UserRegistrationDate { get; set; }*/
         public int Votes { get; set; }
         public DateTime ReviewDate { get; set; }
     }

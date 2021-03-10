@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using bookshelf.DTO.Book.Books;
+using bookshelf.Model.Books;
 
 namespace bookshelf.DTO.Book.BookLogged
 {
@@ -13,7 +14,6 @@ namespace bookshelf.DTO.Book.BookLogged
         public int Rating { get; set; }
 
         public ICollection<ReviewLoggedDTO> Reviews { get; set; }
-        public ICollection<BookISBNDTO> BookISBNs { get; set; }
-        //public ICollection<BookHistoryLoggedDTO> BookHistory { get; set; }
+        public ICollection<BookISBN> BookISBNs { get; set; }
     }
 }

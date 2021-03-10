@@ -31,14 +31,14 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Getting all Books");
             
-            var genres = _context.Books.Select(b => b.Genre).Distinct();
+           // var genres = _context.Books.Select(b => b.Genre).Distinct();
 
-            // var genres = _context.Genres;
+            var genres = _context.Genres;
             
             var books =
                 from genre in genres
-                from book in _context.Books.Include(b => b.Genre).Include(b => b.Reviews)
-                    .ThenInclude(u => u.User).Include(n => n.BookISBNs).Include(b => b.Author).Where(b => b.Genre == genre)
+                from book in _context.Books.Include(b => b.Genre)
+                    .Include(b => b.Author).Where(b => b.Genre == genre).OrderBy(b => b.Rating)
                     .Take(2)
                 select book;
 
@@ -52,7 +52,8 @@ namespace bookshelf.DAL
 
             IQueryable<Book> query = _context.Books.Include(a => a.Author).
                 Include(g => g.Genre).Include(i => i.BookISBNs).
-                Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Id.CompareTo(id) > 0);
+                Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Id.CompareTo(id) > 0);
       
             return await query.FirstOrDefaultAsync();
         }
