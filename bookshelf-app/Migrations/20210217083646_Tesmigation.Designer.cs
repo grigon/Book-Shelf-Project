@@ -9,7 +9,7 @@ using bookshelf.Context;
 
 namespace bookshelf_app.Migrations
 {
-    [DbContext(typeof(BaseDBContext))]
+    [DbContext(typeof(BaseDbContext))]
     [Migration("20210217083646_Tesmigation")]
     partial class Tesmigation
     {

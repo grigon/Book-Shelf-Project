@@ -42,7 +42,7 @@ namespace bookshelf_app
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<BaseDBContext>(
+            services.AddDbContext<BaseDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), b => b.MigrationsAssembly("bookshelf-app")));
             // var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
             //     .UseSqlServer(Configuration["ConnectionString"])

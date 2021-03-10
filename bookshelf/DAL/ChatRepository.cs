@@ -13,10 +13,10 @@ namespace bookshelf.DAL
 {
     public class ChatRepository : IChatRepository
     {
-        private readonly BaseDBContext _context;
+        private readonly BaseDbContext _context;
         private readonly ILogger<ChatRepository> _logger;
 
-        public ChatRepository(BaseDBContext context, ILogger<ChatRepository> logger)
+        public ChatRepository(BaseDbContext context, ILogger<ChatRepository> logger)
         {
             this._context = context;
             this._logger = logger;
@@ -114,7 +114,7 @@ namespace bookshelf.DAL
 
 
             IQueryable<ChatMessage> query = _context.Messages
-                .Include(m => m.Chat).Where(m => m.MessageAuthor.Id == id).Distinct();
+                .Include(m => m.Chat).Where(m => m.MessageAuthor.Id == id.ToString()).Distinct();
             //join with userChat
 
             return await query.ToArrayAsync();
@@ -133,7 +133,7 @@ namespace bookshelf.DAL
                 .Include(u => u.User);
 
 
-            query = query.Where(u => u.User.Id == UserId);
+            query = query.Where(u => u.User.Id == UserId.ToString());
 
 
 
@@ -179,7 +179,7 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation("Get user by Id");
 
-            var query = _context.Users.Where(u => u.Id == id);
+            var query = _context.Users.Where(u => u.Id == id.ToString());
 
             return await query.FirstOrDefaultAsync();
         }
@@ -196,7 +196,7 @@ namespace bookshelf.DAL
 
             var query = _context.Messages
                 .Include(c => c.Chat)
-                .Where(m => m.Id == messageId && m.MessageAuthor.Id == userId);
+                .Where(m => m.Id == messageId && m.MessageAuthor.Id == userId.ToString());
 
             return await query.FirstOrDefaultAsync();
         }

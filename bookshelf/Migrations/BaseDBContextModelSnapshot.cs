@@ -8,7 +8,7 @@ using bookshelf.Context;
 
 namespace bookshelf.Migrations
 {
-    [DbContext(typeof(BaseDBContext))]
+    [DbContext(typeof(BaseDbContext))]
     partial class BaseDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
