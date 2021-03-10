@@ -35,7 +35,7 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Getting a Camp for {id}");
 
-            IQueryable<User> query = _context.Users;
+            IQueryable<User> query = _context.Users.Where(u => u.Id == id.ToString());
 
             return await query.FirstOrDefaultAsync();
         }

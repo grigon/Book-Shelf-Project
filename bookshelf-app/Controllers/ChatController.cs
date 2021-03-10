@@ -24,14 +24,17 @@ namespace bookshelf_app.Controllers
         private readonly IMapper _mapper;
         private readonly LinkGenerator _linkGenerator;
         private readonly UserManager<User> _userManager;
+        private readonly IUserRepository<User> _userRepository;
 
-        public ChatController(ILogger<ChatController> logger, IChatRepository chatRepository, IMapper mapper, LinkGenerator linkGenerator, UserManager<User> userManager)
+        public ChatController(ILogger<ChatController> logger, IChatRepository chatRepository, IMapper mapper, LinkGenerator linkGenerator, 
+            UserManager<User> userManager, IUserRepository<User> userRepository)
         {
             _logger = logger;
             this._chatRepository = chatRepository;
             this._mapper = mapper;
             this._linkGenerator = linkGenerator;
             this._userManager = userManager;
+            this._userRepository = userRepository;
         }
 
         [HttpGet]
@@ -96,7 +99,7 @@ namespace bookshelf_app.Controllers
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 //var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");//from identity
                 //
-                var userAll = await _chatRepository.GetUserById(user.Id); // grześka metoda
+                //var userAll = await _chatRepository.GetUserById(user.Id); // grześka metoda
 
                 if (user == null) return BadRequest("user doesn't exist");
 
@@ -181,9 +184,11 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-                var userId = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+                //var userId = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
 
-                var messagetoDelete = await _chatRepository.GetMessageById(userId, messageId);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+                var messagetoDelete = await _chatRepository.GetMessageById(user.Id, messageId);
 
                 if (messagetoDelete == null) return NotFound();
 
@@ -210,8 +215,13 @@ namespace bookshelf_app.Controllers
             {
                 // this id is from identity....
                 // method not complete in progress...
-                var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
-                var userchat = await _chatRepository.AllChatIdByUserId(id);
+                //var id = new Guid("a7ecde05-58ef-4230-87e8-08c9409edf9e");
+
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+
+                var userchat = await _chatRepository.AllChatIdByUserId(user.Id);
+
                 // link user , with other users in this same chat 
                 return userchat;
 
@@ -230,9 +240,12 @@ namespace bookshelf_app.Controllers
             {
                 //first user to this entity will be from identity , create new object chat and assign to chatuser 
                 //first user chat initiator
-                var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
+                //var id = new Guid("47435eee-7ead-484a-beb2-3cbf5b768b67");
 
-                var firstParticipant = await _chatRepository.GetUserById(id);
+                var firstParticipant = await _userManager.FindByNameAsync(User.Identity.Name);
+
+
+                //var firstParticipant = await _chatRepository.GetUserById(id.ToString());
 
                 if (firstParticipant == null) return BadRequest("user doesn't exist");
 
@@ -248,7 +261,7 @@ namespace bookshelf_app.Controllers
                     return BadRequest($"failed save {firstUserChat.GetType()} for first user to database");
                 }
 
-                var secondParticipant = await _chatRepository.GetUserById(secondUser.userId);
+                var secondParticipant = await _userRepository.GetById(secondUser.userId); // od Grześka z User Repository,
 
                 var secondUserChat = _mapper.Map<ChatUser>(secondUser);
 
@@ -276,7 +289,6 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
         }
-        //[HttpPost]
-        //public async Task<ActionResult>
+
     }
 }

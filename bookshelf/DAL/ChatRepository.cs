@@ -124,16 +124,16 @@ namespace bookshelf.DAL
         /// all chat for specific user/ logged user
         /// this to improve join , group join
         /// </summary>
-        /// <param name="UserId"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-       public async Task<ChatUser[]> AllChatIdByUserId(Guid UserId)
+       public async Task<ChatUser[]> AllChatIdByUserId(string userId)
         {
             IQueryable<ChatUser> query = _context.ChatUsers
                 .Include(c => c.Chat)
                 .Include(u => u.User);
 
 
-            query = query.Where(u => u.User.Id == UserId.ToString());
+            query = query.Where(u => u.User.Id == userId);
 
 
 
