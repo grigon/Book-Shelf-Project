@@ -135,34 +135,44 @@ namespace bookshelf_app.Controllers
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                await _userManager.UpdateSecurityStampAsync(user);
-                await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                await CancelAccessToken();
-                await _signInManager.SignOutAsync();
-                return Ok();
+                if (User.Identity != null)
+                {
+                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    await _userManager.UpdateSecurityStampAsync(user);
+                    await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
+                    await _tokenManager.DeactivateCurrentAsync();
+                    await _signInManager.SignOutAsync();
+                    return Ok();
+                }
             }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to logout");
             }
+
+            return BadRequest();
         }
 
-        [Authorize]
-        [HttpPost("CancelToken")]
-        public async Task<IActionResult> CancelAccessToken()
-        {
-            await _tokenManager.DeactivateCurrentAsync();
-            return NoContent();
-        }
+        // [Authorize]
+        // [HttpPost("CancelToken")]
+        // public async Task<IActionResult> CancelAccessToken()
+        // {
+        //     await _tokenManager.DeactivateCurrentAsync();
+        //     return NoContent();
+        // }
         
         [Authorize]
         [HttpPut("admin")]
-        public async Task<IActionResult> admin()
+        public async Task<IActionResult> Admin()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            await _userManager.AddToRoleAsync(user, "Admin");
-            return Ok();
+            if (user != null)
+            {
+                await _userManager.AddToRoleAsync(user, "Admin");
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [Authorize]

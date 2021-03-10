@@ -45,22 +45,8 @@ namespace bookshelf_app
                 .AddRoles<IdentityRole>()
                 .AddTokenProvider("BookShelf", typeof(DataProtectorTokenProvider<User>));
 
-
-            services.AddAuthorization(config =>
-            {
-                // Add a new Policy with requirement to check for Admin
-                config.AddPolicy("ShouldBeAnAdmin", options =>
-                {
-                    options.RequireAuthenticatedUser();
-                    options.AuthenticationSchemes.Add(
-                        JwtBearerDefaults.AuthenticationScheme);
-                    options.Requirements.Add(new ShouldBeAnAdminRequirement());
-                });
-            });
-
             services.AddSingleton(_key);
             services.AddTransient<TokenManagerMiddleware>();
-            // services.AddTransient<AuthorizationHandler<ShouldBeAnAdminRequirement>, ShouldBeAnAdminRequirementHandler>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

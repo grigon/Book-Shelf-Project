@@ -30,10 +30,10 @@ namespace bookshelf_app.Auth
 
 
         public async Task<bool> IsCurrentActiveTokenAsync()
-            => await IsActiveAsync(GetCuttrnetTokenAsync());
+            => await IsActiveAsync(GetCurrentTokenAsync());
 
         public async Task DeactivateCurrentAsync()
-            => await DeactivateAsync(GetCuttrnetTokenAsync());
+            => await DeactivateAsync(GetCurrentTokenAsync());
  
         public async Task<bool> IsActiveAsync(string token)
             => await _cache.GetStringAsync(GetKkey(token)) == null;
@@ -45,7 +45,7 @@ namespace bookshelf_app.Auth
                     = TimeSpan.FromSeconds(Convert.ToDouble(_configuration["Tokens:TimeValid"]))
             });
 
-        private string GetCuttrnetTokenAsync()
+        private string GetCurrentTokenAsync()
         {
             if (_httpContextAccessor
                 .HttpContext != null)
