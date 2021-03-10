@@ -7,7 +7,8 @@ using bookshelf.Model.Chats;
 
 namespace bookshelf.DAL
 {
-    public class ChatRepository 
+    public class ChatRepository
     {
+        //Console.WriteLine("nn");
     }
 }
