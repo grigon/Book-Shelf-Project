@@ -148,17 +148,22 @@ namespace bookshelf_app.Controllers
                     var messagePath = _mapper.Map<ChatMessageUpdateDTO>(messageFromDB);
                     messageUpdate.ApplyTo(messagePath, ModelState);
                     _mapper.Map(messagePath, messageFromDB);
-                    await _chatRepository.SaveChanges();
+                    if (await _chatRepository.SaveChanges())
+                    {
+                        var url = _linkGenerator.GetPathByAction(HttpContext, "ActualUserChat",
+                            values: new { chatid = messageFromDB.Chat.ChatId });
 
-                    //redirect to chat my id
-                    return NoContent();
+                        return Created(url, _mapper.Map<ChatMessageUpdateDTO>(messagePath));
+                    }
+                    else
+                    {
+                        return BadRequest("Failed save edited chat message to database in chat repository");
+                    }
                 }
-
-
             }
             catch (Exception)
             {
-                _logger.LogError("Retrieve chat message from database came across a problem");
+                _logger.LogError("Update chat message came across a problem, edit message failed");
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
             }
             //logger???
