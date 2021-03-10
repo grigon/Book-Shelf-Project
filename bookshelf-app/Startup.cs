@@ -8,6 +8,9 @@ using bookshelf.DAL;
 using bookshelf.DTO;
 using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
+//using bookshelf.FakeData;
+using bookshelf.Model.Books;
+using bookshelf.Profiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace bookshelf_app
 {
@@ -37,6 +41,17 @@ namespace bookshelf_app
         
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<BaseDBContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), b => b.MigrationsAssembly("bookshelf-app")));
+            // var contextOptions = new DbContextOptionsBuilder<BaseDBContext>()
+            //     .UseSqlServer(Configuration["ConnectionString"])
+            //     .Options;
+            //services.AddDbContext<BaseDBContext>(
+            //    options => options.UseSqlServer(Configuration["ConnectionString"][0],
+            //        b => b.MigrationsAssembly("bookshelf-app")));
+            services.AddScoped<IChatRepository, ChatRepository>();
+
             services.AddDbContext<BaseDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"),
                     b => b.MigrationsAssembly("bookshelf-app")));
@@ -81,6 +96,17 @@ namespace bookshelf_app
                 options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
                     builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
             });
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly("bookshelf"));
+            services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+            //services.AddDbContext<BaseDBContext>(
+            //    options => options.UseSqlServer(Configuration["ConnectionString"]));
+            //services.AddSingleton<IBaseRepository<UserBook>>(service => new DataFakeRepository());
+
+            services.AddMvcCore();
 
             services.AddDbContext<BaseDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"),

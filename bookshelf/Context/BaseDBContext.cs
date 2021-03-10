@@ -17,6 +17,7 @@ namespace bookshelf.Context
         {
         }
 
+        
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<User> Users { get; set; }
@@ -25,10 +26,11 @@ namespace bookshelf.Context
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatMessage> Messages { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<BookISBN> BookISBN { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
         public DbSet<BookHistory> BookHistory { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<BookISBN> BookISBN { get; set; }
+       
     }
 }
