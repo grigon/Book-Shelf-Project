@@ -37,7 +37,8 @@ namespace bookshelf.DAL
             
             var books =
                 from genre in genres
-                from book in _context.Books.Include(b => b.Genre)
+                from book in _context.Books.Include(b => b.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.BookISBNs).Include(b => b.Genre)
                     .Include(b => b.Author).Where(b => b.Genre == genre).OrderBy(b => b.Rating)
                     .Take(2)
                 select book;
