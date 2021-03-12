@@ -5,7 +5,6 @@ using bookshelf.DAL;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
 using bookshelf.Model.Books;
-using bookshelf.Model.Chats;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -167,6 +166,23 @@ namespace bookshelf_app.Controllers
             {
                 var results = await _repository.GetPartByGenre(page, genre);
                 return _mapper.Map<BookLoggedDTO[]>(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        
+        //change to dto
+        [HttpGet("search={search}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO[]>> GetBySearch(string search, int page)
+        { 
+            try
+            {
+                var results = await _repository.GetBySearch(search, page);
+                return _mapper.Map<BookDTO[]>(results);
             }
             catch (Exception)
             {

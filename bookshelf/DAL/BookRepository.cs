@@ -105,7 +105,8 @@ namespace bookshelf.DAL
             
             IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+                .Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 10 - 10).Take(10);
             
             return await query.ToArrayAsync();
         }
@@ -127,6 +128,21 @@ namespace bookshelf.DAL
                 select book;
 
             return await books.ToArrayAsync();
+        }
+        
+        public async Task<Book[]> GetBySearch(string search, int page)
+        {
+            _logger.LogInformation($"Getting book by id");
+
+            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+                Include(g => g.Genre).Include(i => i.BookISBNs).
+                Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Author.FirstName.ToUpper().Contains(search.ToUpper())
+                            || b.Author.LastName.ToUpper().Contains(search.ToUpper()) ||
+                            b.Genre.Name.ToUpper().Contains(search.ToUpper())||
+                            b.Title.ToUpper().Contains(search.ToUpper())).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+      
+            return await query.ToArrayAsync();
         }
         
         public void Add(UserBook userBook)
