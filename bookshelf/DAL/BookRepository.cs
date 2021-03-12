@@ -110,7 +110,7 @@ namespace bookshelf.DAL
             return await query.ToArrayAsync();
         }
         
-       
+       //logged user his books limit for all genres
         public async Task<UserBook[]> GetAllUserBooksForAllGenres(string id)
         {
             _logger.LogInformation($"Getting all user Books");
@@ -120,7 +120,7 @@ namespace bookshelf.DAL
             var books =
                 from genre in genres
                 from book in _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
-                    .Include(b => b.Book.BookISBNs).Include(b => b.Book.Genre)
+                    .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).Include(b => b.Book.Genre)
                     .Include(b => b.Book.Author).Where(b => b.Book.Genre == genre && b.User.Id == id)
                     .OrderBy(b => b.Book.Rating)
                     .Take(10)
