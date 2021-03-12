@@ -81,8 +81,8 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
         
-        //returns all books belonging to the logged user
-        public async Task<UserBook[]> GetAllUserBooks(string id, int page, string genre)
+        //returns all books belonging to the logged user by genre
+        public async Task<UserBook[]> GetAllUserBooksByGenre(string id, string genre, int page)
         {
             _logger.LogInformation($"Getting all user Books");
 
@@ -93,7 +93,7 @@ namespace bookshelf.DAL
                 .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
                 .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
                 .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
-                .Where(u => u.Book.Genre.Name == genre && u.User.Id == id).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+                .Where(u => u.Book.Genre.Name == genre && u.User.Id == id && u.Book.Genre.Name == genre ).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
         }
