@@ -27,12 +27,11 @@ namespace bookshelf.DAL
         }
         
         //for not logged/registered user
+        //usunac paging
         public async Task<Book[]> GetAll(int j)
         {
             _logger.LogInformation($"Getting all Books");
             
-           // var genres = _context.Books.Select(b => b.Genre).Distinct();
-
             var genres = _context.Genres;
             
             var books =
@@ -40,7 +39,7 @@ namespace bookshelf.DAL
                 from book in _context.Books.Include(b => b.Reviews).ThenInclude(r => r.User)
                     .Include(b => b.BookISBNs).Include(b => b.Genre)
                     .Include(b => b.Author).Where(b => b.Genre == genre).OrderBy(b => b.Rating)
-                    .Take(2)
+                    .Take(10)
                 select book;
 
             return await books.ToArrayAsync();
@@ -87,10 +86,6 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Getting all user Books");
 
-            //why is not including user to review?
-            //why in the review once user is present, once is null?
-            //why I can no compare by user id?
-
             IQueryable<UserBook> query =
                 _context.UserBooks
                 .Include(b => b.User)
@@ -107,12 +102,31 @@ namespace bookshelf.DAL
         public async Task<Book[]> GetPartByGenre(int page, string genre)
         {
             _logger.LogInformation($"Getting all Books");
-            //why not correct?
+            
             IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
                 .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
+        }
+        
+       
+        public async Task<UserBook[]> GetAllUserBooksForAllGenres(string id)
+        {
+            _logger.LogInformation($"Getting all user Books");
+
+            var genres = _context.Genres;
+
+            var books =
+                from genre in genres
+                from book in _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs).Include(b => b.Book.Genre)
+                    .Include(b => b.Book.Author).Where(b => b.Book.Genre == genre && b.User.Id == id)
+                    .OrderBy(b => b.Book.Rating)
+                    .Take(10)
+                select book;
+
+            return await books.ToArrayAsync();
         }
         
         public void Add(UserBook userBook)

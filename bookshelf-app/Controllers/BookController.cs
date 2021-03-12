@@ -99,7 +99,7 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        //for logged user
+        /*//for logged user
         [HttpGet("logged/UserBooks/{page}/{genre}")]
         [Produces("application/json")]
         //change to dto
@@ -113,6 +113,28 @@ namespace bookshelf_app.Controllers
                 if (result == null) return NotFound();
                // return _mapper.Map<UserBookDTO[]>(result);
                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }*/
+        
+        //for logged user
+        [HttpGet("logged/UserBooks")]
+        [Produces("application/json")]
+        //change to dto
+        public async Task<ActionResult<UserBook[]>> GetUserBooksForAllGenres()
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                
+                var result = await _repository.GetAllUserBooksForAllGenres(user.Id);
+                if (result == null) return NotFound();
+                // return _mapper.Map<UserBookDTO[]>(result);
+                return result;
             }
             catch (Exception e)
             {
