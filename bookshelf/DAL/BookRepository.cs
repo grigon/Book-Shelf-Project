@@ -61,7 +61,22 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
         
-        public async Task<UserBook[]> GetUserBooks(string id)
+        public async Task<Book[]> GetBySearch(string search, int page)
+        {
+            _logger.LogInformation($"Getting book by id");
+
+            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+                Include(g => g.Genre).Include(i => i.BookISBNs).
+                Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Author.FirstName.ToUpper().Contains(search.ToUpper())
+                            || b.Author.LastName.ToUpper().Contains(search.ToUpper()) ||
+                            b.Genre.Name.ToUpper().Contains(search.ToUpper())||
+                            b.Title.ToUpper().Contains(search.ToUpper())).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+      
+            return await query.ToArrayAsync();
+        }
+        
+        public async Task<UserBook[]> GetUserBooks(string userId)
         {
             _logger.LogInformation($"Getting all user Books");
 
@@ -72,7 +87,7 @@ namespace bookshelf.DAL
                 from book in _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
                     .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
                     .ThenInclude(h => h.User).Include(b => b.Book.Genre)
-                    .Include(b => b.Book.Author).Where(b => b.Book.Genre == genre && b.User.Id == id)
+                    .Include(b => b.Book.Author).Where(b => b.Book.Genre == genre && b.User.Id == userId)
                     .OrderBy(b => b.Book.Rating)
                     .Take(10)
                 select book;
@@ -109,22 +124,22 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
         
-        //do it by user id like user book but by book owner
-        public async Task<Book[]> GetBySearch(string search, int page)
+        public async Task<UserBook[]> GetAllUserBooksByCity(Guid bookId, int page, string city)
         {
-            _logger.LogInformation($"Getting book by id");
+            _logger.LogInformation($"Getting all user Books");
 
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).
-                Include(g => g.Genre).Include(i => i.BookISBNs).
-                Include(r => r.Reviews).ThenInclude(u => u.User)
-                .Where(b => b.Author.FirstName.ToUpper().Contains(search.ToUpper())
-                            || b.Author.LastName.ToUpper().Contains(search.ToUpper()) ||
-                            b.Genre.Name.ToUpper().Contains(search.ToUpper())||
-                            b.Title.ToUpper().Contains(search.ToUpper())).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
-      
+            var query =
+                _context.UserBooks.Include(u => u.User)
+                    .Include(b => b.Book)
+                    .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                    .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs)
+                    .Where(u => u.IsPublic && u.User.IsPublic && u.Book.Id.CompareTo(bookId) > 0 &&
+                                u.User.City.ToUpper().Contains(city.ToUpper()))
+                    .Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+            
             return await query.ToArrayAsync();
         }
-        
         public void Add(UserBook userBook)
         {
             _context.Add(userBook);
