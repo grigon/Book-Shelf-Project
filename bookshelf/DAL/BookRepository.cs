@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AutoMapper.Internal;
 using bookshelf.Context;
-using bookshelf.DTO.Book.BookLogged;
 using bookshelf.Model.Books;
-using bookshelf.Model.Chats;
-using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -26,9 +20,7 @@ namespace bookshelf.DAL
             _logger = logger;
         }
         
-        //for not logged/registered user
-        //usunac paging
-        public async Task<Book[]> GetAll(int j)
+        public async Task<Book[]> GetAll()
         {
             _logger.LogInformation($"Getting all Books");
             
@@ -45,74 +37,31 @@ namespace bookshelf.DAL
             return await books.ToArrayAsync();
         }
         
-        //for not logged/registered user
+        public async Task<Book[]> GetPageByGenre(string genre, int page)
+        {
+            _logger.LogInformation($"Getting all Books");
+
+            var query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
+                .Include(i => i.BookISBNs)
+                .Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+            
+            return await query.ToArrayAsync();
+        }
+        
         public async Task<Book> GetById(Guid id)
         {
             _logger.LogInformation($"Getting book by id");
 
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+            var query = _context.Books.Include(a => a.Author).
                 Include(g => g.Genre).Include(i => i.BookISBNs).
                 Include(r => r.Reviews).ThenInclude(u => u.User)
                 .Where(b => b.Id.CompareTo(id) > 0);
       
             return await query.FirstOrDefaultAsync();
         }
-
-        public async Task<Book[]> GetAllLoogged(string genre)
-        {
-            _logger.LogInformation($"Getting all Books");
-
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
-                .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Take(2);
-            
-            return await query.ToArrayAsync();
-        }
-
-        //for not logged/registered user
-        public async Task<Book> GetByIdLogged(Guid id)
-        {
-            _logger.LogInformation($"Getting book by id");
-
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).
-                Include(g => g.Genre).Include(i => i.BookISBNs).
-                Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Id.CompareTo(id) > 0);
-      
-            return await query.FirstOrDefaultAsync();
-        }
         
-        //returns all books belonging to the logged user by genre
-        public async Task<UserBook[]> GetAllUserBooksByGenre(string id, string genre, int page)
-        {
-            _logger.LogInformation($"Getting all user Books");
-
-            IQueryable<UserBook> query =
-                _context.UserBooks
-                .Include(b => b.User)
-                .Include(b => b.Book)
-                .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
-                .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
-                .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
-                .Where(u => u.Book.Genre.Name == genre && u.User.Id == id && u.Book.Genre.Name == genre ).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
-            
-            return await query.ToArrayAsync();
-        }
-        
-        //Not logged user paging by genre
-        public async Task<Book[]> GetPartByGenre(int page, string genre)
-        {
-            _logger.LogInformation($"Getting all Books");
-            
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
-                .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User)
-                .Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 10 - 10).Take(10);
-            
-            return await query.ToArrayAsync();
-        }
-        
-       //logged user his books limit for all genres
-        public async Task<UserBook[]> GetAllUserBooksForAllGenres(string id)
+        public async Task<UserBook[]> GetUserBooks(string id)
         {
             _logger.LogInformation($"Getting all user Books");
 
@@ -121,7 +70,8 @@ namespace bookshelf.DAL
             var books =
                 from genre in genres
                 from book in _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
-                    .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).Include(b => b.Book.Genre)
+                    .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
+                    .ThenInclude(h => h.User).Include(b => b.Book.Genre)
                     .Include(b => b.Book.Author).Where(b => b.Book.Genre == genre && b.User.Id == id)
                     .OrderBy(b => b.Book.Rating)
                     .Take(10)
@@ -130,6 +80,36 @@ namespace bookshelf.DAL
             return await books.ToArrayAsync();
         }
         
+        public async Task<UserBook[]> GetAllUserBooksByGenre(string userId, string genre, int page)
+        {
+            _logger.LogInformation($"Getting all user Books");
+
+            var query =
+                _context.UserBooks.Include(b => b.Book)
+                .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).ThenInclude(b => b.User)
+                .Where(u => u.Book.Genre.Name == genre && u.User.Id == userId)
+                .Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+            
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<UserBook> GetUserBookById(string userId, Guid Id)
+        {
+            _logger.LogInformation($"Getting all user Books");
+
+            var query =
+                _context.UserBooks.Include(b => b.Book)
+                    .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                    .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).ThenInclude(b => b.User)
+                    .Where(u => u.User.Id == userId && u.Id.CompareTo(Id) > 0);
+            
+            return await query.FirstOrDefaultAsync();
+        }
+        
+        //do it by user id like user book but by book owner
         public async Task<Book[]> GetBySearch(string search, int page)
         {
             _logger.LogInformation($"Getting book by id");
@@ -158,11 +138,6 @@ namespace bookshelf.DAL
         public void Remove(UserBook userBook)
         {
             _context.UserBooks.Remove(userBook);
-        }
-
-        public async Task<bool> Commit()
-        {
-            return (await _context.SaveChangesAsync()) > 0;
         }
     }
 }
