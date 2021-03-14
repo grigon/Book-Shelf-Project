@@ -6,6 +6,7 @@ using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
 using bookshelf.Model.Books;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,14 +32,13 @@ namespace bookshelf_app.Controllers
             _userManager = userManager;
         }
         
-        //for not logged/registered users
-        [HttpGet("all/{page}")]
+        [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> Get(int page)
+        public async Task<ActionResult<BookDTO[]>> Get()
         { 
             try
             {
-                var results = await _repository.GetAll(page);
+                var results = await _repository.GetAll();
                 return _mapper.Map<BookDTO[]>(results);
             }
             catch (Exception)
@@ -47,7 +47,21 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        //for not logged/registered users
+        [HttpGet("genre={genre}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO[]>> GetPageByGenre(string genre, int page)
+        { 
+            try
+            {
+                var results = await _repository.GetPageByGenre(genre, page);
+                return _mapper.Map<BookDTO[]>(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
         [HttpGet("{id}")]
         [Produces("application/json")]
         public async Task<ActionResult<BookDTO>> Get(Guid id)
@@ -64,14 +78,17 @@ namespace bookshelf_app.Controllers
             }
         }
         
+        //Can I make the same route for logge and not logged user with other result?
+        //removed template "logged"- to check is it working correctly
         //for logged user
-        [HttpGet("logged/genre={genre}")]
+        [Authorize]
+        [HttpGet("logged")]
         [Produces("application/json")]
-        public async Task<ActionResult<BookLoggedDTO[]>> GetBooks(string genre)
+        public async Task<ActionResult<BookLoggedDTO[]>> GetBooks()
         { 
             try
             {
-                var results = await _repository.GetAllLoogged(genre);
+                var results = await _repository.GetAll();
                 BookLoggedDTO[] models = _mapper.Map<BookLoggedDTO[]>(results);
                 return Ok(models);
             }
@@ -81,14 +98,30 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        //for logged user
+        [Authorize]
+        [HttpGet("logged/genre={genre}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookLoggedDTO[]>> GetPageByGenreForLogged(string genre, int page)
+        { 
+            try
+            {
+                var results = await _repository.GetPageByGenre(genre, page);
+                return _mapper.Map<BookLoggedDTO[]>(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        [Authorize]
         [HttpGet("logged/{id}")]
         [Produces("application/json")]
         public async Task<ActionResult<BookLoggedDTO>> GetBook(Guid id)
         {
             try
             {
-                var result = await _repository.GetByIdLogged(id);
+                var result = await _repository.GetById(id);
                 if (result == null) return NotFound();
                 return _mapper.Map<BookLoggedDTO>(result);
             }
@@ -98,7 +131,7 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        //for logged user
+        /*//for logged user
         [HttpGet("logged/UserBooks/{genre}/{page}")]
         [Produces("application/json")]
         //change to dto
@@ -188,7 +221,7 @@ namespace bookshelf_app.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
-        }
+        }*/
         
         /*[HttpPut("logged/UserBooks/add")]
         [HttpPut("{id:int")]
