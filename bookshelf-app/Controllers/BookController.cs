@@ -47,7 +47,7 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        [HttpGet("genre={genre}/page={page}")]
+        [HttpGet("{genre}/page={page}")]
         [Produces("application/json")]
         public async Task<ActionResult<BookDTO[]>> GetPageByGenre(string genre, int page)
         { 
@@ -78,11 +78,8 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        //Can I make the same route for logge and not logged user with other result?
-        //removed template "logged"- to check is it working correctly
-        //for logged user
         [Authorize]
-        [HttpGet("logged")]
+        [HttpGet("user")]
         [Produces("application/json")]
         public async Task<ActionResult<BookLoggedDTO[]>> GetBooks()
         { 
@@ -99,7 +96,7 @@ namespace bookshelf_app.Controllers
         }
         
         [Authorize]
-        [HttpGet("logged/genre={genre}/page={page}")]
+        [HttpGet("user/{genre}/page={page}")]
         [Produces("application/json")]
         public async Task<ActionResult<BookLoggedDTO[]>> GetPageByGenreForLogged(string genre, int page)
         { 
@@ -115,7 +112,7 @@ namespace bookshelf_app.Controllers
         }
         
         [Authorize]
-        [HttpGet("logged/{id}")]
+        [HttpGet("user/{id}")]
         [Produces("application/json")]
         public async Task<ActionResult<BookLoggedDTO>> GetBook(Guid id)
         {
@@ -131,97 +128,63 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        /*//for logged user
-        [HttpGet("logged/UserBooks/{genre}/{page}")]
+        [Authorize]
+        [HttpGet("user/UserBooks")]
         [Produces("application/json")]
         //change to dto
-        public async Task<ActionResult<UserBook[]>> GetUserBooks(string genre, int page)
+        public async Task<ActionResult<UserBookDTO[]>> GetUserBooks()
         {
             try
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 
-                var result = await _repository.GetAllUserBooksByGenre(user.Id, genre, page);
+                var result = await _repository.GetUserBooks(user.Id);
                 if (result == null) return NotFound();
-               // return _mapper.Map<UserBookDTO[]>(result);
-               return result;
+                return _mapper.Map<UserBookDTO[]>(result);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
         
-        //for logged user
-        [HttpGet("logged/UserBooks")]
+        [Authorize]
+        [HttpGet("user/UserBooks/{genre}/page={page}")]
         [Produces("application/json")]
-        //change to dto
-        public async Task<ActionResult<UserBook[]>> GetUserBooksForAllGenres()
+        public async Task<ActionResult<UserBookDTO[]>> Get(string genre, int page)
+        { 
+            try
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                
+                var results = await _repository.GetAllUserBooksByGenre(user.Id, genre, page);
+                return _mapper.Map<UserBookDTO[]>(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        [Authorize]
+        [HttpGet("user/UserBooks/{id}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<UserBookDTO>> GetUserBook(Guid id)
         {
             try
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 
-                var result = await _repository.GetAllUserBooksForAllGenres(user.Id);
+                var result = await _repository.GetUserBookById(user.Id, id);
                 if (result == null) return NotFound();
-                // return _mapper.Map<UserBookDTO[]>(result);
-                return result;
+                return _mapper.Map<UserBookDTO>(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.StackTrace);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
         
-        [HttpGet("{genre}/page={page}")]
-        [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> Get(string genre, int page)
-        { 
-            try
-            {
-                var results = await _repository.GetPartByGenre(page, genre);
-                return _mapper.Map<BookDTO[]>(results);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
-            }
-        }
-        
-        //paging books by genre for logged user
-        [HttpGet("logged/{genre}/page={page}")]
-        [Produces("application/json")]
-        public async Task<ActionResult<BookLoggedDTO[]>> GetLoggedPartByGenre(int page, string genre)
-        { 
-            try
-            {
-                var results = await _repository.GetPartByGenre(page, genre);
-                return _mapper.Map<BookLoggedDTO[]>(results);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
-            }
-        }
-        
-        
-        //change to dto
-        [HttpGet("search={search}/page={page}")]
-        [Produces("application/json")]
-        public async Task<ActionResult<BookDTO[]>> GetBySearch(string search, int page)
-        { 
-            try
-            {
-                var results = await _repository.GetBySearch(search, page);
-                return _mapper.Map<BookDTO[]>(results);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
-            }
-        }*/
         
         /*[HttpPut("logged/UserBooks/add")]
         [HttpPut("{id:int")]
