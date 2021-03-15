@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using bookshelf.DTO.Book.Books;
 using bookshelf.Model.Books;
 
 namespace bookshelf.DTO.Book.BookLogged

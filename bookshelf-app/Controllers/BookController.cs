@@ -185,6 +185,39 @@ namespace bookshelf_app.Controllers
             }
         }
         
+        /*[Authorize]*/
+        [HttpGet("user/search={search}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<BookDTO[]>> GetUserBookBySearch(string search, int page)
+        {
+            try
+            {
+                var result = await _repository.GetBySearch(search, page);
+                if (result == null) return NotFound();
+                return _mapper.Map<BookDTO[]>(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
+        
+        /*[Authorize]*/
+        [HttpGet("user/UserBooks/{id}/city={city}/page={page}")]
+        [Produces("application/json")]
+        public async Task<ActionResult<UserBookDTO[]>> GetUserBookByCity(Guid bookId, int page, string city)
+        {
+            try
+            {
+                var result = await _repository.GetAllUserBooksByCity(bookId, page, city);
+                if (result == null) return NotFound();
+                return _mapper.Map<UserBookDTO[]>(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
+            }
+        }
         
         /*[HttpPut("logged/UserBooks/add")]
         [HttpPut("{id:int")]

@@ -63,7 +63,7 @@ namespace bookshelf.DAL
         
         public async Task<Book[]> GetBySearch(string search, int page)
         {
-            _logger.LogInformation($"Getting book by id");
+            _logger.LogInformation($"Getting book by search");
 
             IQueryable<Book> query = _context.Books.Include(a => a.Author).
                 Include(g => g.Genre).Include(i => i.BookISBNs).
@@ -71,7 +71,7 @@ namespace bookshelf.DAL
                 .Where(b => b.Author.FirstName.ToUpper().Contains(search.ToUpper())
                             || b.Author.LastName.ToUpper().Contains(search.ToUpper()) ||
                             b.Genre.Name.ToUpper().Contains(search.ToUpper())||
-                            b.Title.ToUpper().Contains(search.ToUpper())).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+                            b.Title.ToUpper().Contains(search.ToUpper())).Skip(page == 1 ? 0 : page * 10 - 10).Take(10);
       
             return await query.ToArrayAsync();
         }
@@ -129,17 +129,18 @@ namespace bookshelf.DAL
             _logger.LogInformation($"Getting all user Books");
 
             var query =
-                _context.UserBooks.Include(u => u.User)
+                _context.UserBooks/*.Include(u => u.User)*/
                     .Include(b => b.Book)
-                    .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                    /*.ThenInclude(b => b.Author).Include(b => b.Book.Genre)
                     .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
-                    .Include(b => b.Book.BookISBNs)
-                    .Where(u => u.IsPublic && u.User.IsPublic && u.Book.Id.CompareTo(bookId) > 0 &&
+                    .Include(b => b.Book.BookISBNs)*/
+                    .Where(u => u.IsPublic && u.Book.Id.CompareTo(bookId) > 0 &&
                                 u.User.City.ToUpper().Contains(city.ToUpper()))
                     .Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
         }
+        
         public void Add(UserBook userBook)
         {
             _context.Add(userBook);
