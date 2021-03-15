@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Users;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RTools_NTS.Util;
 
 namespace bookshelf.DAL
 {
@@ -35,7 +32,7 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Getting a Camp for {id}");
 
-            IQueryable<User> query = _context.Users;
+            IQueryable<User> query = _context.Users.Where(u => u.Id == id.ToString());
 
             return await query.FirstOrDefaultAsync();
         }
@@ -43,12 +40,6 @@ namespace bookshelf.DAL
         public void Add(User user) 
         {
             _logger.LogInformation("Adding an object of type User to the context.");
-            _context.Add(user);
-        }
-
-        public void Add<User>(User user) where User : class
-        {
-            // _logger.LogInformation($"Adding an object of type user to the context.");
             _context.Add(user);
         }
 
@@ -72,10 +63,5 @@ namespace bookshelf.DAL
             return true;
         }
 
-        public async Task<IdentityUserToken<string>> GetRefreshTokenById(string id)
-        {
-            return _context.UserTokens.First(t => t.UserId == id);
-        }
-        
     }
 }
