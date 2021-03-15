@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
+using bookshelf.DTO.Create;
+using bookshelf.Model.Books;
 
 namespace bookshelf.DTO.Book
 {
@@ -20,6 +22,7 @@ namespace bookshelf.DTO.Book
             this.CreateMap<Model.Books.Review, ReviewLoggedDTO>().ReverseMap();
             this.CreateMap<Model.Books.UserBook, UserBookDTO>().ReverseMap();
             this.CreateMap<Model.Users.User, UserLoggedDTO>().ReverseMap();
+            this.CreateMap<ReviewAddDTO, Review>().ReverseMap();
         }
     }
 }

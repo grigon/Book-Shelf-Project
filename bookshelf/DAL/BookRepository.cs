@@ -130,15 +130,21 @@ namespace bookshelf.DAL
 
             var query =
                 _context.UserBooks/*.Include(u => u.User)*/
-                    .Include(b => b.Book)
+                    /*.Include(b => b.Book)*/
                     /*.ThenInclude(b => b.Author).Include(b => b.Book.Genre)
                     .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
                     .Include(b => b.Book.BookISBNs)*/
-                    .Where(u => u.IsPublic && u.Book.Id.CompareTo(bookId) > 0 &&
-                                u.User.City.ToUpper().Contains(city.ToUpper()))
-                    .Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
+                    .Where(/*u => u.IsPublic && */u => u.Id.CompareTo(bookId) > 0/* &&*/
+                                /*u.User.City.ToUpper().Contains(city.ToUpper())*/)
+                    /*.Skip(page == 1 ? 0 : page * 2 - 2)*//*.Take(1)*/;
             
             return await query.ToArrayAsync();
+        }
+
+        public async void AddReview(Review review)
+        {
+            await _context.Reviews.AddAsync(review);
+            await _context.SaveChangesAsync();
         }
         
         public void Add(UserBook userBook)

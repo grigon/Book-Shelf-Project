@@ -4,6 +4,7 @@ using AutoMapper;
 using bookshelf.DAL;
 using bookshelf.DTO.Book.BookLogged;
 using bookshelf.DTO.Book.Books;
+using bookshelf.DTO.Create;
 using bookshelf.Model.Books;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -218,6 +219,24 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database failure");
             }
         }
+
+        [Authorize]
+        [HttpPost("user/UserBooks/{id}/add")]
+        public async Task<ActionResult<Review>> Post(Guid id, [FromBody]ReviewAddDTO reviewDto)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            UserBook userBook = await _repository.GetUserBookById(user.Id, id);
+            var review = _mapper.Map<Review>(reviewDto);
+            review.ReviewDate = DateTime.Now;
+            /*review.Book = userBook.Book;
+            review.User = user;*/
+            review.Votes = 0;
+
+            _repository.AddReview(review);
+
+            return review;
+        }
+        
         
         /*[HttpPut("logged/UserBooks/add")]
         [HttpPut("{id:int")]
