@@ -9,6 +9,7 @@ using bookshelf_app.Auth;
 using bookshelf.DAL;
 using bookshelf.DTO.Create;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace bookshelf_app.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/account")]
     public class AccountController : ControllerBase
@@ -57,18 +59,18 @@ namespace bookshelf_app.Controllers
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (user != null)
                 {
-                    var isSuccess = false;
+                    var loggedIn = false;
                     if (!refresh)
                     {
                         var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-                        isSuccess = (result.Result == SignInResult.Success);
+                        loggedIn = (result.Result == SignInResult.Success);
                     }
                     else
                     {
-                        isSuccess = true;
+                        loggedIn = true;
                     }
 
-                    if (isSuccess)
+                    if (loggedIn)
                     {
                         var claims = new List<Claim> { };
                         var roles = await _userManager.GetRolesAsync(user);
@@ -212,6 +214,7 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
