@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace bookshelf_app.Migrations
 {
-    public partial class initcreate : Migration
+    public partial class aaa : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,10 +11,10 @@ namespace bookshelf_app.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,27 +25,27 @@ namespace bookshelf_app.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    IsPublic = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RememberMe = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RememberMe = table.Column<bool>(type: "bit", nullable: false),
                     City = table.Column<string>(type: "VARCHAR(70)", nullable: true),
                     PhotoPath = table.Column<string>(type: "VARCHAR(200)", nullable: true),
-                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +56,7 @@ namespace bookshelf_app.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     FirstName = table.Column<string>(type: "VARCHAR(80)", maxLength: 80, nullable: false),
                     LastName = table.Column<string>(type: "VARCHAR(80)", maxLength: 80, nullable: false)
                 },
@@ -69,7 +69,7 @@ namespace bookshelf_app.Migrations
                 name: "Chats",
                 columns: table => new
                 {
-                    ChatId = table.Column<Guid>(type: "VARCHAR(40)", nullable: false)
+                    ChatId = table.Column<string>(type: "VARCHAR(40)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,7 +80,7 @@ namespace bookshelf_app.Migrations
                 name: "Genres",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false)
                 },
                 constraints: table =>
@@ -92,7 +92,7 @@ namespace bookshelf_app.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false)
                 },
                 constraints: table =>
@@ -104,11 +104,11 @@ namespace bookshelf_app.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -125,11 +125,11 @@ namespace bookshelf_app.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -146,10 +146,10 @@ namespace bookshelf_app.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -166,8 +166,8 @@ namespace bookshelf_app.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,10 +190,10 @@ namespace bookshelf_app.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -210,9 +210,9 @@ namespace bookshelf_app.Migrations
                 name: "ChatUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    ChatId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    ChatId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -235,11 +235,11 @@ namespace bookshelf_app.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    MessageDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Message = table.Column<string>(type: "TEXT", nullable: true),
-                    MessageAuthorId = table.Column<string>(type: "TEXT", nullable: true),
-                    ChatId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true)
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    MessageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MessageAuthorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ChatId = table.Column<string>(type: "VARCHAR(40)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,11 +262,11 @@ namespace bookshelf_app.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     Title = table.Column<string>(type: "VARCHAR(80)", maxLength: 80, nullable: false),
-                    AuthorId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
-                    GenreId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
-                    Rating = table.Column<int>(type: "INTEGER", nullable: false)
+                    AuthorId = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    GenreId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    Rating = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -276,7 +276,7 @@ namespace bookshelf_app.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Genres_GenreId",
                         column: x => x.GenreId,
@@ -289,9 +289,9 @@ namespace bookshelf_app.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    RoleId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true)
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RoleId = table.Column<string>(type: "VARCHAR(40)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -314,8 +314,8 @@ namespace bookshelf_app.Migrations
                 name: "BookISBN",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    BookId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    BookId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
                     ISBN = table.Column<string>(type: "VARCHAR(30)", nullable: true)
                 },
                 constraints: table =>
@@ -333,12 +333,12 @@ namespace bookshelf_app.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    Content = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    BookId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
-                    Votes = table.Column<int>(type: "INTEGER", nullable: false),
-                    ReviewDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BookId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    Votes = table.Column<int>(type: "int", nullable: false),
+                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -361,11 +361,11 @@ namespace bookshelf_app.Migrations
                 name: "UserBooks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    BookId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    Borrowed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsPublic = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    BookId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Borrowed = table.Column<bool>(type: "bit", nullable: false),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -388,11 +388,11 @@ namespace bookshelf_app.Migrations
                 name: "BookHistory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "VARCHAR(40)", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    UserBookId = table.Column<Guid>(type: "VARCHAR(40)", nullable: true),
-                    BorrowDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserBookId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -420,7 +420,8 @@ namespace bookshelf_app.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -446,7 +447,8 @@ namespace bookshelf_app.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookHistory_UserBookId",

@@ -68,7 +68,7 @@ namespace bookshelf_app
                 });
 
             services.AddDbContext<BaseDbContext>(
-                options => options.UseSqlite(Configuration.GetConnectionString("BookShelf"), 
+                options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"), 
                     b => b.MigrationsAssembly("bookshelf-app")));
             
 

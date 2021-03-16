@@ -13,10 +13,8 @@ namespace bookshelf.Model.Books
         [Column(TypeName = "VARCHAR(40)")]
         public Guid Id { get; set; }
         public string Content { get; set; }
-       // [ForeignKey("UserId")]
         [Column(TypeName = "VARCHAR(40)")]
         public User User { get; set; }
-       // [ForeignKey("BookId")]
         [Column(TypeName = "VARCHAR(40)")]
         public Book Book { get; set; }
         public int Votes { get; set; }

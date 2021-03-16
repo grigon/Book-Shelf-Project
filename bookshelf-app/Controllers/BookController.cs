@@ -129,7 +129,7 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        [Authorize]
+        //[Authorize]
         [HttpGet("user/UserBooks")]
         [Produces("application/json")]
         //change to dto
@@ -203,16 +203,18 @@ namespace bookshelf_app.Controllers
             }
         }
         
+        //change to dto
         /*[Authorize]*/
         [HttpGet("user/UserBooks/{id}/city={city}/page={page}")]
         [Produces("application/json")]
-        public async Task<ActionResult<UserBookDTO[]>> GetUserBookByCity(Guid bookId, int page, string city)
+        public async Task<ActionResult<UserBook[]>> GetUserBookByCity(Guid id, int page, string city)
         {
             try
             {
-                var result = await _repository.GetAllUserBooksByCity(bookId, page, city);
+                var result = await _repository.GetAllUserBooksByCity(id, page, city);
                 if (result == null) return NotFound();
-                return _mapper.Map<UserBookDTO[]>(result);
+                return result;
+                //return _mapper.Map<UserBook[]>(result);
             }
             catch (Exception)
             {
@@ -227,14 +229,18 @@ namespace bookshelf_app.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             UserBook userBook = await _repository.GetUserBookById(user.Id, id);
             var review = _mapper.Map<Review>(reviewDto);
-            review.ReviewDate = DateTime.Now;
-            /*review.Book = userBook.Book;
-            review.User = user;*/
-            review.Votes = 0;
+            var book = await _repository.GetById(userBook.Book.Id);
+            
+            _repository.AddReview(new Review()
+            {
+                Content = review.Content,
+                User = user,
+                Book = book,
+                Votes = 0,
+                ReviewDate = DateTime.Now
+            });
 
-            _repository.AddReview(review);
-
-            return review;
+            return Ok(review);
         }
         
         

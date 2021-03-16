@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Books;
+using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -56,7 +57,7 @@ namespace bookshelf.DAL
             var query = _context.Books.Include(a => a.Author).
                 Include(g => g.Genre).Include(i => i.BookISBNs).
                 Include(r => r.Reviews).ThenInclude(u => u.User)
-                .Where(b => b.Id.CompareTo(id) > 0);
+                .Where(b => b.Id.CompareTo(id) == 0);
       
             return await query.FirstOrDefaultAsync();
         }
@@ -99,8 +100,9 @@ namespace bookshelf.DAL
         {
             _logger.LogInformation($"Getting all user Books");
 
-            var query =
-                _context.UserBooks.Include(b => b.Book)
+           
+              
+              var query =  _context.UserBooks.Include(b => b.Book)
                 .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
                 .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
                 .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).ThenInclude(b => b.User)
@@ -112,39 +114,50 @@ namespace bookshelf.DAL
 
         public async Task<UserBook> GetUserBookById(string userId, Guid Id)
         {
-            _logger.LogInformation($"Getting all user Books");
+            _logger.LogInformation($"Getting user Book by id");
 
             var query =
-                _context.UserBooks.Include(b => b.Book)
+                _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs)
+                    .Include(b => b.Book)
                     .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
-                    .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
-                    .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).ThenInclude(b => b.User)
-                    .Where(u => u.User.Id == userId && u.Id.CompareTo(Id) > 0);
+                    .Include(b => b.BookHistories).ThenInclude(b => b.User)
+                    .Where(u => u.User.Id == userId && u.Id.CompareTo(Id) == 0);
             
             return await query.FirstOrDefaultAsync();
         }
+        
         
         public async Task<UserBook[]> GetAllUserBooksByCity(Guid bookId, int page, string city)
         {
             _logger.LogInformation($"Getting all user Books");
 
             var query =
-                _context.UserBooks/*.Include(u => u.User)*/
-                    /*.Include(b => b.Book)*/
-                    /*.ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                _context.UserBooks
                     .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
-                    .Include(b => b.Book.BookISBNs)*/
-                    .Where(/*u => u.IsPublic && */u => u.Id.CompareTo(bookId) > 0/* &&*/
-                                /*u.User.City.ToUpper().Contains(city.ToUpper())*/)
-                    /*.Skip(page == 1 ? 0 : page * 2 - 2)*//*.Take(1)*/;
+                    .Include(b => b.Book.BookISBNs)
+                    .Include(u => u.User)
+                    .Include(b => b.Book)
+                    .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                    .Where(/*u => u.IsPublic &&  */u => u.Book.Id.CompareTo(bookId) == 0 &&
+                                u.User.City.ToUpper().Contains(city.ToUpper()))
+                    .Skip(page == 1 ? 0 : page * 10 - 10).Take(10);
             
             return await query.ToArrayAsync();
         }
 
         public async void AddReview(Review review)
         {
-            await _context.Reviews.AddAsync(review);
+            await _context.AddAsync(review);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SaveChanges()
+        {
+            _logger.LogInformation("Attempting to save this changes");
+
+            var result = (await _context.SaveChangesAsync() > 0);
+            return /*(await _context.SaveChangesAsync() > 0);*/result;
         }
         
         public void Add(UserBook userBook)
