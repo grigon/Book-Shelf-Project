@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using bookshelf.Model.Books;
 
 namespace bookshelf.DTO.Book.BookLogged
 {
@@ -7,10 +8,9 @@ namespace bookshelf.DTO.Book.BookLogged
     {
         public Guid Id { get; set; }
         public BookLoggedDTO Book { get; set; }
-        public Model.Users.User User { get; set; }
         public bool Borrowed { get; set; }
         public bool IsPublic { get; set; }
         
-       // public ICollection<BookHistoryLoggedDTO> BookHistory { get; set; }
+        public ICollection<BookHistory> BookHistories { get; set; }
     }
 }

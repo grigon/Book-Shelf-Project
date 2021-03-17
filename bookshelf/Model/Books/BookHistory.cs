@@ -12,6 +12,7 @@ namespace bookshelf.Model.Books
         [Column(TypeName = "VARCHAR(40)")]
         public Guid Id { get; set; }
         [Column(TypeName = "VARCHAR(40)")]
+        //public Guid UserId { get; set; }
         public User User { get; set; }
         [Column(TypeName = "VARCHAR(40)")]
         public UserBook UserBook { get; set; }

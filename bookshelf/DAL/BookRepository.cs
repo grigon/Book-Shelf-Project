@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Books;
+using bookshelf.Model.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -19,146 +20,144 @@ namespace bookshelf.DAL
             _context = context;
             _logger = logger;
         }
+        
+        public async Task<Book[]> GetAll()
+        {
+            _logger.LogInformation($"Getting all Books");
+            
+            var genres = _context.Genres;
+            
+            var books =
+                from genre in genres
+                from book in _context.Books.Include(b => b.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.BookISBNs).Include(b => b.Genre)
+                    .Include(b => b.Author).Where(b => b.Genre == genre).OrderBy(b => b.Rating)
+                    .Take(10)
+                select book;
 
-        //for not logged/registered user
-        public async Task<Book[]> GetAll(int j/*string genre*/)
+            return await books.ToArrayAsync();
+        }
+        
+        public async Task<Book[]> GetPageByGenre(string genre, int page)
         {
             _logger.LogInformation($"Getting all Books");
 
-            IQueryable<Genre> genres = _context.Genres;
-            Genre[] gg = genres.ToArray();
-
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
+            var query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
                 .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User)/*.Where(b => b.Genre.Name == genre)*/.Take(2);
-            
-            foreach (var g in gg)
-            {
-                query = query.Concat(_context.Books.Include(a => a.Author).Include(g => g.Genre)
-                    .Include(i => i.BookISBNs)
-                    .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == g.Name).Skip(j).Take(2));
-            }
-
-            /*
-            var query2 = from genre in _context.Genres
-                join book in _context.Books on
-                    genre.Name equals book.Genre.Name into bookGroup
-                select new
-                {
-                    Genre = genre,
-                    Book = bookGroup
-                };
-            var query3 = _context.Genres.GroupJoin(_context.Books,
-                g => g.Name,
-                b => b.Genre.Name,
-                (g, b) =>
-                    new
-                    {
-                        Genge = g,
-                        Book = b
-                    }).GroupBy(g => g.Genge.Name);
-            var query4 = query3.SelectMany(b => b.SelectMany(g => g.Book).Take(2));
-            
-            foreach (var gb in query3)
-            {
-              foreach (var b in gb)
-                    {
-                        
-                    }
-            }*/
-
-            /*
-            var queryA = from book in _context.Books
-                group book by book.Genre.Name
-                into bookGroup
-                select new
-                {
-                    Book = bookGroup
-                } into result orderby result.Book.Key select result;*/
-            
-            
-            /*
-            var query3 = _context.Genres.Join(_context.Books,
-                g => g.Name,
-                b => b.Genre.Name,
-                (g, b) =>
-                    new
-                    {
-                        Genge = g,
-                        Book = b
-                    }).GroupBy(g => g.Genge.Name).Select(b => b);
-            
-            var a = 
-                _context.Genres.GroupJoin(_context.Books,
-                    genre => genre.Name,
-                    book => book.Genre.Name,
-                    (g, booksCollection) =>
-                        new
-                        {
-                            Books = booksCollection.Select(book => book).Take(2)
-                        });*/
+                .Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Genre.Name == genre).Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
         }
-
-        //for not logged/registered user
+        
         public async Task<Book> GetById(Guid id)
         {
             _logger.LogInformation($"Getting book by id");
 
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+            var query = _context.Books.Include(a => a.Author).
                 Include(g => g.Genre).Include(i => i.BookISBNs).
-                Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Id.CompareTo(id) > 0);
-      
-            return await query.FirstOrDefaultAsync();
-        }
-
-        public async Task<Book[]> GetAllLoogged(string genre)
-        {
-            _logger.LogInformation($"Getting all Books");
-
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
-                .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Take(2);
-            
-            return await query.ToArrayAsync();
-        }
-
-        //for not logged/registered user
-        public async Task<Book> GetByIdLogged(Guid id)
-        {
-            _logger.LogInformation($"Getting book by id");
-
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).
-                Include(g => g.Genre).Include(i => i.BookISBNs).
-                Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Id.CompareTo(id) > 0);
+                Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Id.CompareTo(id) == 0);
       
             return await query.FirstOrDefaultAsync();
         }
         
-        //returns all books belonging to the logged user
-        public async Task<UserBook[]> GetAllUserBooks(Guid id, string genre)
+        public async Task<Book[]> GetBySearch(string search, int page)
+        {
+            _logger.LogInformation($"Getting book by search");
+
+            IQueryable<Book> query = _context.Books.Include(a => a.Author).
+                Include(g => g.Genre).Include(i => i.BookISBNs).
+                Include(r => r.Reviews).ThenInclude(u => u.User)
+                .Where(b => b.Author.FirstName.ToUpper().Contains(search.ToUpper())
+                            || b.Author.LastName.ToUpper().Contains(search.ToUpper()) ||
+                            b.Genre.Name.ToUpper().Contains(search.ToUpper())||
+                            b.Title.ToUpper().Contains(search.ToUpper())).Skip(page == 1 ? 0 : page * 10 - 10).Take(10);
+      
+            return await query.ToArrayAsync();
+        }
+        
+        public async Task<UserBook[]> GetUserBooks(string userId)
         {
             _logger.LogInformation($"Getting all user Books");
 
-            IQueryable<UserBook> query = _context.UserBooks.Include(b => b.Book).ThenInclude(g => g.Genre).Where(b=> b.Book.Genre.Name == genre)
-                .Include(b => b.Book.BookISBNs)
-                .Include(r => r.Book.Reviews).ThenInclude(u => u.User)
-                .Where(u => u.User.Id.CompareTo(id) > 0);
+            var genres = _context.Genres;
+
+            var books =
+                from genre in genres
+                from book in _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories)
+                    .ThenInclude(h => h.User).Include(b => b.Book.Genre)
+                    .Include(b => b.Book.Author).Where(b => b.Book.Genre == genre && b.User.Id == userId)
+                    .OrderBy(b => b.Book.Rating)
+                    .Take(10)
+                select book;
+
+            return await books.ToArrayAsync();
+        }
+        
+        public async Task<UserBook[]> GetAllUserBooksByGenre(string userId, string genre, int page)
+        {
+            _logger.LogInformation($"Getting all user Books");
+
+           
+              
+              var query =  _context.UserBooks.Include(b => b.Book)
+                .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                .Include(b => b.Book.BookISBNs).Include(b => b.BookHistories).ThenInclude(b => b.User)
+                .Where(u => u.Book.Genre.Name == genre && u.User.Id == userId)
+                .Skip(page == 1 ? 0 : page * 2 - 2).Take(2);
             
             return await query.ToArrayAsync();
         }
-        
-        //Not logged user paging by genre
-        public async Task<Book[]> GetPartByGenre(int page, string genre)
+
+        public async Task<UserBook> GetUserBookById(string userId, Guid Id)
         {
-            _logger.LogInformation($"Getting all Books");
-            //why not correct?
-            IQueryable<Book> query = _context.Books.Include(a => a.Author).Include(g => g.Genre)
-                .Include(i => i.BookISBNs)
-                .Include(r => r.Reviews).ThenInclude(u => u.User).Where(b => b.Genre.Name == genre).Skip(page > 1 ? 2 * page - 2 : 0).Take(2);
+            _logger.LogInformation($"Getting user Book by id");
+
+            var query =
+                _context.UserBooks.Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs)
+                    .Include(b => b.Book)
+                    .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                    .Include(b => b.BookHistories).ThenInclude(b => b.User)
+                    .Where(u => u.User.Id == userId && u.Id.CompareTo(Id) == 0);
+            
+            return await query.FirstOrDefaultAsync();
+        }
+        
+        
+        public async Task<UserBook[]> GetAllUserBooksByCity(Guid bookId, int page, string city)
+        {
+            _logger.LogInformation($"Getting all user Books");
+
+            var query =
+                _context.UserBooks
+                    .Include(b => b.Book.Reviews).ThenInclude(r => r.User)
+                    .Include(b => b.Book.BookISBNs)
+                    .Include(u => u.User)
+                    .Include(b => b.Book)
+                    .ThenInclude(b => b.Author).Include(b => b.Book.Genre)
+                    .Where(/*u => u.IsPublic &&  */u => u.Book.Id.CompareTo(bookId) == 0 &&
+                                u.User.City.ToUpper().Contains(city.ToUpper()))
+                    .Skip(page == 1 ? 0 : page * 10 - 10).Take(10);
             
             return await query.ToArrayAsync();
+        }
+
+        public async void AddReview(Review review)
+        {
+            await _context.AddAsync(review);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SaveChanges()
+        {
+            _logger.LogInformation("Attempting to save this changes");
+
+            var result = (await _context.SaveChangesAsync() > 0);
+            return /*(await _context.SaveChangesAsync() > 0);*/result;
         }
         
         public void Add(UserBook userBook)
@@ -174,11 +173,6 @@ namespace bookshelf.DAL
         public void Remove(UserBook userBook)
         {
             _context.UserBooks.Remove(userBook);
-        }
-
-        public async Task<bool> Commit()
-        {
-            return (await _context.SaveChangesAsync()) > 0;
         }
     }
 }
