@@ -12,7 +12,7 @@ namespace bookshelf_app
         {
             var host = CreateWebHostBuilder(args).Build();
 
-            // RunSeeding(host);
+            RunSeeding(host);
             
             host.Run();
         }

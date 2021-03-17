@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,6 +9,7 @@ using bookshelf_app.Auth;
 using bookshelf.DAL;
 using bookshelf.DTO.Create;
 using bookshelf.Model.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +21,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace bookshelf_app.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/account")]
     public class AccountController : ControllerBase
@@ -48,22 +52,48 @@ namespace bookshelf_app.Controllers
         }
 
         [HttpPost("CreateToken")]
-        public async Task<IActionResult> CreateToken(UserLoginDTO loginDto)
+        public async Task<IActionResult> CreateToken(UserLoginDTO loginDto, bool refresh)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (user != null)
                 {
-                    var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-                    if (result.Result == SignInResult.Success)
+                    var loggedIn = false;
+                    if (!refresh)
                     {
-                        var claims = new[]
+                        var result = _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+                        loggedIn = (result.Result == SignInResult.Success);
+                    }
+                    else
+                    {
+                        loggedIn = true;
+                    }
+
+                    if (loggedIn)
+                    {
+                        var claims = new List<Claim> { };
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Count == 0)
                         {
-                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
-                        };
+                            claims = new List<Claim>
+                            {
+                                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                            };
+                        }
+                        else
+                        {
+                            claims = new List<Claim>
+                                {
+                                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                                    new Claim(ClaimTypes.Role, roles.Last())
+                                }
+                                ;
+                        }
 
                         var creds = new SigningCredentials(
                             _key,
@@ -76,9 +106,15 @@ namespace bookshelf_app.Controllers
                             expires: DateTime.UtcNow.AddSeconds(Convert.ToDouble(_configuration["Tokens:TimeValid"])),
                             signingCredentials: creds
                         );
+                        var newRefreshToken = "";
+                        if (!refresh)
+                        {
+                            newRefreshToken =
+                                await _userManager.GenerateUserTokenAsync(user, "BookShelf", "RefreshToken");
+                            await _userManager.SetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken",
+                                newRefreshToken);
+                        }
 
-                        await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                        var newRefreshToken = CreateRefreshToken(user);
                         var results = new
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -95,55 +131,73 @@ namespace bookshelf_app.Controllers
             return BadRequest("User not found");
         }
 
-
         [Authorize]
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                await _userManager.UpdateSecurityStampAsync(user);
-                await _signInManager.SignOutAsync();
-                return Ok();
+                if (User.Identity != null)
+                {
+                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    await _userManager.UpdateSecurityStampAsync(user);
+                    await _userManager.RemoveAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
+                    await _tokenManager.DeactivateCurrentAsync();
+                    await _signInManager.SignOutAsync();
+                    return Ok();
+                }
             }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to logout");
             }
+
+            return BadRequest();
         }
 
-        [HttpPost("CancelToken")]
-        public async Task<IActionResult> CancelAccessToken()
+        [Authorize]
+        [HttpPut("admin")]
+        public async Task<IActionResult> Admin()
         {
-            await _tokenManager.DeactivateCurrentAsync();
-            return NoContent();
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user != null)
+            {
+                await _userManager.AddToRoleAsync(user, "Admin");
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [Authorize]
         [HttpGet("RefreshAccessToken")]
-        public async Task<IActionResult> RefreshAccessToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshAccessToken()
         {
-            try
+            if (_httpContextAccessor
+                .HttpContext != null)
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                var isValid =
-                    await _userManager.VerifyUserTokenAsync(user, "BookShelf", "RefreshToken", "RefreshToken");
-
-                if (isValid)
+                var refreshToken = _httpContextAccessor
+                    .HttpContext.Request.Headers["RefreshToken"];
+                try
                 {
-                    if (refreshToken ==
-                        _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken").ToString())
+                    if (User.Identity != null)
                     {
-                        var token = await CreateToken(_mapper.Map<UserLoginDTO>(user));
-                        return Ok(token);
-                    };
+                        var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                        var tokenToCompare =
+                            await _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
+                        
+                        if (refreshToken == tokenToCompare)
+                        {
+                            await _tokenManager.DeactivateCurrentAsync();
+                            var token = await CreateToken(_mapper.Map<UserLoginDTO>(user), true);
+                            return Ok(token);
+                        };
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to refresh token");
+                catch (Exception e)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to refresh token");
+                }
             }
 
             return BadRequest();
@@ -159,8 +213,8 @@ namespace bookshelf_app.Controllers
             return Ok(newRefreshToken);
         }
 
-
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -169,11 +223,10 @@ namespace bookshelf_app.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user,
                     model.Password,
                     false,
-                    // model.RememberMe, 
                     false);
                 if (result.Succeeded)
                 {
-                    var token = await CreateToken(model);
+                    var token = await CreateToken(model, false);
                     return Ok(token);
                 }
             }

@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using bookshelf.Context;
 using bookshelf.Model.Users;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RTools_NTS.Util;
 
 namespace bookshelf.DAL
 {
@@ -46,12 +43,6 @@ namespace bookshelf.DAL
             _context.Add(user);
         }
 
-        public void Add<User>(User user) where User : class
-        {
-            // _logger.LogInformation($"Adding an object of type user to the context.");
-            _context.Add(user);
-        }
-
         public Task<User> Update(User t)
         {
             throw new NotImplementedException();
@@ -72,10 +63,5 @@ namespace bookshelf.DAL
             return true;
         }
 
-        public async Task<IdentityUserToken<string>> GetRefreshTokenById(string id)
-        {
-            return _context.UserTokens.First(t => t.UserId == id);
-        }
-        
     }
 }

@@ -10,7 +10,7 @@ namespace bookshelf.DTO
         {
             CreateMap<Model.Users.User, UserReadDTO>();
             CreateMap<Model.Users.User, UserCreateDTO>().ReverseMap();
-            CreateMap<UserLoginDTO, Model.Users.User>();
+            CreateMap<UserLoginDTO, Model.Users.User>().ReverseMap();
             // .ForMember(a => a.Password, s => s.Ignore())
             // .ReverseMap();
         }

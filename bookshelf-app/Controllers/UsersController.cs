@@ -34,7 +34,7 @@ namespace bookshelf_app.Controllers
             _userManager = userManager;
         }
         
-        // [Authorize(Policy = "RequireAdministratorRole")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<UserReadDTO[]>> GetAll()
         {
@@ -65,7 +65,7 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        [HttpPost("/add")]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<UserReadDTO>> Post(UserCreateDTO model)
         {

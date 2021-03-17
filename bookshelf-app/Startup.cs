@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using bookshelf;
 using bookshelf_app.Auth;
@@ -8,6 +9,8 @@ using bookshelf.DAL;
 using bookshelf.DTO;
 using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 //using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using bookshelf.Profiles;
@@ -38,7 +41,7 @@ namespace bookshelf_app
         }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -61,12 +64,6 @@ namespace bookshelf_app
                 .AddRoles<IdentityRole>()
                 .AddTokenProvider("BookShelf", typeof(DataProtectorTokenProvider<User>));
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdministratorRole",
-                    policy => policy.RequireRole("Administrator"));
-            });
-
             services.AddSingleton(_key);
             services.AddTransient<TokenManagerMiddleware>();
             services.AddTransient<ITokenManager, TokenManager>();
@@ -86,9 +83,9 @@ namespace bookshelf_app
                     };
                 });
 
-            //services.AddDbContext<BaseDbContext>(
-            //    options => options.UseSqlite(Configuration.GetConnectionString("BookShelf"), 
-            //        b => b.MigrationsAssembly("bookshelf-app")));
+            services.AddDbContext<BaseDbContext>(
+                options => options.UseSqlite(Configuration.GetConnectionString("BookShelf"), 
+                    b => b.MigrationsAssembly("bookshelf-app")));
             
 
             services.AddCors(options =>
@@ -135,7 +132,8 @@ namespace bookshelf_app
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -148,7 +146,7 @@ namespace bookshelf_app
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseCors("MyAllowSpecificOrigins");
 
             app.UseAuthentication();
