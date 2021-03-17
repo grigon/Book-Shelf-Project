@@ -103,7 +103,7 @@ namespace bookshelf_app.Controllers
                             _configuration["Tokens:Issuer"],
                             _configuration["Tokens:Audience"],
                             claims,
-                            expires: DateTime.UtcNow.AddSeconds(Convert.ToDouble(_configuration["Tokens:TimeValid"])),
+                            expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Tokens:TimeValid"])),
                             signingCredentials: creds
                         );
                         var newRefreshToken = "";

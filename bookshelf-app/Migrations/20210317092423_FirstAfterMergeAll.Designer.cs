@@ -10,8 +10,8 @@ using bookshelf.Context;
 namespace bookshelf_app.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20210303170521_NewMigrationWithAuthorization")]
-    partial class NewMigrationWithAuthorization
+    [Migration("20210317092423_FirstAfterMergeAll")]
+    partial class FirstAfterMergeAll
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,6 +180,7 @@ namespace bookshelf_app.Migrations
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("AuthorId")
+                        .IsRequired()
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("GenreId")
@@ -380,22 +381,6 @@ namespace bookshelf_app.Migrations
                     b.ToTable("ChatUsers");
                 });
 
-            modelBuilder.Entity("bookshelf.Model.Users.Role", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(40)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("VARCHAR(60)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("bookshelf.Model.Users.User", b =>
                 {
                     b.Property<string>("Id")
@@ -479,27 +464,6 @@ namespace bookshelf_app.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("bookshelf.Model.Users.UserRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(40)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("VARCHAR(40)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRoles");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -555,7 +519,9 @@ namespace bookshelf_app.Migrations
                 {
                     b.HasOne("bookshelf.Model.Books.Author", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("bookshelf.Model.Books.Genre", "Genre")
                         .WithMany()
@@ -569,7 +535,7 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Books.BookHistory", b =>
                 {
                     b.HasOne("bookshelf.Model.Books.UserBook", "UserBook")
-                        .WithMany()
+                        .WithMany("BookHistories")
                         .HasForeignKey("UserBookId");
 
                     b.HasOne("bookshelf.Model.Users.User", "User")
@@ -650,26 +616,16 @@ namespace bookshelf_app.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("bookshelf.Model.Users.UserRole", b =>
-                {
-                    b.HasOne("bookshelf.Model.Users.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("bookshelf.Model.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("bookshelf.Model.Books.Book", b =>
                 {
                     b.Navigation("BookISBNs");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("bookshelf.Model.Books.UserBook", b =>
+                {
+                    b.Navigation("BookHistories");
                 });
 #pragma warning restore 612, 618
         }

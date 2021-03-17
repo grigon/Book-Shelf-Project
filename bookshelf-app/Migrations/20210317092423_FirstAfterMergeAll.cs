@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace bookshelf_app.Migrations
 {
-    public partial class NewMigrationWithAuthorization : Migration
+    public partial class FirstAfterMergeAll : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,18 +86,6 @@ namespace bookshelf_app.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genres", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
-                    Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -264,7 +252,7 @@ namespace bookshelf_app.Migrations
                 {
                     Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     Title = table.Column<string>(type: "VARCHAR(80)", maxLength: 80, nullable: false),
-                    AuthorId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
+                    AuthorId = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     GenreId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false)
                 },
@@ -276,36 +264,11 @@ namespace bookshelf_app.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Books_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    RoleId = table.Column<string>(type: "VARCHAR(40)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -514,16 +477,6 @@ namespace bookshelf_app.Migrations
                 name: "IX_UserBooks_UserId",
                 table: "UserBooks",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_RoleId",
-                table: "UserRoles",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_UserId",
-                table: "UserRoles",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -559,9 +512,6 @@ namespace bookshelf_app.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -569,9 +519,6 @@ namespace bookshelf_app.Migrations
 
             migrationBuilder.DropTable(
                 name: "Chats");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -9,38 +9,39 @@ using bookshelf.Context;
 namespace bookshelf_app.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDBContextModelSnapshot : ModelSnapshot
+    partial class BaseDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.3")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.2");
 
-            modelBuilder.Entity("bookshelf.Model.Books.Author", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -49,17 +50,18 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -72,17 +74,18 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -94,17 +97,17 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -116,10 +119,10 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -131,16 +134,16 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -149,7 +152,7 @@ namespace bookshelf_app.Migrations
 
             modelBuilder.Entity("bookshelf.Model.Books.Author", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("VARCHAR(40)");
 
@@ -172,12 +175,13 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
-
-                    b.Property<Guid?>("AuthorId")
                         .HasColumnType("VARCHAR(40)");
 
-                    b.Property<Guid?>("GenreId")
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(40)");
+
+                    b.Property<string>("GenreId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<int>("Rating")
@@ -201,7 +205,7 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
                     b.Property<DateTime>("BorrowDate")
                         .HasColumnType("datetime2");
@@ -209,11 +213,11 @@ namespace bookshelf_app.Migrations
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserBookId")
+                    b.Property<string>("UserBookId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -228,9 +232,9 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
-                    b.Property<Guid?>("BookId")
+                    b.Property<string>("BookId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("ISBN")
@@ -247,12 +251,12 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("VARCHAR(40)");
+                        .HasMaxLength(60)
+                        .HasColumnType("VARCHAR(60)");
 
                     b.HasKey("Id");
 
@@ -263,9 +267,9 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
-                    b.Property<Guid?>("BookId")
+                    b.Property<string>("BookId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("Content")
@@ -275,7 +279,7 @@ namespace bookshelf_app.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Votes")
                         .HasColumnType("int");
@@ -293,9 +297,9 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
-                    b.Property<Guid?>("BookId")
+                    b.Property<string>("BookId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<bool>("Borrowed")
@@ -305,7 +309,7 @@ namespace bookshelf_app.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -320,7 +324,7 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("ChatId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
                     b.HasKey("ChatId");
 
@@ -331,16 +335,16 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
-                    b.Property<Guid?>("ChatId")
+                    b.Property<string>("ChatId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MessageAuthorId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("MessageDate")
                         .HasColumnType("datetime2");
@@ -358,13 +362,13 @@ namespace bookshelf_app.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                        .HasColumnType("VARCHAR(40)");
 
-                    b.Property<Guid?>("ChatId")
+                    b.Property<string>("ChatId")
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -375,91 +379,75 @@ namespace bookshelf_app.Migrations
                     b.ToTable("ChatUsers");
                 });
 
-            modelBuilder.Entity("bookshelf.Model.Users.Role", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("VARCHAR(40)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("bookshelf.Model.Users.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .HasColumnType("VARCHAR(70)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsPublic")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("PhotoPath")
                         .HasColumnType("VARCHAR(200)");
 
                     b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("RememberMe")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -468,30 +456,61 @@ namespace bookshelf_app.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("bookshelf.Model.Users.UserRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("VARCHAR(50)");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("VARCHAR(40)");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("bookshelf.Model.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("bookshelf.Model.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasKey("Id");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasIndex("RoleId");
+                    b.HasOne("bookshelf.Model.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRoles");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("bookshelf.Model.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("bookshelf.Model.Books.Book", b =>
@@ -529,7 +548,7 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Books.BookISBN", b =>
                 {
                     b.HasOne("bookshelf.Model.Books.Book", "Book")
-                        .WithMany()
+                        .WithMany("BookISBNs")
                         .HasForeignKey("BookId");
 
                     b.Navigation("Book");
@@ -538,7 +557,7 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Books.Review", b =>
                 {
                     b.HasOne("bookshelf.Model.Books.Book", "Book")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("BookId");
 
                     b.HasOne("bookshelf.Model.Users.User", "User")
@@ -595,26 +614,16 @@ namespace bookshelf_app.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("bookshelf.Model.Users.UserRole", b =>
-                {
-                    b.HasOne("bookshelf.Model.Users.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("bookshelf.Model.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("bookshelf.Model.Books.Book", b =>
                 {
                     b.Navigation("BookISBNs");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("bookshelf.Model.Books.UserBook", b =>
+                {
+                    b.Navigation("BookHistories");
                 });
 #pragma warning restore 612, 618
         }
