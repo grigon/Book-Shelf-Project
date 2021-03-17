@@ -24,7 +24,7 @@ namespace bookshelf_app
             using (var scope = scopeFactory.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<DataSeeder>();
-                seeder.SeedAsync().Wait();
+                seeder.SeedUser().Wait();
             }
             
         }

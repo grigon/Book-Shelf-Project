@@ -109,7 +109,7 @@ namespace bookshelf_app
                 options => options.UseSqlServer(Configuration.GetConnectionString("BookShelf"),
                     b => b.MigrationsAssembly("bookshelf-app")));
 
-            services.AddTransient<DataSeeder>();
+            services.AddScoped<DataSeeder>();
             services.AddDistributedRedisCache(r =>
                 r.Configuration = Configuration["redis:ConnectionString"]
             );
@@ -134,8 +134,9 @@ namespace bookshelf_app
 
 
 // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeeder  sedder)
         {
+            //sedder.Seed();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

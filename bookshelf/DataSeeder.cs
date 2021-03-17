@@ -21,92 +21,144 @@ namespace bookshelf
         private readonly BaseDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public DataSeeder(BaseDbContext _context, UserManager<User> _userManager, IServiceProvider serviceProvider)
+        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher)
         {
             this._context = _context;
-            this._userManager = _userManager;
+            this._userManager = userManager;
             _serviceProvider = serviceProvider;
+            this._passwordHasher = passwordHasher;
         }
 
-        public async Task SeedAsync()
-        {
-            var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
+        //public async Task SeedAsync()
+        //{
+        //    var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //    var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
 
-            IdentityResult roleResult;
-            //Adding Admin Role
-            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
-            if (!roleCheck)
+        //    IdentityResult roleResult;
+        //    //Adding Admin Role
+        //    var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+        //    if (!roleCheck)
+        //    {
+        //        //create the roles and seed them to the database
+        //        roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+        //    }
+
+        //    User user = await UserManager.FindByNameAsync("Admin");
+        //    if (user == null)
+        //    {
+        //        user = new User()
+        //        {
+        //            UserName = "Admin",
+        //            Email = "admin@email.com",
+        //        };
+
+        //        var result = await _userManager.CreateAsync(user, "Pass#$wo345d");
+        //        if (result != IdentityResult.Success)
+        //        {
+        //            throw new InvalidOperationException("Could not create new user in seeder");
+        //        }
+
+        //        await _userManager.AddToRoleAsync(user, "Admin");
+        //    }
+
+
+
+
+        // _context.Database.EnsureCreated();
+        // if (!_context.Books.Any())
+        // {
+        //     var filepath = Path.Combine("../bookshelf/users.json");
+        //     var json = File.ReadAllText(filepath);
+        //     var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+        //     _context.Users.AddRange(users);
+        //     _context.SaveChanges(); 
+        //}
+
+        //public void Seed()
+        //{
+        //    if (_context.Database.CanConnect())
+        //    {
+        //        if (!(_context.Users.Count() > 3)) 
+        //        { 
+        //        var users = GetUsers();
+        //        _context.Users.AddRange(users);
+        //        _context.SaveChanges();
+        //    }
+        //    }
+        //}
+
+
+        public async Task SeedUser()
+        {
+            //var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
+
+            //IdentityResult roleResult;
+            ////Adding Admin Role
+            //var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            //if (!roleCheck)
+            //{
+            //    //create the roles and seed them to the database
+            //    roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            //}
+
+            //User user = await UserManager.FindByNameAsync("Admin");
+            //if (user == null)
+            //{
+            var filepath = Path.Combine("../bookshelf/users.json");
+            var json = File.ReadAllText(filepath);
+            var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+            foreach (var item in users)
             {
-                //create the roles and seed them to the database
-                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+                item.
             }
 
-            User user = await UserManager.FindByNameAsync("Admin");
-            if (user == null)
-            {
-                user = new User()
-                {
-                    UserName = "Admin",
-                    Email = "admin@email.com",
-                };
+            //var user = new User()
+            //{
+            //    UserName = users
+            //    Email = "dominik@wik.name",
+            //    City = "Warsaw",
+            //    RegistrationDate =  
+            //    PhotoPath = "Empty path"
+            //};
 
-                var result = await _userManager.CreateAsync(user, "Pass#$wo345d");
-                if (result != IdentityResult.Success)
-                {
-                    throw new InvalidOperationException("Could not create new user in seeder");
-                }
+            //var result = await _userManager.CreateAsync(user, "Magic50+");
+            //if (result != IdentityResult.Success)
+            //{
+            //    throw new InvalidOperationException("Could not create new user in seeder");
+            //}
 
-                await _userManager.AddToRoleAsync(user, "Admin");
-            }
-
-
-            
-
-            // _context.Database.EnsureCreated();
-            // if (!_context.Books.Any())
-            // {
-            //     var filepath = Path.Combine("../bookshelf/users.json");
-            //     var json = File.ReadAllText(filepath);
-            //     var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-            //     _context.Users.AddRange(users);
-            //     _context.SaveChanges(); 
-        }
-
-        public void Seed()
-        {
-            if (_context.Database.CanConnect())
-            {
-                
-            }
         }
 
 
-        public IEnumerable<User> GetUsers()
-        {
-            var users = new List<User>()
-            {
-                new User()
-                {
-                    UserName =  "Dominik",
-                    Email    = "dominik@wik.name",
-                    PasswordHash = "Magic50+",
-                    City =  "Warsaw",
-                    PhotoPath = "Empty path"
+        //public IEnumerable<User> GetUsers()
+        //{
+        //    var users = new List<User>();
 
-                },
-                new User()
-                {
-                    UserName =  "Dominik",
-                    Email    = "dominik@wik.name",
-                    PasswordHash = "Magic50+",
-                    City =  "Warsaw",
-                    PhotoPath = "Empty path"
+        //    var user1 = new User()
+        //    {
+        //        UserName = "Dominik",
+        //        Email = "dominik@wik.name",
+        //        City = "Warsaw",
+        //        PhotoPath = "Empty path"
 
-                },
-            };
-            return users;
-        }
+        //    };
+        //   var lipa = _passwordHasher.HashPassword(user1, "Magic50+");
+        //    user1.PasswordHash = lipa;
+
+        //    users.Add(user1);
+        //    //new User()
+        //    //    {
+        //    //        UserName =  "Mike",
+        //    //        Email    = "mike@gmail.com",
+        //    //        PasswordHash = "Lipa6000*",
+        //    //        City =  "Boston",
+        //    //        PhotoPath = "Empty path"
+
+        //    //    },
+        //    //};
+        //    return users;
+        //}
     }
 }

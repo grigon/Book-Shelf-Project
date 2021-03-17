@@ -2,35 +2,63 @@
   {
     "UserName": "Roman",
     "Email": "roman@mail.com",
-    "password": "somePAss5!",
+    "Password": "somePAss5!",
     "City": "Warsaw",
     "photoPath": "string"
   },
   {
-    "userName": "Jolanta",
-    "email": "malpa@malpa.pl",
-    "password": "somePAss",
+    "UserName": "Dominik",
+    "Email": "dominik@wiklinski.name",
+    "Password": "Magic50+",
+    "City": "Warsaw",
+    "photoPath": "string"
+  },
+  {
+    "UserName": "Mike",
+    "Email": "mike@gmail.com",
+    "Password": "Brokul10!",
+    "City": "Boston",
+    "photoPath": "string"
+  },
+  {
+    "UserName": "Dominik",
+    "Email": "dominik@wiklinski.name",
+    "Password": "somePAss5!",
+    "City": "Warsaw",
+    "photoPath": "string"
+  },
+  {
+    "UserName": "Steven",
+    "Email": "teven@gmail.com",
+    "Password": "America96+",
+    "City": "Miami",
+    "photoPath": "string"
+  },
+  {
+    "UserName": "Jolanta",
+    "Email": "malpa@malpa.pl",
+    "Password": "AlePAss47/",
     "city": "Poznań",
     "photoPath": "string"
   },
   {
-    "userName": "Stefan",
-    "email": "stefan@jajko.pl",
-    "password": "Passsome",
+    "UserName": "Stefan",
+    "Email": "stefan@jajko.pl",
+    "Password": "SmokWawelski69+",
     "city": "Kraków",
     "photoPath": "string"
   },
   {
-    "userName": "Piotrek",
-    "email": "email@adress.pl",
-    "password": "passssss",
+    "UserName": "Piotrek",
+    "Email": "email@adress.pl",
+    "Password": "Snakei150*",
     "city": "Wrocław",
     "photoPath": "string"
   },
   {
-    "userName": "Olaf",
-    "email": "olaf@email.com",
-    "password": "somePass",
+    "UserName": "Olaf",
+    "Email": "olaf@email.com",
+    "Password": "Mokebe12-/",
     "city": "Gdańsk",
     "photoPath": "string"
   }
