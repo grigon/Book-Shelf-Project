@@ -4,62 +4,154 @@
     "Email": "roman@mail.com",
     "Password": "somePAss5!",
     "City": "Warsaw",
-    "photoPath": "string"
+    "PhotoPath": "string"
   },
   {
     "UserName": "Dominik",
     "Email": "dominik@wiklinski.name",
     "Password": "Magic50+",
     "City": "Warsaw",
-    "photoPath": "string"
+    "PhotoPath": "string"
   },
   {
     "UserName": "Mike",
     "Email": "mike@gmail.com",
     "Password": "Brokul10!",
     "City": "Boston",
-    "photoPath": "string"
-  },
-  {
-    "UserName": "Dominik",
-    "Email": "dominik@wiklinski.name",
-    "Password": "somePAss5!",
-    "City": "Warsaw",
-    "photoPath": "string"
+    "PhotoPath": "string"
   },
   {
     "UserName": "Steven",
     "Email": "teven@gmail.com",
     "Password": "America96+",
     "City": "Miami",
-    "photoPath": "string"
+    "PhotoPath": "string"
   },
   {
     "UserName": "Jolanta",
     "Email": "malpa@malpa.pl",
     "Password": "AlePAss47/",
-    "city": "Poznań",
-    "photoPath": "string"
+    "City": "Poznań",
+    "PhotoPath": "string"
   },
   {
     "UserName": "Stefan",
     "Email": "stefan@jajko.pl",
     "Password": "SmokWawelski69+",
-    "city": "Kraków",
-    "photoPath": "string"
+    "City": "Kraków",
+    "PhotoPath": "string"
   },
   {
     "UserName": "Piotrek",
     "Email": "email@adress.pl",
     "Password": "Snakei150*",
-    "city": "Wrocław",
-    "photoPath": "string"
+    "City": "Wrocław",
+    "PhotoPath": "string"
   },
   {
     "UserName": "Olaf",
     "Email": "olaf@email.com",
     "Password": "Mokebe12-/",
-    "city": "Gdańsk",
-    "photoPath": "string"
+    "City": "Gdańsk",
+    "PhotoPath": "string"
+  },
+  {
+    "UserName": "Luis",
+    "Email": "lu@gmail.com",
+    "Password": "Nanananna12+",
+    "City": "New York",
+    "PhotoPath": "string"
+  },
+  {
+    "UserName": "Tim",
+    "Email": "tim@gmail.com",
+    "Password": "Mokebe12-/",
+    "City": "Cork",
+    "PhotoPath": "string"
+  },
+  {
+    "UserName": "Olaf",
+    "Email": "olaf@email.com",
+    "Password": "Misuri458*",
+    "City": "Gdańsk",
+    "PhotoPath": "string"
+  },
+  {
+    "UserName": "Olaf",
+    "Email": "olaf@email.com",
+    "Password": "Zabawaki9845?",
+    "City": "Gdańsk",
+    "PhotoPath": "string"
+  },
+  {
+    "UserName": "Beatriz",
+    "Email": "bkitcatt0@instagram.com",
+    "Password": "2i8Oslb2+",
+    "City": "Ampanihy",
+    "PhotoPath": "Kilo Delta"
+  },
+  {
+    "UserName": "Arabel",
+    "Email": "alosty1@prnewswire.com",
+    "Password": "fCgnvOtPioR+",
+    "City": "Monte de Trigo",
+    "PhotoPath": "Uniform"
+  },
+  {
+    "UserName": "Lonni",
+    "Email": "lcargen2@walmart.com",
+    "Password": "BNzEqoyHA+",
+    "City": "Madrid",
+    "PhotoPath": "India"
+  },
+  {
+    "UserName": "Michel",
+    "Email": "mshaul3@comsenz.com",
+    "Password": "LcVpUuPW+",
+    "City": "Cabangahan",
+    "PhotoPath": "Oscar"
+  },
+  {
+    "UserName": "Nada",
+    "Email": "nkensall4@wikia.com",
+    "Password": "ufpURup/",
+    "City": "Yujiao",
+    "PhotoPath": "Bravo"
+  },
+  {
+    "UserName": "Wanda",
+    "Email": "whaking5@google.com",
+    "Password": "HqghTcdZknpf+",
+    "City": "Ciparay",
+    "PhotoPath": "Alfa Hotel"
+  },
+  {
+    "UserName": "Reta",
+    "Email": "rwillett6@parallels.com",
+    "Password": "8GEBub459/",
+    "City": "Verkhniy Landekh",
+    "PhotoPath": "Bravo"
+  },
+  {
+    "UserName": "Eugenie",
+    "Email": "ebellino7@berkeley.edu",
+    "Password": "yLHZx9uXETeK6+",
+    "City": "Bobigny",
+    "PhotoPath": "Tango India"
+  },
+  {
+    "UserName": "Kelley",
+    "Email": "kmerrison8@who.int",
+    "Password": "gNSmgMJP3psC*",
+    "City": "Puerto Mayor Otaño",
+    "PhotoPath": "Kilo Echo"
+  },
+  {
+    "UserName": "Barbi",
+    "Email": "btenpenny9@imgur.com",
+    "Password": "HLphdAQjrH+",
+    "City": "Pejukutan",
+    "PhotoPath": "Tango"
   }
+
 ]

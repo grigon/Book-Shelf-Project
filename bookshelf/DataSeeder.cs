@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using bookshelf.Extensions;
 
 namespace bookshelf
 {
@@ -109,9 +110,11 @@ namespace bookshelf
             var filepath = Path.Combine("../bookshelf/users.json");
             var json = File.ReadAllText(filepath);
             var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-            foreach (var item in users)
+            var userPass = JsonConvert.DeserializeObject<IEnumerable<PasswordSeederHelper>>(json);
+
+            foreach (var item in userPass)
             {
-                item.
+                Console.WriteLine(item.Password);
             }
 
             //var user = new User()
