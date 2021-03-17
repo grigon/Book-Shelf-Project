@@ -39,6 +39,7 @@ namespace bookshelf_app.Controllers
         {
             try
             {
+                
                 User[] results = await _repository.GetAll();
                 return _mapper.Map<UserReadDTO[]>(results);
             }

@@ -37,8 +37,8 @@ namespace bookshelf_app.Controllers
             this._userRepository = userRepository;
         }
 
-        [HttpGet]
-        [Produces("application/json")]
+        //[HttpGet]
+        //[Produces("application/json")]
         //public async Task<ActionResult<ChatMessageReadDTO[]>> GetAllMesegges()
         //{
         //    //try
@@ -85,6 +85,7 @@ namespace bookshelf_app.Controllers
             }
             catch (Exception)
             {
+                
                 _logger.LogError($"An error has occuredd with chat repository, get meassages for chat {chatid},  It came across a problem");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server error");
             }
