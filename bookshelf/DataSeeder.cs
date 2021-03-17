@@ -107,32 +107,32 @@ namespace bookshelf
             //User user = await UserManager.FindByNameAsync("Admin");
             //if (user == null)
             //{
-            var filepath = Path.Combine("../bookshelf/users.json");
-            var json = File.ReadAllText(filepath);
-            var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-            var userPass = JsonConvert.DeserializeObject<IEnumerable<PasswordSeederHelper>>(json);
+        //    var filepath = Path.Combine("../bookshelf/users.json");
+        //    var json = File.ReadAllText(filepath);
+        //    var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+        //    var userPass = JsonConvert.DeserializeObject<IEnumerable<PasswordSeederHelper>>(json);
 
-            foreach (var item in userPass)
-            {
-                Console.WriteLine(item.Password);
-            }
+        //    foreach (var item in userPass)
+        //    {
+        //        Console.WriteLine(item.Password);
+        //    }
 
-            //var user = new User()
-            //{
-            //    UserName = users
-            //    Email = "dominik@wik.name",
-            //    City = "Warsaw",
-            //    RegistrationDate =  
-            //    PhotoPath = "Empty path"
-            //};
+        //    var user = new User()
+        //    {
+        //        UserName = users
+        //        Email = "dominik@wik.name",
+        //        City = "Warsaw",
+        //        RegistrationDate =
+        //        PhotoPath = "Empty path"
+        //    };
 
-            //var result = await _userManager.CreateAsync(user, "Magic50+");
-            //if (result != IdentityResult.Success)
-            //{
-            //    throw new InvalidOperationException("Could not create new user in seeder");
-            //}
+        //    var result = await _userManager.CreateAsync(user, "Magic50+");
+        //    if (result != IdentityResult.Success)
+        //    {
+        //        throw new InvalidOperationException("Could not create new user in seeder");
+        //    }
 
-        }
+        //}
 
 
         //public IEnumerable<User> GetUsers()
