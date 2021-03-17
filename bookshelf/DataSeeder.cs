@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace bookshelf
 {
@@ -59,6 +61,9 @@ namespace bookshelf
                 await _userManager.AddToRoleAsync(user, "Admin");
             }
 
+
+            
+
             // _context.Database.EnsureCreated();
             // if (!_context.Books.Any())
             // {
@@ -67,6 +72,41 @@ namespace bookshelf
             //     var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
             //     _context.Users.AddRange(users);
             //     _context.SaveChanges(); 
+        }
+
+        public void Seed()
+        {
+            if (_context.Database.CanConnect())
+            {
+                
+            }
+        }
+
+
+        public IEnumerable<User> GetUsers()
+        {
+            var users = new List<User>()
+            {
+                new User()
+                {
+                    UserName =  "Dominik",
+                    Email    = "dominik@wik.name",
+                    PasswordHash = "Magic50+",
+                    City =  "Warsaw",
+                    PhotoPath = "Empty path"
+
+                },
+                new User()
+                {
+                    UserName =  "Dominik",
+                    Email    = "dominik@wik.name",
+                    PasswordHash = "Magic50+",
+                    City =  "Warsaw",
+                    PhotoPath = "Empty path"
+
+                },
+            };
+            return users;
         }
     }
 }
