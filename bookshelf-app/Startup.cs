@@ -11,7 +11,6 @@ using bookshelf.Model.Users;
 using bookshelf.DTO.Book;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-//using bookshelf.FakeData;
 using bookshelf.Model.Books;
 using bookshelf.Profiles;
 using Microsoft.AspNetCore.Builder;

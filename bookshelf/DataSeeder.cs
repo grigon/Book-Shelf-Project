@@ -126,26 +126,28 @@ namespace bookshelf
             }
         }
 
-        public void SeederGenre()
+        public async Task SeederGenre()
         {
-            //if (!_context.Genres.Any())
-            //{
-
-            //}
-
-            var filePath = Path.Combine("../bookShelf/Genres.json");
-            var json = File.ReadAllText(filePath);
-            var genres = JsonConvert.DeserializeObject<IEnumerable<Genre>>(json);
-
-            for (int i = 0; i < genres.Count(); i++)
+            if (!_context.Genres.Any())
             {
-                var genre = new Genre()
+                var collectionGenres = new List<Genre>();
+                var filePath = Path.Combine("../bookShelf/Genres.json");
+                var json = File.ReadAllText(filePath);
+                var genres = JsonConvert.DeserializeObject<IEnumerable<Genre>>(json);
+
+                for (int i = 0; i < genres.Count(); i++)
                 {
+                    var genre = new Genre()
+                    {
+                        Name = genres.ElementAt(i).Name
+                    };
 
-                };
+                    collectionGenres.Add(genre);
+                }
+
+                _context.Genres.AddRange(collectionGenres);
+                await _context.SaveChangesAsync();
             }
-
-
         }
 
 

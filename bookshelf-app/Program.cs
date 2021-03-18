@@ -26,6 +26,7 @@ namespace bookshelf_app
                 var seeder = scope.ServiceProvider.GetService<DataSeeder>();
                 seeder.SeedAsync().Wait();
                 seeder.SeedUser().Wait();
+                seeder.SeederGenre().Wait();
             }
             
         }
