@@ -78,15 +78,8 @@
     "City": "Cork",
     "RegistrationDate": "2016-05-23",
     "PhotoPath": "empty path"
-  },
-  {
-    "UserName": "Olaf",
-    "Email": "olaf@email.com",
-    "Password": "Misuri458*",
-    "City": "Gdańsk",
-    "RegistrationDate": "2019-04-23",
-    "PhotoPath": "empty path"
   }
+
 
 
 ]

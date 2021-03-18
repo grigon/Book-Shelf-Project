@@ -10,8 +10,8 @@ using bookshelf.Context;
 namespace bookshelf_app.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20210317092423_FirstAfterMergeAll")]
-    partial class FirstAfterMergeAll
+    [Migration("20210318083651_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,7 +180,6 @@ namespace bookshelf_app.Migrations
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("AuthorId")
-                        .IsRequired()
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("GenreId")
@@ -343,7 +342,7 @@ namespace bookshelf_app.Migrations
                         .HasColumnType("VARCHAR(40)");
 
                     b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VARCHAR(500)");
 
                     b.Property<string>("MessageAuthorId")
                         .HasColumnType("nvarchar(450)");
@@ -519,9 +518,7 @@ namespace bookshelf_app.Migrations
                 {
                     b.HasOne("bookshelf.Model.Books.Author", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("bookshelf.Model.Books.Genre", "Genre")
                         .WithMany()
@@ -589,7 +586,7 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Chats.ChatMessage", b =>
                 {
                     b.HasOne("bookshelf.Model.Chats.Chat", "Chat")
-                        .WithMany()
+                        .WithMany("ChatMessages")
                         .HasForeignKey("ChatId");
 
                     b.HasOne("bookshelf.Model.Users.User", "MessageAuthor")
@@ -626,6 +623,11 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Books.UserBook", b =>
                 {
                     b.Navigation("BookHistories");
+                });
+
+            modelBuilder.Entity("bookshelf.Model.Chats.Chat", b =>
+                {
+                    b.Navigation("ChatMessages");
                 });
 #pragma warning restore 612, 618
         }

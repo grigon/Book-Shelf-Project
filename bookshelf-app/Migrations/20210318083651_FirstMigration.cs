@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace bookshelf_app.Migrations
 {
-    public partial class FirstAfterMergeAll : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -225,7 +225,7 @@ namespace bookshelf_app.Migrations
                 {
                     Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     MessageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Message = table.Column<string>(type: "VARCHAR(500)", nullable: true),
                     MessageAuthorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ChatId = table.Column<string>(type: "VARCHAR(40)", nullable: true)
                 },
@@ -252,7 +252,7 @@ namespace bookshelf_app.Migrations
                 {
                     Id = table.Column<string>(type: "VARCHAR(40)", nullable: false),
                     Title = table.Column<string>(type: "VARCHAR(80)", maxLength: 80, nullable: false),
-                    AuthorId = table.Column<string>(type: "VARCHAR(40)", nullable: false),
+                    AuthorId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
                     GenreId = table.Column<string>(type: "VARCHAR(40)", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false)
                 },
@@ -264,7 +264,7 @@ namespace bookshelf_app.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Genres_GenreId",
                         column: x => x.GenreId,
