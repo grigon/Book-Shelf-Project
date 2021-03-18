@@ -1,0 +1,17 @@
+[
+	{
+		"Id": "ca989c9d-c78f-4583-bdef-0ef6cd292c28",
+		"FirstName": "Agatha",
+		"LastName": "Christie"
+	},
+	{
+		"Id": "0e273e53-6515-45ab-8a55-8cff2fc30f6e",
+		"FirstName": "Stephen",
+		"LastName": "King"
+	},
+	{
+		"Id": "f0597d1b-da5a-4a04-8a20-8c76b6af59b0",
+		"FirstName": "Jon",
+		"LastName": "Krakauer"
+	}
+]

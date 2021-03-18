@@ -1,20 +1,20 @@
 [
-  //{
-  //  "UserName": "AgentRoman",
-  //  "Email": "roman@specialservice.com",
-  //  "Password": "SasMitAnsoon15!",
-  //  "City": "Warsaw",
-  //  "RegistrationDate": "2019-02-28",
-  //  "PhotoPath": "string"
-  //},
-  //{
-  //  "UserName": "Dominik",
-  //  "Email": "dominik@cocojambo.name",
-  //  "Password": "Karaiby2050/",
-  //  "City": "Warsaw",
-  //  "RegistrationDate": "2020-05-23",
-  //  "PhotoPath": "string"
-  //},
+  {
+    "UserName": "AgentRoman",
+    "Email": "roman@specialservice.com",
+    "Password": "SasMitAnsoon15!",
+    "City": "Warsaw",
+    "RegistrationDate": "2019-02-28",
+    "PhotoPath": "string"
+  },
+  {
+    "UserName": "Dominik",
+    "Email": "dominik@cocojambo.name",
+    "Password": "Karaiby2050/",
+    "City": "Warsaw",
+    "RegistrationDate": "2020-05-23",
+    "PhotoPath": "string"
+  },
   {
     "UserName": "Mike",
     "Email": "mike@gmail.com",
