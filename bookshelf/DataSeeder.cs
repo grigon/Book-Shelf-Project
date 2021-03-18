@@ -32,7 +32,20 @@ namespace bookshelf
             this._passwordHasher = passwordHasher;
         }
 
-        public async Task SeedAsync()
+
+
+        public async Task MotherSeeder()
+        {
+            await SeedAsync();
+            await SeedUser();
+            await SeederGenre();
+            await SeederAuthor();
+            
+
+        }
+
+
+        private async Task SeedAsync()
         {
             if (!_context.Roles.Any())
             {
@@ -45,7 +58,6 @@ namespace bookshelf
                 var roleCheck = await RoleManager.RoleExistsAsync("Admin");
                 if (!roleCheck)
                 {
-
                     roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
                 }
 
@@ -94,7 +106,7 @@ namespace bookshelf
         //}
 
 
-        public async Task SeedUser()
+        private async Task SeedUser()
         {
             if (!(_context.Users.Count() > 1))
             {
@@ -126,12 +138,12 @@ namespace bookshelf
             }
         }
 
-        public async Task SeederGenre()
+        private async Task SeederGenre()
         {
             if (!_context.Genres.Any())
             {
                 var collectionGenres = new List<Genre>();
-                var filePath = Path.Combine("../bookShelf/Genres.json");
+                var filePath = Path.Combine("../bookShelf/Genres.json");   // magic string to refactor 
                 var json = File.ReadAllText(filePath);
                 var genres = JsonConvert.DeserializeObject<IEnumerable<Genre>>(json);
 
@@ -146,6 +158,31 @@ namespace bookshelf
                 }
 
                 _context.Genres.AddRange(collectionGenres);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeederAuthor()  
+        {
+            if (!_context.Authors.Any())
+            {
+                var collecionAuthor = new List<Author>();
+                var filePath = Path.Combine("../bookShelf/Authors.json");  // magic string to refactor  
+                var json = File.ReadAllText(filePath);
+                var authors = JsonConvert.DeserializeObject<IEnumerable<Author>>(json);
+
+                for (int i = 0; i < authors.Count(); i++)
+                {
+                    var autor = new Author()
+                    {
+                        FirstName = authors.ElementAt(i).FirstName,
+                        LastName = authors.ElementAt(i).LastName,
+                    };
+
+                    collecionAuthor.Add(autor);
+                }
+
+                _context.Authors.AddRange(collecionAuthor);
                 await _context.SaveChangesAsync();
             }
         }
