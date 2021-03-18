@@ -15,10 +15,8 @@ namespace bookshelf.Model.Books
         [Column(TypeName = "VARCHAR(80)")]
         public string Title { get; set; }
         [Column(TypeName = "VARCHAR(40)")]
-        public Guid AuthorId { get; set; }
-        public virtual Author Author { get; set; }
+        public Author Author { get; set; }
         [Column(TypeName = "VARCHAR(40)")]
-       // public Guid GenreId { get; set; }
         public Genre Genre { get; set; }
         public int Rating { get; set; }
 

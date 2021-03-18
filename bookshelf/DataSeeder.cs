@@ -93,7 +93,7 @@ namespace bookshelf
 
         public async Task SeedUser()
         {
-            //var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
+            var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
 
             //IdentityResult roleResult;
             ////Adding Admin Role
@@ -107,32 +107,30 @@ namespace bookshelf
             //User user = await UserManager.FindByNameAsync("Admin");
             //if (user == null)
             //{
-        //    var filepath = Path.Combine("../bookshelf/users.json");
-        //    var json = File.ReadAllText(filepath);
-        //    var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-        //    var userPass = JsonConvert.DeserializeObject<IEnumerable<PasswordSeederHelper>>(json);
+            var filepath = Path.Combine("../bookshelf/users.json");
+            var json = File.ReadAllText(filepath);
+            var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+            var userPass = JsonConvert.DeserializeObject<IEnumerable<PasswordSeederHelper>>(json);
 
-        //    foreach (var item in userPass)
-        //    {
-        //        Console.WriteLine(item.Password);
-        //    }
+            for (int i = 0; i < users.Count(); i++)
+            {
+                var user = new User()
+                {
+                    UserName = users.ElementAt(i).UserName,
+                    Email = users.ElementAt(i).Email,
+                    City = users.ElementAt(i).City,
+                    RegistrationDate = users.ElementAt(i).RegistrationDate,
+                    PhotoPath = users.ElementAt(i).PhotoPath
+                };
+                var cos = userPass.ElementAt(i).Password;
 
-        //    var user = new User()
-        //    {
-        //        UserName = users
-        //        Email = "dominik@wik.name",
-        //        City = "Warsaw",
-        //        RegistrationDate =
-        //        PhotoPath = "Empty path"
-        //    };
-
-        //    var result = await _userManager.CreateAsync(user, "Magic50+");
-        //    if (result != IdentityResult.Success)
-        //    {
-        //        throw new InvalidOperationException("Could not create new user in seeder");
-        //    }
-
-        //}
+                var result = await _userManager.CreateAsync(user, userPass.ElementAt(i).Password);
+                if (result != IdentityResult.Success)
+                {
+                    throw new InvalidOperationException("Could not create new user in seeder");
+                }
+            }
+        }
 
 
         //public IEnumerable<User> GetUsers()

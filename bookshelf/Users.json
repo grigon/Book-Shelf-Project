@@ -1,27 +1,27 @@
 [
-  {
-    "UserName": "Roman",
-    "Email": "roman@mail.com",
-    "Password": "somePAss5!",
-    "City": "Warsaw",
-    "RegistrationDate": "2019-02-28",
-    "PhotoPath": "string"
-  },
-  {
-    "UserName": "Dominik",
-    "Email": "dominik@wiklinski.name",
-    "Password": "Magic50+",
-    "City": "Warsaw",
-    "RegistrationDate": "2020-05-23",
-    "PhotoPath": "string"
-  },
+  //{
+  //  "UserName": "AgentRoman",
+  //  "Email": "roman@specialservice.com",
+  //  "Password": "SasMitAnsoon15!",
+  //  "City": "Warsaw",
+  //  "RegistrationDate": "2019-02-28",
+  //  "PhotoPath": "string"
+  //},
+  //{
+  //  "UserName": "Dominik",
+  //  "Email": "dominik@cocojambo.name",
+  //  "Password": "Karaiby2050/",
+  //  "City": "Warsaw",
+  //  "RegistrationDate": "2020-05-23",
+  //  "PhotoPath": "string"
+  //},
   {
     "UserName": "Mike",
     "Email": "mike@gmail.com",
     "Password": "Brokul10!",
     "City": "Boston",
     "RegistrationDate": "2020-05-23",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Steven",
@@ -29,15 +29,15 @@
     "Password": "America96+",
     "City": "Miami",
     "RegistrationDate": "2019-08-19",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Jolanta",
     "Email": "malpa@malpa.pl",
     "Password": "AlePAss47/",
     "City": "Poznań",
-    "RegistrationDate": "2020-03-23",
-    "PhotoPath": "string"
+    "RegistrationDate": "2/20/21 20:36",
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Stefan",
@@ -45,7 +45,7 @@
     "Password": "SmokWawelski69+",
     "City": "Kraków",
     "RegistrationDate": "2019-04-02",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Piotrek",
@@ -53,7 +53,7 @@
     "Password": "Snakei150*",
     "City": "Wrocław",
     "RegistrationDate": "2021-01-23",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Olaf",
@@ -61,7 +61,7 @@
     "Password": "Mokebe12-/",
     "City": "Gdańsk",
     "RegistrationDate": "2019-12-23",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Luis",
@@ -69,7 +69,7 @@
     "Password": "Nanananna12+",
     "City": "New York",
     "RegistrationDate": "2019-05-15",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Tim",
@@ -77,7 +77,7 @@
     "Password": "Mokebe12-/",
     "City": "Cork",
     "RegistrationDate": "2016-05-23",
-    "PhotoPath": "string"
+    "PhotoPath": "empty path"
   },
   {
     "UserName": "Olaf",
@@ -85,88 +85,8 @@
     "Password": "Misuri458*",
     "City": "Gdańsk",
     "RegistrationDate": "2019-04-23",
-    "PhotoPath": "string"
-  },
+    "PhotoPath": "empty path"
+  }
 
-    {
-      "UserName": "Kiley",
-      "Email": "kzambonini0@a8.net",
-      "Password": "Zambonini",
-      "City": "kzambonini0@addtoany.com",
-      "RegistrationDate": "2019-05-23",
-      "PhotoPath": "Lima"
-    },
-    {
-      "UserName": "Philipa",
-      "Email": "pmenzies1@pen.io",
-      "Password": "Menzies",
-      "City": "pmenzies1@bizjournals.com",
-      "RegistrationDate": "2018-08-13",
-      "PhotoPath": "India"
-    },
-    {
-      "UserName": "Minetta",
-      "Email": "mburgoine2@webmd.com",
-      "Password": "Burgoine",
-      "City": "mburgoine2@w3.org",
-      "RegistrationDate": "2018-11-11",
-      "PhotoPath": "Mike Papa"
-    },
-    {
-      "UserName": "Jere",
-      "Email": "jlusty3@ning.com",
-      "Password": "Lusty",
-      "City": "jlusty3@sogou.com",
-      "RegistrationDate": "2020-12-13",
-      "PhotoPath": "Echo"
-    },
-    {
-      "UserName": "Mikel",
-      "Email": "mlufkin4@cpanel.net",
-      "Password": "Lufkin",
-      "City": "mlufkin4@gmpg.org",
-      "RegistrationDate": "2018-12-10",
-      "PhotoPath": "Kilo Golf"
-    },
-    {
-      "UserName": "Chickie",
-      "Email": "csapshed5@ca.gov",
-      "Password": "Sapshed",
-      "City": "csapshed5@youtu.be",
-      "RegistrationDate": "2017-06-09",
-      "PhotoPath": "India"
-    },
-    {
-      "UserName": "Kameko",
-      "Email": "kbussel6@weibo.com",
-      "Password": "Bussel",
-      "City": "kbussel6@nationalgeographic.com",
-      "RegistrationDate": "2016-12-06",
-      "PhotoPath": "Alfa"
-    },
-    {
-      "UserName": "Maurie",
-      "Email": "mbutton7@wiley.com",
-      "Password": "Button",
-      "City": "mbutton7@tiny.cc",
-      "RegistrationDate": "2018-09-14",
-      "PhotoPath": "Charlie X-ray"
-    },
-    {
-      "UserName": "Ainsley",
-      "Email": "apottes8@chron.com",
-      "Password": "Pottes",
-      "City": "apottes8@tamu.edu",
-      "RegistrationDate": "2016-08-22",
-      "PhotoPath": "November Sierra"
-    },
-    {
-      "UserName": "Phyllys",
-      "Email": "pcheltnam9@ebay.com",
-      "Password": "Cheltnam",
-      "City": "pcheltnam9@w3.org",
-      "RegistrationDate": "2016-03-06",
-      "PhotoPath": "Delta"
-    }
 
 ]
