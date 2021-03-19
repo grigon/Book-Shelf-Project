@@ -112,7 +112,7 @@ namespace bookshelf
             {
 
 
-                var filepath = Path.Combine("../bookshelf/users.json");
+                var filepath = Path.Combine("../bookshelf/Extensions/Jsons/users.json");
                 var json = File.ReadAllText(filepath);
                 var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
                 var userPass = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
@@ -143,7 +143,7 @@ namespace bookshelf
             if (!_context.Genres.Any())
             {
                 var collectionGenres = new List<Genre>();
-                var filePath = Path.Combine("../bookShelf/Genres.json");   // magic string to refactor 
+                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Genres.json");   // magic string to refactor 
                 var json = File.ReadAllText(filePath);
                 var genres = JsonConvert.DeserializeObject<IEnumerable<Genre>>(json);
 
@@ -167,7 +167,7 @@ namespace bookshelf
             if (!_context.Authors.Any())
             {
                 var collecionAuthor = new List<Author>();
-                var filePath = Path.Combine("../bookShelf/Authors.json");  // magic string to refactor  
+                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Authors.json");  // magic string to refactor  
                 var json = File.ReadAllText(filePath);
                 var authors = JsonConvert.DeserializeObject<IEnumerable<Author>>(json);
 
