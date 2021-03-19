@@ -55,6 +55,8 @@ namespace bookshelf
 
                 IdentityResult roleResult;
                 //Adding Admin Role
+                ////////////////refactor   TO Json  
+                ///// SAVE THE JSONS
                 var roleCheck = await RoleManager.RoleExistsAsync("Admin");
                 if (!roleCheck)
                 {
@@ -185,6 +187,50 @@ namespace bookshelf
                 _context.Authors.AddRange(collecionAuthor);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        private async Task SeederBook()
+        {
+            var collection = new List<Book>();
+            var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Books");
+            var json = File.ReadAllText(filePath);
+
+            var books = JsonConvert.DeserializeObject<IEnumerable<Book>>(json);
+            var bookHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+            for (int i = 0; i < books.Count(); i++)
+            {
+                var book = new Book()
+                {
+                    Title = books.ElementAt(i).Title,
+                    Author = await GetAuthor(bookHelper.ElementAt(i).AuthorName),
+                    Genre = await GetGenre(bookHelper.ElementAt(i).)
+                    Rating = books.ElementAt(i).Rating
+                }
+            }
+        }
+
+        private async Task<Author> GetAuthor(string Name.)
+        {
+            IQueryable<Author> query = _context.Authors.Where(a => a.FirstName.ToUpper() == Name.ToUpper());
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+        private async Task<Genre> GetGenre(string Name)
+        {
+            IQueryable<Genre> query = _context.Genres.Where(g => g.Name.ToUpper() == Name.ToUpper());
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+        private async Task<User> GetUSer(string Mail)
+        {
+            IQueryable<User> query = _context.Users.Where(e => e.Email.ToUpper() == Mail.ToUpper());
+
+            return await query.FirstOrDefaultAsync();
         }
 
 
