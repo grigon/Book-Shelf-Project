@@ -1,0 +1,79 @@
+[
+	{
+		"Id": "c2d0d1e5-044a-44be-97e1-149cb917ed56",
+		"BookTitle": " Into the Wild",
+		"UserEmail": "teven@gmail.com",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "02de6a67-f8b6-48d3-92d7-86bcc79bf9c4",
+		"BookTitle": " Into Thin Air",
+		"UserEmail": "dominik@cocojambo.name",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "24dd68ca-8384-4160-97fe-25191e1fb110",
+		"BookTitle": " Into Thin Air",
+		"UserEmail": "stefan@jajko.pl",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "4a58ff39-8c38-4d4d-9bbb-0e9f62a9de8b",
+		"BookTitle": " Into Thin Air",
+		"UserEmail": "teven@gmail.com",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "03eef2bf-ece9-4f09-ae18-44f53396a7e6",
+		"BookTitle": " The Outsider",
+		"UserEmail": "dominik@cocojambo.name",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "f79ff4c8-06f3-4d21-b24c-8b80ad2711db",
+		"BookTitle": " The Outsider",
+		"UserEmail": "stefan@jajko.pl",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "f38ff251-136a-4d08-bc94-4dec5e9a2313",
+		"BookTitle": " The Shining",
+		"UserEmail": "malpa@malpa.pl",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "a88c9623-c39e-4589-83e7-44b2e3c79d43",
+		"BookTitle": " Colorado Kid",
+		"UserEmail": "teven@gmail.com",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "aa9b48e7-01ec-4fca-a8ab-c3e9e843c734",
+		"BookTitle": " Salem’s Lot",
+		"UserEmail": "olaf@email.com",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "a0eba964-fa21-4889-8ebc-7a76b35ab430",
+		"BookTitle": " Salem’s Lot",
+		"UserEmail": "olaf@email.com",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	},
+	{
+		"Id": "b0d7a161-8da8-4680-a5cb-4749361ec33b",
+		"BookTitle": " Murder in Mesopotamia",
+		"UserEmail": "malpa@malpa.pl",
+		"Borrowed": "FALSE",
+		"IsPublic": "TRUE"
+	}
+],

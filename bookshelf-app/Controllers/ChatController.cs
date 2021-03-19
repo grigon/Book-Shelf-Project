@@ -133,6 +133,7 @@ namespace bookshelf_app.Controllers
             }
             catch (Exception)
             {
+               
                 _logger.LogError("An error has occured with chat repository, Couldn't save message in database");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Server Error");
             }

@@ -115,7 +115,7 @@ namespace bookshelf
                 var filepath = Path.Combine("../bookshelf/users.json");
                 var json = File.ReadAllText(filepath);
                 var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-                var userPass = JsonConvert.DeserializeObject<IEnumerable<PasswordSeederHelper>>(json);
+                var userPass = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
 
                 for (int i = 0; i < users.Count(); i++)
                 {

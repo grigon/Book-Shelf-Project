@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>bookshelf_app</RootNamespace>
+        <UserSecretsId>a2228a4a-cddb-4a41-9a0a-44337454a10f</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

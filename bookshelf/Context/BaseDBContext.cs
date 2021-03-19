@@ -16,6 +16,7 @@ namespace bookshelf.Context
         public BaseDbContext(DbContextOptions<BaseDbContext> options)
             : base(options)
         {
+            this.Database.EnsureCreated();
         }
 
         
