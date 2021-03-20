@@ -146,7 +146,7 @@ namespace bookshelf
             if (!_context.Authors.Any())
             {
                 var collecionAuthor = new List<Author>();
-                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Authors.json");  // magic string to refactor  
+                var filePath = Path.Combine($"{pathJsons}Authors.json");  // magic string to refactor  
                 var json = File.ReadAllText(filePath);
                 var authors = JsonConvert.DeserializeObject<IEnumerable<Author>>(json);
 
@@ -170,7 +170,7 @@ namespace bookshelf
             if (!_context.Books.Any())
             {
                 var collectionBooks = new List<Book>();
-                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Books.json");
+                var filePath = Path.Combine($"{pathJsons}Books.json");
                 var json = File.ReadAllText(filePath);
 
                 var books = JsonConvert.DeserializeObject<IEnumerable<Book>>(json);
@@ -199,7 +199,7 @@ namespace bookshelf
             if (_context.UserBooks.Any())
             {
                 var colleciotnReview = new List<Review>();
-                var filePatch = Path.Combine("../bookShelf/Extensions/Jsons/Reviews.json");
+                var filePatch = Path.Combine($"{pathJsons}Reviews.json");
                 var json = File.ReadAllText(filePatch);
 
                 var reviews = JsonConvert.DeserializeObject<IEnumerable<Review>>(json);
@@ -228,7 +228,7 @@ namespace bookshelf
             if (_context.UserBooks.Any())
             {
                 var collectionUserBook = new List<UserBook>();
-                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/UserBook.json");
+                var filePath = Path.Combine($"{pathJsons}UserBook.json");
                 var json = File.ReadAllText(filePath);
 
                 var userBooks = JsonConvert.DeserializeObject<IEnumerable<UserBook>>(json);
