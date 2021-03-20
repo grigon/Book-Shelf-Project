@@ -66,17 +66,20 @@ namespace bookshelf
                 {
                     roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
                 }
-
+                var filepath = Path.Combine($"{pathJsons}Admin.json");
+                var json = File.ReadAllText(filepath);
+                var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+                var userPass = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
                 User user = await UserManager.FindByNameAsync("Admin");
                 if (user == null)
                 {
                     user = new User()
                     {
-                        UserName = "Admin",
-                        Email = "admin@email.com",
+                        UserName = users.ElementAt(0).UserName,
+                        Email = users.ElementAt(0).Email
                     };
 
-                    var result = await _userManager.CreateAsync(user, "Pass#$wo345d");
+                    var result = await _userManager.CreateAsync(user, userPass.ElementAt(0).Password);
                     if (result != IdentityResult.Success)
                     {
                         throw new InvalidOperationException("Could not create new user in seeder");
@@ -85,7 +88,6 @@ namespace bookshelf
                     await _userManager.AddToRoleAsync(user, "Admin");
                 }
             }
-
         }
 
         private async Task SeederUser()

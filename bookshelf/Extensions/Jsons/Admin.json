@@ -1,5 +1,5 @@
 {
 	"UserName": "Admin",
-	"FirstName": "admin@email.com",
-	"LastName": "Christie"
+	"Email": "admin@email.com",
+	"Password": "Pass#$wo345d"
 }
