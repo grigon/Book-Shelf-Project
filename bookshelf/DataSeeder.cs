@@ -28,7 +28,7 @@ namespace bookshelf
         private readonly ILogger _logger;
         private readonly string pathJsons = "../bookShelf/Extensions/Jsons/";
 
-        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher, ILogger logger)
+        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher, ILogger<DataSeeder> logger)
         {
             this._context = _context;
             this._userManager = userManager;
