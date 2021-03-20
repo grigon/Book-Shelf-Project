@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using bookshelf.Extensions;
+using bookshelf.Model.Chats;
 
 namespace bookshelf
 {
@@ -245,28 +246,49 @@ namespace bookshelf
 
         private async Task SeederUserBook()
         {
-            var collectionUserBook = new List<UserBook>();
-            var filePath = Path.Combine("../bookShelf/Extensions/Jsons/UserBook.json");
-            var json = File.ReadAllText(filePath);
-
-            var userBooks = JsonConvert.DeserializeObject<IEnumerable<UserBook>>(json);
-            var userBooksHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
-
-
-            for (int i = 0; i < userBooks.Count(); i++)
+            if (_context.UserBooks.Any())
             {
-                var userBook = new UserBook()
-                {
-                    Book = await GetBook(userBooksHelper.ElementAt(i).BookTitle),
-                    User = await GetUser(userBooksHelper.ElementAt(i).UserEmail),
-                    Borrowed = userBooks.ElementAt(i).Borrowed,
-                    IsPublic = userBooks.ElementAt(i).IsPublic
-                };
+                var collectionUserBook = new List<UserBook>();
+                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/UserBook.json");
+                var json = File.ReadAllText(filePath);
 
-                collectionUserBook.Add(userBook);
+                var userBooks = JsonConvert.DeserializeObject<IEnumerable<UserBook>>(json);
+                var userBooksHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+
+                for (int i = 0; i < userBooks.Count(); i++)
+                {
+                    var userBook = new UserBook()
+                    {
+                        Book = await GetBook(userBooksHelper.ElementAt(i).BookTitle),
+                        User = await GetUser(userBooksHelper.ElementAt(i).UserEmail),
+                        Borrowed = userBooks.ElementAt(i).Borrowed,
+                        IsPublic = userBooks.ElementAt(i).IsPublic
+                    };
+
+                    collectionUserBook.Add(userBook);
+                }
+                _context.AddRange(collectionUserBook);
+                await _context.SaveChangesAsync();
             }
-            _context.AddRange(collectionUserBook);
-            await _context.SaveChangesAsync();
+        }
+        private async Task SeederCreateChat()
+        {
+            if (!_context.Chats.Any())
+            {
+                var numberChats = 3;
+
+                var collectionChats = new List<Chat>();
+
+                for (int i = 0; i < numberChats; i++)
+                {
+                    var chat = new Chat();
+                    collectionChats.Add(chat);
+                }
+
+                _context.AddRange(collectionChats);
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task<Author> GetAuthor(string Name)
