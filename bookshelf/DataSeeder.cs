@@ -45,6 +45,7 @@ namespace bookshelf
             await SeederUserBook();
             await SeederCreateChat();
             await SeederUserChat();
+            await SeederChatMessage();
 
         }
 
@@ -291,6 +292,35 @@ namespace bookshelf
 
                 }
                 _context.ChatUsers.AddRange(collectionChatUsers);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeederChatMessage()
+        {
+            if (!_context.Messages.Any())
+            {
+                var collecionMessages = new List<ChatMessage>();
+
+                var filePath = Path.Combine($"{pathJsons}ChatMessage.json");
+                var json = File.ReadAllText(filePath);
+
+                var chatMessages = JsonConvert.DeserializeObject<IEnumerable<ChatMessage>>(json);
+                var chatMessagesHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+                for (int i = 0; i < chatMessages.Count(); i++)
+                {
+                    var chatMessage = new ChatMessage()
+                    {
+                        Message = chatMessages.ElementAt(i).Message,
+                        MessageDate = chatMessages.ElementAt(i).MessageDate,
+                        MessageAuthor = await GetUser(chatMessagesHelper.ElementAt(i).UserEmail),
+                        Chat = await GetChat(chatMessagesHelper.ElementAt(i).ChatNumber)
+                    };
+                    collecionMessages.Add(chatMessage);
+                }
+
+                _context.Messages.AddRange(collecionMessages);
                 await _context.SaveChangesAsync();
             }
         }
