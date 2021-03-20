@@ -30,6 +30,7 @@ namespace bookshelf
 
         public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher, ILogger<DataSeeder> logger)
         {
+            //mozna 
             this._context = _context;
             this._userManager = userManager;
             _serviceProvider = serviceProvider;
