@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using bookshelf.Extensions;
 using bookshelf.Model.Chats;
+using Microsoft.Extensions.Logging;
 
 namespace bookshelf
 {
@@ -24,14 +25,16 @@ namespace bookshelf
         private readonly UserManager<User> _userManager;
         private readonly IServiceProvider _serviceProvider;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly ILogger _logger;
         private readonly string pathJsons = "../bookShelf/Extensions/Jsons/";
 
-        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher)
+        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher, ILogger logger)
         {
             this._context = _context;
             this._userManager = userManager;
             _serviceProvider = serviceProvider;
             this._passwordHasher = passwordHasher;
+            this._logger = logger;
         }
 
         public async Task MotherSeeder()
@@ -53,14 +56,11 @@ namespace bookshelf
         {
             if (!_context.Roles.Any())
             {
-                //Seeder for admin
                 var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
 
                 IdentityResult roleResult;
-                //Adding Admin Role
-                ////////////////refactor   TO Json  
-                ///// SAVE THE JSONS
+
                 var roleCheck = await RoleManager.RoleExistsAsync("Admin");
                 if (!roleCheck)
                 {
@@ -78,7 +78,6 @@ namespace bookshelf
                         UserName = users.UserName,
                         Email = users.Email
                     };
-
                     var result = await _userManager.CreateAsync(user, userPass.Password);
                     if (result != IdentityResult.Success)
                     {
