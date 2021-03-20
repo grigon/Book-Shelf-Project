@@ -41,7 +41,7 @@ namespace bookshelf
             await SeederGenre();
             await SeederAuthor();
             await SeederBook();
-            await SeederRevies();
+            await SeedReview();
 
         }
 
@@ -219,7 +219,7 @@ namespace bookshelf
         private async Task SeedReview()
         {
             var colleciotnReview = new List<Review>();
-            var filePatch = Path.Combine("../bookShelf/Extensions/Jsons/Review.json");
+            var filePatch = Path.Combine("../bookShelf/Extensions/Jsons/Reviews.json");
             var json = File.ReadAllText(filePatch);
 
             var reviews = JsonConvert.DeserializeObject<IEnumerable<Review>>(json);
@@ -244,7 +244,9 @@ namespace bookshelf
 
         private async Task<Author> GetAuthor(string Name)
         {
-            IQueryable<Author> query = _context.Authors.Where(a => a.FirstName.ToUpper() == Name.ToUpper());
+            IQueryable<Author> query = _context.Authors
+                .Where(a => a.FirstName.ToUpper().Trim()  
+                == Name.ToUpper().Trim());
 
             return await query.FirstOrDefaultAsync();
         }
@@ -252,7 +254,9 @@ namespace bookshelf
 
         private async Task<Genre> GetGenre(string Name)
         {
-            IQueryable<Genre> query = _context.Genres.Where(g => g.Name.ToUpper() == Name.ToUpper());
+            IQueryable<Genre> query = _context.Genres
+                .Where(g => g.Name.ToUpper().Trim() 
+                == Name.ToUpper().Trim());
 
             return await query.FirstOrDefaultAsync();
         }
@@ -260,14 +264,18 @@ namespace bookshelf
 
         private async Task<User> GetUser(string Mail)
         {
-            IQueryable<User> query = _context.Users.Where(e => e.Email.ToUpper() == Mail.ToUpper());
+            IQueryable<User> query = _context.Users
+                .Where(e => e.Email.ToUpper().Replace(" ",string.Empty) 
+                == Mail.ToUpper().Trim().Replace(" ",string.Empty)); //only one space 
 
             return await query.FirstOrDefaultAsync();
         }
 
         private async Task<Book> GetBook(string title)
         {
-            IQueryable<Book> query = _context.Books.Where(b => b.Title == title);
+            IQueryable<Book> query = _context.Books
+                .Where(b => b.Title.ToUpper().Trim().Replace(" ",string.Empty)
+                .Contains(title.ToUpper().Trim().Replace(" ",string.Empty)));
 
             return await query.FirstOrDefaultAsync();
         }
