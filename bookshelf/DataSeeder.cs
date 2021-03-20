@@ -42,6 +42,7 @@ namespace bookshelf
             await SeederBook();
             await SeederReview();
             await SeederUserBook();
+            await SeederCreateChat();
 
         }
 
@@ -323,6 +324,13 @@ namespace bookshelf
             IQueryable<Book> query = _context.Books
                 .Where(b => b.Title.ToUpper().Trim().Replace(" ",string.Empty)
                 .Contains(title.ToUpper().Trim().Replace(" ",string.Empty)));
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        private async Task<Chat> GetChat(int position) // sort order by GUID it is  possible?? 
+        {
+            IQueryable<Chat> query = _context.Chats.OrderBy(c => c.ChatId).Skip(position-1).Take(1);
 
             return await query.FirstOrDefaultAsync();
         }
