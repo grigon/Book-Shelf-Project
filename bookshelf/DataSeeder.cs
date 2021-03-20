@@ -246,7 +246,7 @@ namespace bookshelf
         private async Task SeederUserBook()
         {
             var collectionUserBook = new List<UserBook>();
-            var filePath = Path.Combine("../bookShelf/Extensions/Jsons/UserBook");
+            var filePath = Path.Combine("../bookShelf/Extensions/Jsons/UserBook.json");
             var json = File.ReadAllText(filePath);
 
             var userBooks = JsonConvert.DeserializeObject<IEnumerable<UserBook>>(json);
