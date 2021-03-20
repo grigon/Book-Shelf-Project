@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Identity;
 using bookshelf.Model.Users;
-
+using Microsoft.AspNetCore.Authorization;
 namespace bookshelf_app.Controllers
 {
     [ApiController]
     [FormatFilter]
     [Route("api/[controller]")]
+    [Authorize]
     public class ChatController : ControllerBase
     {
         private readonly ILogger<ChatController> _logger;

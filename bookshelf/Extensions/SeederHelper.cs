@@ -12,8 +12,8 @@ namespace bookshelf.Extensions
         public string BookTitle { get; set; }
         public string UserEmail { get; set; }
         public string AuthorName { get; set; }
+        public string GenreName { get; set; }
         public int ChatNumber { get; set; }
-        public int Genre { get; set; }
 
 
     }

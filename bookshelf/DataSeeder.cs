@@ -40,7 +40,8 @@ namespace bookshelf
             await SeedUser();
             await SeederGenre();
             await SeederAuthor();
-            
+            await SeederBook();
+            await SeederRevies();
 
         }
 
@@ -112,8 +113,6 @@ namespace bookshelf
         {
             if (!(_context.Users.Count() > 1))
             {
-
-
                 var filepath = Path.Combine("../bookshelf/Extensions/Jsons/users.json");
                 var json = File.ReadAllText(filepath);
                 var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
@@ -183,7 +182,6 @@ namespace bookshelf
 
                     collecionAuthor.Add(autor);
                 }
-
                 _context.Authors.AddRange(collecionAuthor);
                 await _context.SaveChangesAsync();
             }
@@ -191,26 +189,60 @@ namespace bookshelf
 
         private async Task SeederBook()
         {
-            var collection = new List<Book>();
-            var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Books");
-            var json = File.ReadAllText(filePath);
-
-            var books = JsonConvert.DeserializeObject<IEnumerable<Book>>(json);
-            var bookHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
-
-            for (int i = 0; i < books.Count(); i++)
+            if (!_context.Books.Any())
             {
-                var book = new Book()
+                var collectionBooks = new List<Book>();
+                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Books.json");
+                var json = File.ReadAllText(filePath);
+
+                var books = JsonConvert.DeserializeObject<IEnumerable<Book>>(json);
+                var bookHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+                for (int i = 0; i < bookHelper.Count(); i++)
                 {
-                    Title = books.ElementAt(i).Title,
-                    Author = await GetAuthor(bookHelper.ElementAt(i).AuthorName),
-                    Genre = await GetGenre(bookHelper.ElementAt(i).)
-                    Rating = books.ElementAt(i).Rating
+                    var book = new Book()
+                    {
+                        Title = books.ElementAt(i).Title,
+                        Author = await GetAuthor(bookHelper.ElementAt(i).AuthorName),
+                        Genre = await GetGenre(bookHelper.ElementAt(i).GenreName),
+                        Rating = books.ElementAt(i).Rating
+                    };
+
+                    collectionBooks.Add(book);
                 }
+                _context.Books.AddRange(collectionBooks);
+                await _context.SaveChangesAsync();
             }
+
         }
 
-        private async Task<Author> GetAuthor(string Name.)
+        private async Task SeedReview()
+        {
+            var colleciotnReview = new List<Review>();
+            var filePatch = Path.Combine("../bookShelf/Extensions/Jsons/Review.json");
+            var json = File.ReadAllText(filePatch);
+
+            var reviews = JsonConvert.DeserializeObject<IEnumerable<Review>>(json);
+            var reviewHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+            for (int i = 0; i < reviews.Count(); i++)
+            {
+                var review = new Review()
+                {
+                    Content = reviews.ElementAt(i).Content,
+                    User = await GetUser(reviewHelper.ElementAt(i).UserEmail),
+                    Book = await GetBook(reviewHelper.ElementAt(i).BookTitle),
+                    Votes = reviews.ElementAt(i).Votes,
+                    ReviewDate = reviews.ElementAt(i).ReviewDate
+                };
+
+                colleciotnReview.Add(review);
+            }
+            _context.AddRange(colleciotnReview);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<Author> GetAuthor(string Name)
         {
             IQueryable<Author> query = _context.Authors.Where(a => a.FirstName.ToUpper() == Name.ToUpper());
 
@@ -226,9 +258,16 @@ namespace bookshelf
         }
 
 
-        private async Task<User> GetUSer(string Mail)
+        private async Task<User> GetUser(string Mail)
         {
             IQueryable<User> query = _context.Users.Where(e => e.Email.ToUpper() == Mail.ToUpper());
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        private async Task<Book> GetBook(string title)
+        {
+            IQueryable<Book> query = _context.Books.Where(b => b.Title == title);
 
             return await query.FirstOrDefaultAsync();
         }
