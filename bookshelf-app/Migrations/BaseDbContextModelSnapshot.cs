@@ -599,7 +599,7 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Chats.ChatUser", b =>
                 {
                     b.HasOne("bookshelf.Model.Chats.Chat", "Chat")
-                        .WithMany()
+                        .WithMany("ChatUsers")
                         .HasForeignKey("ChatId");
 
                     b.HasOne("bookshelf.Model.Users.User", "User")
@@ -626,6 +626,8 @@ namespace bookshelf_app.Migrations
             modelBuilder.Entity("bookshelf.Model.Chats.Chat", b =>
                 {
                     b.Navigation("ChatMessages");
+
+                    b.Navigation("ChatUsers");
                 });
 #pragma warning restore 612, 618
         }

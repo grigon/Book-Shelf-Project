@@ -24,6 +24,7 @@ namespace bookshelf
         private readonly UserManager<User> _userManager;
         private readonly IServiceProvider _serviceProvider;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly string pathJsons = "../bookShelf/Extensions/Jsons/";
 
         public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher)
         {
@@ -113,7 +114,7 @@ namespace bookshelf
         {
             if (!(_context.Users.Count() > 1))
             {
-                var filepath = Path.Combine("../bookshelf/Extensions/Jsons/users.json");
+                var filepath = Path.Combine($"{pathJsons}users.json");
                 var json = File.ReadAllText(filepath);
                 var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
                 var userPass = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
@@ -144,7 +145,7 @@ namespace bookshelf
             if (!_context.Genres.Any())
             {
                 var collectionGenres = new List<Genre>();
-                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Genres.json");   // magic string to refactor // path is correct
+                var filePath = Path.Combine($"{pathJsons}Genres.json");   // magic string to refactor // path is correct
                 var json = File.ReadAllText(filePath); // catch empty file / check is file 
                 var genres = JsonConvert.DeserializeObject<IEnumerable<Genre>>(json);
 
@@ -288,6 +289,32 @@ namespace bookshelf
                 }
 
                 _context.AddRange(collectionChats);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task SedderUserChat()
+        {
+            if (_context.ChatUsers.Any())
+            {
+                var collectionChatUsers = new List<ChatUser>();
+
+                var filePath = Path.Combine($"{pathJsons}UserChat");
+                var json = File.ReadAllText(filePath);
+
+                var userChatHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+                for (int i = 0; i < userChatHelper.Count(); i++)
+                {
+                    var chatUser = new ChatUser()
+                    {
+                        Chat = await GetChat(userChatHelper.ElementAt(i).ChatNumber),
+                        User = await GetUser(userChatHelper.ElementAt(i).UserEmail)
+                    };
+                    collectionChatUsers.Add(chatUser);
+
+                }
+                _context.ChatUsers.AddRange(collectionChatUsers);
                 await _context.SaveChangesAsync();
             }
         }
