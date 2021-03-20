@@ -44,6 +44,7 @@ namespace bookshelf
             await SeederReview();
             await SeederUserBook();
             await SeederCreateChat();
+            await SeederUserChat();
 
         }
 
@@ -85,30 +86,6 @@ namespace bookshelf
             }
 
         }
-
-        // _context.Database.EnsureCreated();
-        // if (!_context.Books.Any())
-        // {
-        //     var filepath = Path.Combine("../bookshelf/users.json");
-        //     var json = File.ReadAllText(filepath);
-        //     var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-        //     _context.Users.AddRange(users);
-        //     _context.SaveChanges(); 
-        //}
-
-        //public void Seed()
-        //{
-        //    if (_context.Database.CanConnect())
-        //    {
-        //        if (!(_context.Users.Count() > 3)) 
-        //        { 
-        //        var users = GetUsers();
-        //        _context.Users.AddRange(users);
-        //        _context.SaveChanges();
-        //    }
-        //    }
-        //}
-
 
         private async Task SeederUser()
         {
@@ -267,7 +244,6 @@ namespace bookshelf
                         Borrowed = userBooks.ElementAt(i).Borrowed,
                         IsPublic = userBooks.ElementAt(i).IsPublic
                     };
-
                     collectionUserBook.Add(userBook);
                 }
                 _context.AddRange(collectionUserBook);
@@ -293,13 +269,13 @@ namespace bookshelf
             }
         }
 
-        private async Task SedderUserChat()
+        private async Task SeederUserChat()
         {
-            if (_context.ChatUsers.Any())
+            if (!_context.ChatUsers.Any())
             {
                 var collectionChatUsers = new List<ChatUser>();
 
-                var filePath = Path.Combine($"{pathJsons}UserChat");
+                var filePath = Path.Combine($"{pathJsons}UserChat.json");
                 var json = File.ReadAllText(filePath);
 
                 var userChatHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
