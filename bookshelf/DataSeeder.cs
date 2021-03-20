@@ -68,18 +68,18 @@ namespace bookshelf
                 }
                 var filepath = Path.Combine($"{pathJsons}Admin.json");
                 var json = File.ReadAllText(filepath);
-                var users = JsonConvert.DeserializeObject<IEnumerable<User>>(json);
-                var userPass = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+                var users = JsonConvert.DeserializeObject<User>(json);
+                var userPass = JsonConvert.DeserializeObject<SeederHelper>(json);
                 User user = await UserManager.FindByNameAsync("Admin");
                 if (user == null)
                 {
                     user = new User()
                     {
-                        UserName = users.ElementAt(0).UserName,
-                        Email = users.ElementAt(0).Email
+                        UserName = users.UserName,
+                        Email = users.Email
                     };
 
-                    var result = await _userManager.CreateAsync(user, userPass.ElementAt(0).Password);
+                    var result = await _userManager.CreateAsync(user, userPass.Password);
                     if (result != IdentityResult.Success)
                     {
                         throw new InvalidOperationException("Could not create new user in seeder");

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace bookshelf_app.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class FirstAwakeAllSeeder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

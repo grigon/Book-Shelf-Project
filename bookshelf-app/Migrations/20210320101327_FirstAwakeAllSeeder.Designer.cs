@@ -10,8 +10,8 @@ using bookshelf.Context;
 namespace bookshelf_app.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20210320084047_UpgradeChatModel")]
-    partial class UpgradeChatModel
+    [Migration("20210320101327_FirstAwakeAllSeeder")]
+    partial class FirstAwakeAllSeeder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
