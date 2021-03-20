@@ -32,19 +32,17 @@ namespace bookshelf
             this._passwordHasher = passwordHasher;
         }
 
-
-
         public async Task MotherSeeder()
         {
             await SeedAsync();
-            await SeedUser();
+            await SeederUser();
             await SeederGenre();
             await SeederAuthor();
             await SeederBook();
-            await SeedReview();
+            await SeederReview();
+            await SeederUserBook();
 
         }
-
 
         private async Task SeedAsync()
         {
@@ -109,7 +107,7 @@ namespace bookshelf
         //}
 
 
-        private async Task SeedUser()
+        private async Task SeederUser()
         {
             if (!(_context.Users.Count() > 1))
             {
@@ -144,8 +142,8 @@ namespace bookshelf
             if (!_context.Genres.Any())
             {
                 var collectionGenres = new List<Genre>();
-                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Genres.json");   // magic string to refactor 
-                var json = File.ReadAllText(filePath);
+                var filePath = Path.Combine("../bookShelf/Extensions/Jsons/Genres.json");   // magic string to refactor // path is correct
+                var json = File.ReadAllText(filePath); // catch empty file / check is file 
                 var genres = JsonConvert.DeserializeObject<IEnumerable<Genre>>(json);
 
                 for (int i = 0; i < genres.Count(); i++)
@@ -216,29 +214,58 @@ namespace bookshelf
 
         }
 
-        private async Task SeedReview()
+        private async Task SeederReview()
         {
-            var colleciotnReview = new List<Review>();
-            var filePatch = Path.Combine("../bookShelf/Extensions/Jsons/Reviews.json");
-            var json = File.ReadAllText(filePatch);
-
-            var reviews = JsonConvert.DeserializeObject<IEnumerable<Review>>(json);
-            var reviewHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
-
-            for (int i = 0; i < reviews.Count(); i++)
+            if (_context.UserBooks.Any())
             {
-                var review = new Review()
+                var colleciotnReview = new List<Review>();
+                var filePatch = Path.Combine("../bookShelf/Extensions/Jsons/Reviews.json");
+                var json = File.ReadAllText(filePatch);
+
+                var reviews = JsonConvert.DeserializeObject<IEnumerable<Review>>(json);
+                var reviewHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+                for (int i = 0; i < reviews.Count(); i++)
                 {
-                    Content = reviews.ElementAt(i).Content,
-                    User = await GetUser(reviewHelper.ElementAt(i).UserEmail),
-                    Book = await GetBook(reviewHelper.ElementAt(i).BookTitle),
-                    Votes = reviews.ElementAt(i).Votes,
-                    ReviewDate = reviews.ElementAt(i).ReviewDate
+                    var review = new Review()
+                    {
+                        Content = reviews.ElementAt(i).Content,
+                        User = await GetUser(reviewHelper.ElementAt(i).UserEmail),
+                        Book = await GetBook(reviewHelper.ElementAt(i).BookTitle),
+                        Votes = reviews.ElementAt(i).Votes,
+                        ReviewDate = reviews.ElementAt(i).ReviewDate
+                    };
+
+                    colleciotnReview.Add(review);
+                }
+                _context.AddRange(colleciotnReview);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeederUserBook()
+        {
+            var collectionUserBook = new List<UserBook>();
+            var filePath = Path.Combine("../bookShelf/Extensions/Jsons/UserBook");
+            var json = File.ReadAllText(filePath);
+
+            var userBooks = JsonConvert.DeserializeObject<IEnumerable<UserBook>>(json);
+            var userBooksHelper = JsonConvert.DeserializeObject<IEnumerable<SeederHelper>>(json);
+
+
+            for (int i = 0; i < userBooks.Count(); i++)
+            {
+                var userBook = new UserBook()
+                {
+                    Book = await GetBook(userBooksHelper.ElementAt(i).BookTitle),
+                    User = await GetUser(userBooksHelper.ElementAt(i).UserEmail),
+                    Borrowed = userBooks.ElementAt(i).Borrowed,
+                    IsPublic = userBooks.ElementAt(i).IsPublic
                 };
 
-                colleciotnReview.Add(review);
+                collectionUserBook.Add(userBook);
             }
-            _context.AddRange(colleciotnReview);
+            _context.AddRange(collectionUserBook);
             await _context.SaveChangesAsync();
         }
 
@@ -251,7 +278,6 @@ namespace bookshelf
             return await query.FirstOrDefaultAsync();
         }
 
-
         private async Task<Genre> GetGenre(string Name)
         {
             IQueryable<Genre> query = _context.Genres
@@ -260,7 +286,6 @@ namespace bookshelf
 
             return await query.FirstOrDefaultAsync();
         }
-
 
         private async Task<User> GetUser(string Mail)
         {
@@ -279,35 +304,5 @@ namespace bookshelf
 
             return await query.FirstOrDefaultAsync();
         }
-
-
-        //public IEnumerable<User> GetUsers()
-        //{
-        //    var users = new List<User>();
-
-        //    var user1 = new User()
-        //    {
-        //        UserName = "Dominik",
-        //        Email = "dominik@wik.name",
-        //        City = "Warsaw",
-        //        PhotoPath = "Empty path"
-
-        //    };
-        //   var lipa = _passwordHasher.HashPassword(user1, "Magic50+");
-        //    user1.PasswordHash = lipa;
-
-        //    users.Add(user1);
-        //    //new User()
-        //    //    {
-        //    //        UserName =  "Mike",
-        //    //        Email    = "mike@gmail.com",
-        //    //        PasswordHash = "Lipa6000*",
-        //    //        City =  "Boston",
-        //    //        PhotoPath = "Empty path"
-
-        //    //    },
-        //    //};
-        //    return users;
-        //}
     }
 }
