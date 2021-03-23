@@ -31,9 +31,5 @@
     <ItemGroup>
       <Compile Remove="DTO\Book\GenreDTO.cs" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="DTO\Update" />
-    </ItemGroup>
     
 </Project>

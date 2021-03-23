@@ -71,8 +71,12 @@ namespace bookshelf_app
 
             services.AddCors(options =>
             {
-                options.AddPolicy(name: "MyAllowSpecificOrigins", builder =>
-                    builder.WithOrigins("https://localhost:8001").AllowAnyMethod().AllowAnyHeader());
+                options.AddPolicy(name: "MyAllowSpecificOrigins",
+                    builder =>
+                        builder
+                            .WithOrigins("http://localhost:8080")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
             });
 
             services.AddDbContext<BaseDbContext>(

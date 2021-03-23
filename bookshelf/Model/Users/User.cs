@@ -7,10 +7,6 @@ namespace bookshelf.Model.Users
 {
     public class User : IdentityUser
     {
-        // [Key]
-        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        // [Column(TypeName = "VARCHAR(36)")]
-        // public Guid Id { get; set; }
         public bool IsPublic { get; set; }
         public bool IsActive { get; set; }
         public bool RememberMe { get; set; }

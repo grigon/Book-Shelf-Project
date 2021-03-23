@@ -76,7 +76,6 @@ namespace bookshelf_app.Controllers
                     return BadRequest("Could not use current Id");
                 }
                 user.RegistrationDate = DateTime.Now;
-                // user.NormalizedEmail = model.Email.Normalize();
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result != IdentityResult.Success)
@@ -97,7 +96,8 @@ namespace bookshelf_app.Controllers
 
             return BadRequest();
         }
-        
+
+
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(Guid Id)
         {

@@ -8,6 +8,7 @@ using AutoMapper;
 using bookshelf_app.Auth;
 using bookshelf.DAL;
 using bookshelf.DTO.Create;
+using bookshelf.DTO.Update;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -50,6 +51,28 @@ namespace bookshelf_app.Controllers
             _httpContextAccessor = httpContextAccessor;
             _tokenManager = tokenManager;
         }
+        
+        [HttpPut]
+        public async Task<IActionResult> Edit(UserEditDTO model)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                user.City = model.UserName;
+                user.City = model.City;
+                user.City = model.PhotoPath;
+                _userRepository.Update(user);
+                await _userRepository.Commit();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update user profile");
+            }
+
+            return Ok();
+
+        }
+        
 
         [HttpPost("CreateToken")]
         public async Task<IActionResult> CreateToken(UserLoginDTO loginDto, bool refresh)
@@ -127,7 +150,6 @@ namespace bookshelf_app.Controllers
                     return BadRequest("Bad User name or password");
                 }
             }
-
             return BadRequest("User not found");
         }
 

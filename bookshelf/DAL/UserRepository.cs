@@ -37,15 +37,16 @@ namespace bookshelf.DAL
             return await query.FirstOrDefaultAsync();
         }
 
-        public void Add(User user) 
+        public void Add(User user)
         {
             _logger.LogInformation("Adding an object of type User to the context.");
             _context.Add(user);
         }
 
-        public Task<User> Update(User t)
+        public void Update(User user)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Attempitng to update the changes in the context");
+            _context.Update(user);
         }
 
         public void Remove(User user)
@@ -62,6 +63,5 @@ namespace bookshelf.DAL
             await _context.SaveChangesAsync();
             return true;
         }
-
     }
 }
