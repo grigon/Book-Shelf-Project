@@ -47,6 +47,22 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
+        [HttpGet]
+        public async Task<ActionResult<UserReadDTO>> GetCurrentUser(string email)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null) return NotFound();
+                return _mapper.Map<UserReadDTO>(user);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+        
+        
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserReadDTO>> GetUser(Guid  id)
