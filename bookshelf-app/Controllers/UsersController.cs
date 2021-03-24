@@ -34,7 +34,7 @@ namespace bookshelf_app.Controllers
         }
         
         [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<UserReadDTO[]>> GetAll()
         {
             try
@@ -47,7 +47,8 @@ namespace bookshelf_app.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
-        [HttpGet]
+        
+        [HttpGet("email/{email}")]
         public async Task<ActionResult<UserReadDTO>> GetCurrentUser(string email)
         {
             try
@@ -62,8 +63,6 @@ namespace bookshelf_app.Controllers
             }
         }
         
-        
-
         [HttpGet("{id}")]
         public async Task<ActionResult<UserReadDTO>> GetUser(Guid  id)
         {

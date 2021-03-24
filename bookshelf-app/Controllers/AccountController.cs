@@ -8,6 +8,7 @@ using AutoMapper;
 using bookshelf_app.Auth;
 using bookshelf.DAL;
 using bookshelf.DTO.Create;
+using bookshelf.DTO.Read;
 using bookshelf.DTO.Update;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,16 +52,17 @@ namespace bookshelf_app.Controllers
             _httpContextAccessor = httpContextAccessor;
             _tokenManager = tokenManager;
         }
-        
+
         [HttpPut]
         public async Task<IActionResult> Edit(UserEditDTO model)
         {
             try
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                user.City = model.UserName;
+                user.UserName = model.UserName;
+                user.NormalizedUserName = model.UserName.Normalize();
                 user.City = model.City;
-                user.City = model.PhotoPath;
+                user.PhotoPath = model.PhotoPath;
                 _userRepository.Update(user);
                 await _userRepository.Commit();
             }
@@ -70,9 +72,8 @@ namespace bookshelf_app.Controllers
             }
 
             return Ok();
-
         }
-        
+
 
         [HttpPost("CreateToken")]
         public async Task<IActionResult> CreateToken(UserLoginDTO loginDto, bool refresh)
@@ -142,7 +143,8 @@ namespace bookshelf_app.Controllers
                         {
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo,
-                            refreshToken = newRefreshToken
+                            refreshToken = newRefreshToken,
+                            id = user.Id
                         };
                         return Created("", results);
                     }
@@ -150,6 +152,7 @@ namespace bookshelf_app.Controllers
                     return BadRequest("Bad User name or password");
                 }
             }
+
             return BadRequest("User not found");
         }
 
@@ -192,28 +195,46 @@ namespace bookshelf_app.Controllers
         }
 
         [Authorize]
-        [HttpGet("RefreshAccessToken")]
-        public async Task<IActionResult> RefreshAccessToken()
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<UserReadDTO>> GetCurrentUser(string email)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null) return NotFound();
+                return _mapper.Map<UserReadDTO>(user);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("RefreshAccessToken/{id}")]
+        public async Task<IActionResult> RefreshAccessToken(string id)
         {
             if (_httpContextAccessor
                 .HttpContext != null)
             {
                 var refreshToken = _httpContextAccessor
-                    .HttpContext.Request.Headers["RefreshToken"];
+                    .HttpContext.Request.Headers["RefreshToken"].ToString();
                 try
                 {
                     if (User.Identity != null)
                     {
-                        var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                        var user = await _userManager.FindByIdAsync(id);
                         var tokenToCompare =
                             await _userManager.GetAuthenticationTokenAsync(user, "BookShelf", "RefreshToken");
-                        
+
                         if (refreshToken == tokenToCompare)
                         {
                             await _tokenManager.DeactivateCurrentAsync();
                             var token = await CreateToken(_mapper.Map<UserLoginDTO>(user), true);
                             return Ok(token);
-                        };
+                        }
+
+                        ;
                     }
                 }
                 catch (Exception e)
