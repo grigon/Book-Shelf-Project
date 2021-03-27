@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using bookshelf.Model.Books;
 using bookshelf.Model.Chats;
+using bookshelf.Model.NLog;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -33,5 +34,8 @@ namespace bookshelf.Context
         public DbSet<Genre> Genres { get; set; }
        
         public DbSet<BookISBN> BookISBN { get; set; }
+
+        public DbSet<LoggerEntityError> LoggerError { get; set; }
+        public DbSet<LoggerEntityLow> LoggerLowState { get; set; }
     }
 }
