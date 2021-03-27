@@ -26,11 +26,19 @@ namespace bookshelf.Middlewere
             }
             catch (BadRequestException badRequest)
             {
-                _logger.LogError(badRequest.Message);
+                _logger.LogInformation(badRequest.Message);
                 context.Response.StatusCode = 400;
 
                 await context.Response.WriteAsync(badRequest.Message);
                 //await context.Response.CompleteAsync();
+            }
+            catch (U)
+            catch (ForbiddenException forbidden)
+            {
+                _logger.LogInformation(forbidden.Message);
+
+                context.Response.StatusCode = 403;
+
             }
         }
     }
