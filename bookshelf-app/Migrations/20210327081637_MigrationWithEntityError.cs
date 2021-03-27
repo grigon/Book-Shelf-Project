@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace bookshelf_app.Migrations
 {
-    public partial class FirstAwakeAllSeeder : Migration
+    public partial class MigrationWithEntityError : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,6 +86,44 @@ namespace bookshelf_app.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genres", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LoggerError",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Application = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Logged = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Logger = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Callsite = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Exception = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoggerError", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LoggerLowState",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Application = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Logged = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Logger = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Callsite = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Exception = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoggerLowState", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -504,6 +542,12 @@ namespace bookshelf_app.Migrations
 
             migrationBuilder.DropTable(
                 name: "ChatUsers");
+
+            migrationBuilder.DropTable(
+                name: "LoggerError");
+
+            migrationBuilder.DropTable(
+                name: "LoggerLowState");
 
             migrationBuilder.DropTable(
                 name: "Messages");

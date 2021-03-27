@@ -10,8 +10,8 @@ using bookshelf.Context;
 namespace bookshelf_app.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20210320101327_FirstAwakeAllSeeder")]
-    partial class FirstAwakeAllSeeder
+    [Migration("20210327081637_MigrationWithEntityError")]
+    partial class MigrationWithEntityError
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -378,6 +378,72 @@ namespace bookshelf_app.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ChatUsers");
+                });
+
+            modelBuilder.Entity("bookshelf.Model.NLog.LoggerEntityError", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Application")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Callsite")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Level")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Logged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Logger")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoggerError");
+                });
+
+            modelBuilder.Entity("bookshelf.Model.NLog.LoggerEntityLow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Application")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Callsite")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Level")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Logged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Logger")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoggerLowState");
                 });
 
             modelBuilder.Entity("bookshelf.Model.Users.User", b =>

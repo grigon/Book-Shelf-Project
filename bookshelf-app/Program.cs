@@ -3,6 +3,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace bookshelf_app
 {
@@ -10,14 +12,24 @@ namespace bookshelf_app
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
+
+
+            //RunSeeding(host);
+
+            //host.Run();
+            //var host = CreateHostBuilder(args).Build().Run();
+
+
 
             RunSeeding(host);
-            
+
             host.Run();
+
         }
 
-        private static void RunSeeding(IWebHost host)
+        //private static void RunSeeding(IWebHost host)
+        private static void RunSeeding(IHost host)
         {
             var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
 
@@ -26,15 +38,33 @@ namespace bookshelf_app
                 var seeder = scope.ServiceProvider.GetService<DataSeeder>();
                 seeder.MotherSeeder().Wait();
             }
-            
+
         }
-        
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+
+        //public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .UseStartup<Startup>()
+        //        .UseNLog();
+
+
+        //public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //    Host.CreateDefaultBuilder(args)
+        //        .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(LogLevel.Trace);
+            })
+            .UseNLog();
+
+
+
     }
 }
