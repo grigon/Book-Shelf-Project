@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using bookshelf.Extensions;
 using bookshelf.Model.Chats;
 using Microsoft.Extensions.Logging;
+using bookshelf.Exceptions;
 
 namespace bookshelf
 {
@@ -54,6 +55,8 @@ namespace bookshelf
         private async Task SeedAsync()
         {
 
+
+                      
             if (!_context.Roles.Any())
             {
                 var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();

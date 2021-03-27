@@ -12,12 +12,14 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Identity;
 using bookshelf.Model.Users;
 using Microsoft.AspNetCore.Authorization;
+using bookshelf.Exceptions;
+
 namespace bookshelf_app.Controllers
 {
     [ApiController]
     [FormatFilter]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class ChatController : ControllerBase
     {
         private readonly ILogger<ChatController> _logger;
@@ -60,6 +62,11 @@ namespace bookshelf_app.Controllers
         [HttpGet("allchats/admin")]// add all id in chat 
         public async Task<ActionResult<Chat[]>> AllChatAdmin()
         {
+
+
+              throw new BadRequestException("we checked Is admin exist sfgsfhdfhdhfhdfdjjfgjsfhfdfh");
+              _logger.LogCritical("uuuuuuuuuullalalla");
+            
             try
             {
                 var chats = await _chatRepository.AllChatsForAdmin();
