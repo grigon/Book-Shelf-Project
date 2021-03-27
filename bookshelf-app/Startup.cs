@@ -24,6 +24,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using bookshelf.Middlewere;
 
 namespace bookshelf_app
 {
@@ -111,7 +112,7 @@ namespace bookshelf_app
             services.AddDistributedRedisCache(r =>
                 r.Configuration = Configuration["redis:ConnectionString"]
             );
-
+            services.AddScoped<ErrorHandligMiddleware>();
 
             services.AddScoped<IUserRepository<User>, UserRepository>();
             // services.AddScoped<UserRepository<UserBook>, UserBookRepository>();
@@ -133,9 +134,9 @@ namespace bookshelf_app
 
 
 // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeeder  sedder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //sedder.Seed();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -143,6 +144,7 @@ namespace bookshelf_app
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "bookshelf_app v1"));
             }
 
+            app.UseMiddleware<ErrorHandligMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseRouting();
