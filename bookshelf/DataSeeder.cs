@@ -24,17 +24,15 @@ namespace bookshelf
         private readonly BaseDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IPasswordHasher<User> _passwordHasher;
         private readonly ILogger _logger;
         private readonly string pathJsons = "../bookShelf/Extensions/Jsons/";
 
-        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, IPasswordHasher<User> passwordHasher, ILogger<DataSeeder> logger)
+        public DataSeeder(BaseDbContext _context, UserManager<User> userManager, IServiceProvider serviceProvider, ILogger<DataSeeder> logger)
         {
             
             this._context = _context;
             this._userManager = userManager;
-            _serviceProvider = serviceProvider;
-            this._passwordHasher = passwordHasher;
+            this._serviceProvider = serviceProvider;
             this._logger = logger;
         }
 
@@ -55,6 +53,7 @@ namespace bookshelf
 
         private async Task SeedAsync()
         {
+
             if (!_context.Roles.Any())
             {
                 var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -119,7 +118,6 @@ namespace bookshelf
                 }
             }
         }
-
         private async Task SeederGenre()
         {
             if (!_context.Genres.Any())
@@ -143,7 +141,6 @@ namespace bookshelf
                 await _context.SaveChangesAsync();
             }
         }
-
         private async Task SeederAuthor()  
         {
             if (!_context.Authors.Any())
@@ -349,7 +346,7 @@ namespace bookshelf
         {
             IQueryable<User> query = _context.Users
                 .Where(e => e.Email.ToUpper().Replace(" ",string.Empty) 
-                == Mail.ToUpper().Trim().Replace(" ",string.Empty)); //only one space 
+                == Mail.ToUpper().Trim().Replace(" ",string.Empty));
 
             return await query.FirstOrDefaultAsync();
         }
