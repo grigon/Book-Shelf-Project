@@ -94,7 +94,6 @@ namespace bookshelf_app
             });
             //services.AddAutoMapper(Assembly.GetExecutingAssembly("bookshelf"));
             services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
-            services.AddAutoMapper(typeof(ChatProfile).GetTypeInfo().Assembly);
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
@@ -113,12 +112,13 @@ namespace bookshelf_app
                 r.Configuration = Configuration["redis:ConnectionString"]
             );
 
+
             services.AddScoped<IUserRepository<User>, UserRepository>();
             // services.AddScoped<UserRepository<UserBook>, UserBookRepository>();
 
             services.AddAutoMapper(typeof(UserProfile).GetTypeInfo().Assembly);
             services.AddScoped<BookRepository>();
-            services.AddAutoMapper(typeof(BookProfile).GetTypeInfo().Assembly);
+            //services.AddAutoMapper(typeof(BookProfile).GetTypeInfo().Assembly);
             
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
